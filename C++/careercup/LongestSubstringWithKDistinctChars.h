@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -42,4 +43,47 @@ public static String longestSubstringWithKDistinctChars(String s, int k) {
 }
 */
 class LongestSubstringWithKDistinctChars {
+   public:
+    static void test() {
+        LongestSubstringWithKDistinctChars obj;
+
+        string s = "aabacbebebe";
+        int k = 3;
+        auto res = obj.longestSubstrWithKDistinctChars(s, k);
+        assert(res == "cbebebe");
+
+        cout << format("Longest substring with k={0} distinct characters: {1}", k, res)
+             << endl;
+    }
+
+   public:
+    string longestSubstrWithKDistinctChars(const string& str, int k) {
+        int i = 0, j = 0;
+        int maxLen = 0;
+        string result;
+        unordered_map<char, int> charMap;
+
+        while (j < str.length()) {
+            char ch = str[j];
+            charMap[ch]++;
+
+            while (charMap.size() > k) {
+                ch = str[i];
+                charMap[ch]--;
+                if (charMap[ch] == 0) charMap.erase(ch);
+                i++;
+            }
+
+            if (charMap.size() == k) {
+                int len = j - i + 1;
+                if (len > maxLen) {
+                    result = str.substr(i, j - i + 1);
+                }
+            }
+
+            j++;
+        }
+
+        return result;
+    }
 };

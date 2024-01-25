@@ -115,6 +115,7 @@ struct Point {
     int x;
     int y;
 
+    Point() {}
     Point(int x, int y) : x(x), y(y) {}
 
     string to_string() const {
@@ -130,6 +131,14 @@ struct Point {
 
     bool operator!=(const Point &that) {
         return (this->x != that.x || this->y != that.y);
+    }
+
+    Point operator+(const Point &that) {
+        Point newPoint;
+        newPoint.x = this->x + that.x;
+        newPoint.y = this->y + that.y;
+
+        return newPoint;
     }
 
 #define START_METHOD() \

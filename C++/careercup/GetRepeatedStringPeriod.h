@@ -1,6 +1,5 @@
 #pragma once
 #include "../Header.h"
-
 /*
 Find whether string S is periodic.
 Periodic indicates S = nP.
@@ -11,78 +10,77 @@ S = "aabbaaabba", then n = 2, and P = "aabba"
 follow up:
 Given string S, find out the P (repetitive pattern) of S.
 */
-class GetPeriod {
-public:
-	static void test() {
-		vector<string> strs = { "waterwater", "ababab", "xxxxxx", "aabbaaabba", "abcd", "dbcasdssddbcasds" };
-		GetPeriod obj;
 
-		for (auto str : strs) {
-			auto res = obj.isPeriod(str);
-			cout << "Is string='" << str << "' periodic: " << res << endl;
+class GetRepeatedStringPeriod {
+   public:
+    static void test() {
+        vector<string> strs = {"waterwater", "ababab", "xxxxxx", "aabbaaabba", "abcd", "dbcasdssddbcasds"};
+        GetRepeatedStringPeriod obj;
 
-			if (res) {
-				auto p = obj.getPeriod(str);
-				cout << "Period = " << p.first << ", " << p.second << endl;
-			}
-		}
-	}
+        for (auto str : strs) {
+            auto res1 = obj.isPeriod1(str);
+            auto res2 = obj.isPeriod1(str);
+            assert(res1 == res2);
 
-	bool isPeriod(string s) {
-		string tmp = s + s;
-		tmp = tmp.substr(1, tmp.length() - 2);
-		return (tmp.find(s) != string::npos);
-	}
+            cout << "Is string='" << str << "' periodic: " << res1 << endl;
 
-	pair<string, int> getPeriod(string s) {
-		int n = s.length();
-		for (int len = 1; len <= n / 2; len++) {
-			if (n % len == 0 && isRepeat(s, len, n)) {
-				return { s.substr(0,len),n / len };
-			}
-		}
-		return { "",-1 };
-	}
+            if (res1) {
+                auto period1 = obj.getPeriod1(str);
+                auto period2 = obj.getPeriod2(str);
+                assert(period1 == period2);
 
-	bool isRepeat(string s, int periodLen, int totalLen) {
-		for (auto i = 0; i < periodLen; i++) {
-			for (int j = periodLen + i; j < totalLen; j += periodLen) {
-			    if (s[i] != s[j]) return false;
-			}
-		}
-		return true;
-	}
+                cout << format("Period={}, Repeated={}", period1.first, period1.second) << endl;
+            }
+
+            cout << endl;
+        }
+    }
+
+   private:
+    bool isPeriod1(string str) {
+        return (str.substr(1) + str.substr(0, str.length() - 1)).find(str) != string::npos;
+    }
+
+    pair<string, int> getPeriod1(string str) {
+        int n = str.length();
+        for (int i = 1; i <= n / 2; i++) {
+            if (n % i == 0) {
+                string period = str.substr(0, i);
+                int j = i;
+                while (j + i <= n) {
+                    if (str.substr(j, i) != period) break;
+
+                    j += i;
+                    if (j == n) return {period, n / i};
+                }
+            }
+        }
+        return {"", -1};
+    }
+
+   private:
+    bool isPeriod2(string s) {
+        string tmp = s + s;
+        tmp = tmp.substr(1, tmp.length() - 2);
+        return (tmp.find(s) != string::npos);
+    }
+
+    pair<string, int> getPeriod2(string s) {
+        int n = s.length();
+        for (int len = 1; len <= n / 2; len++) {
+            if (n % len == 0 && isRepeat(s, len, n)) {
+                return {s.substr(0, len), n / len};
+            }
+        }
+        return {"", -1};
+    }
+
+    bool isRepeat(string s, int periodLen, int totalLen) {
+        for (auto i = 0; i < periodLen; i++) {
+            for (int j = periodLen + i; j < totalLen; j += periodLen) {
+                if (s[i] != s[j]) return false;
+            }
+        }
+        return true;
+    }
 };
-
-/*
-boolean isPeriod(String s) {
-		StringBuilder str = new StringBuilder(s   s);
-		str.deleteCharAt(0);
-		str.deleteCharAt(str.length() - 1);
-		return strStr(str.toString(), s); //KMP strStr(T, S) to find if T has S in it.
-	}
-
-	//Solution to follow-up
-	//This method looks for the repeating pattern in string
-	private static String getPeriod(String string) { // O(n * n)
-		//for every possible period size i, check if it's valid
-		for (int i = 1; i <= string.length() / 2; i  ) {
-			if (string.length() % i == 0) {
-				String period = string.substring(0, i);
-				int j = i;
-				while(j + i <= string.length()) {
-					if (period.equals(string.substring(j, j   i))) {
-						j = j + i;
-						if(j == string.length()) { //period valid through entire string
-							return period;
-						}
-					} else {
-						break;
-					}
-				}
-			}
-
-		}
-		return null; //string is not periodic
-	}
-*/

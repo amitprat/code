@@ -1,9 +1,9 @@
 package Java;
 
-import Java.tree.DiameterOfTree;
+import Java.dp.ProbabilityOfBeingAlive;;
 
 public class Main {
     public static void main(String[] args) {
-        DiameterOfTree.test();
+        ProbabilityOfBeingAlive.test();
     }
 }

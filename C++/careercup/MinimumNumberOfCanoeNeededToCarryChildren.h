@@ -1,5 +1,5 @@
+#pragma once
 #include "../header.h"
-
 /*
 https://careercup.com/question?id=6303093824159744
 
@@ -11,6 +11,7 @@ I tried a few test cases and it seems to be working as expected.
 
 Complexity would be O(nlogn) due to the sort at the beginning.
 */
+
 class MinimumNumberOfCanoeNeededToCarryChildren {
    private:
     int minimumNumberOfCanoes(vector<int> weights) {
@@ -18,13 +19,26 @@ class MinimumNumberOfCanoeNeededToCarryChildren {
         sort(weights.begin(), weights.end());
         int l = 0, r = weights.size() - 1;
         while (l <= r) {
-            if (weights[l] + weights[r] <= 150) {
+            if (l == r) {
+                // cover case where both pointers point to same child
+                if (weights[r] <= 150) {
+                    count++;
+                }
+
+                // if kid is too heavy to fit, skip
+                r--;
+            } else if (weights[l] + weights[r] <= 150) {
+                // 2 kids fit
                 count++;
                 l++;
             } else if (weights[r] <= 150) {
+                // only 1 kid fits, put the larger kid in the boat if he fits
                 count++;
+
+                // Else, larger kid is too heavy to go on boat.
+                // Either way, we've handled the heavier child
+                r--;
             }
-            r--;
         }
 
         return count;

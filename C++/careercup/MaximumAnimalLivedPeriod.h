@@ -22,4 +22,115 @@ Time complexity = O(nLogn), because of sorting in step 1.
 Space complexity = O(n)
 */
 class MaximumAnimalLivedPeriod {
+   public:
+    static void test() {
+        MaximumAnimalLivedPeriod obj;
+        vector<Interval> intervals = {
+            {5, 11}, {6, 18}, {2, 5}, {3, 12}};
+
+        {
+            auto res = obj.findMaxPeriod(intervals);
+            cout << "Max Period = " << res.first << ":" << res.second.to_string() << endl;
+        }
+        // vector<pair<int, Interval>> res = obj.findPeriod2(intervals);
+        // for (auto r : res) {
+        //     cout << r.first << ":" << r.second.to_string() << endl;
+        // }
+    }
+
+   private:
+    // Approach1: construct start end end intervals in a array as  [10S, 11S, 15E, 20E,..]
+    // Then sort the array in increasing order keeping start interval first if both are same.
+    // Then iterate over the array and count the max number of starts by incrementing on 'S' and decreasing on 'E'.
+    // The max interval is the [max(Starts), min(End)]
+    pair<int, Interval> findMaxPeriod(vector<Interval> intervals) {
+        multimap<int, char> m;
+        int period = 0;
+        Interval curPeriod = {INT_MIN, INT_MAX};
+        int mxPeriodCount = 0;
+        Interval maxPeriod = curPeriod;
+
+        for (auto interval : intervals) {
+            m.insert({interval.start, 'a'});
+            m.insert({interval.end, 'd'});
+        }
+
+        for (auto entry : m) {
+            if (entry.second == 'a') {
+                curPeriod.start = max(curPeriod.start, entry.first);
+                period++;
+            } else if (entry.second == 'd') {
+                curPeriod.end = entry.first;
+                if (period > mxPeriodCount) {
+                    maxPeriod = curPeriod;
+                    mxPeriodCount = period;
+                }
+                period--;
+            }
+        }
+        mxPeriodCount = max(mxPeriodCount, period);
+
+        return {mxPeriodCount, maxPeriod};
+    }
+
+   private:
+    // Similar to above approach but keeping them seperate arrays to sort.
+    vector<Interval> solution(Interval in[], int n) {
+        vector<int> s(n);
+        vector<int> e(n);
+
+        for (int i = 0; i < n; i++) {
+            s[i] = in[i].start;
+            e[i] = in[i].end;
+        }
+        sort(s.begin(), s.end());
+        sort(e.begin(), e.end());
+
+        vector<Interval> results;
+        int maxDiff = 0;
+
+        int i = 0, j = 0;
+        while (i < n && j < n) {
+            if (s[i] <= e[j]) {
+                i++;
+            } else {
+                maxDiff = max(maxDiff, i - j + 1);
+                results.push_back(Interval(s[i], e[j]));
+
+                j++;
+            }
+        }
+
+        return results;
+    }
+
+   private:
+    /*
+    Solution 2 -
+    Explanation -
+
+    but i think this will also work
+    1.Firstly take an array arr[100],initialize it to zero.
+    2.for every interval do +1 for eg, [5, 7] ,do arr[5]++,arr[6]++.arr[7]++;
+    3.now traverse again and you got all intervals for max value.
+    i think in this case time complexity is O(n).
+    */
+
+   private:
+    /*
+    Solution 3 -
+    Explanation -
+    Time = O(nlogn)
+    Space = O(n)
+
+    1) Sort all intervals according to start time.
+    2) Select the ith[i ->1,n] interval and merge to all previous intervals and keep on counting.
+    Example -
+    (2,5), (3,12) , (5,11) , (6,18) - [1,1,1,1]
+    (3,5), (3,12) , (5,11) , (6,18) - [2,1,1,1]
+    (5,5), (5,11) , (5,11) , (6,18) - [3,2,1,1]
+    (5,5), (6,11) , (6,11) , (6,18) - [3,3,2,1]
+
+    Pick up all the max intervals (5,5) and (6,11);
+    */
 };

@@ -1,22 +1,30 @@
 #include "../header.h"
 
+/*
+Find the largest rectangular area possible in a given histogram where the largest rectangle can be made of a number of contiguous bars
+whose heights are given in an array.
+*/
 class LargestAreaUnderHistogram {
    public:
     static void test() {
         LargestAreaUnderHistogram obj;
+
         vector<int> hist = {6, 2, 5, 4, 5, 1, 6};
         auto res = obj.largestArea(hist);
-        cout << "Largest " << res << endl;
+        assert(res == 12);
+        cout << format("Largest area: {}", res) << endl;
     }
 
    public:
     int largestArea(vector<int>& arr) {
         stack<int> st;
         int maxArea = 0;
+
         int i = 0;
         for (; i < arr.size();) {
-            // if this bar is higher then we can keep pushing it to stack
-            // as we can always consider previous bar * distance as maximum area
+            // if new bar on right is greater or equal to current bar on top of stack (or stack is empty),
+            // push bar to top of stack. This is because, while popping elements from stack, we know that
+            // bars between [being popped, end or bar lesser then stack top-1] are all larger than bar [being popped].
             if (st.empty() || arr[i] >= arr[st.top()]) {
                 st.push(i++);
             } else {
