@@ -15,7 +15,7 @@ public:
         string result;
 
         for (auto ch : str) {
-            if (isOperand(ch)) {
+            if (isOperator(ch)) {
                 while (!st.empty() && prec(st.top()) >= prec(ch)) {
                     if (st.top() != '(') result += st.top();
                     st.pop();
@@ -30,7 +30,7 @@ public:
         return result;
     }
 
-    bool isOperand(char ch) {
+    bool isOperator(char ch) {
         return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '(' || ch == ')';
     }
 

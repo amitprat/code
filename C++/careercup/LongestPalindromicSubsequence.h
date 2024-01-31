@@ -30,7 +30,7 @@ class LongestPalindromicSubsequence {
         string s3 = getLongestPalindromicSubsequence(s);
 
         assert(s1 == s2);
-        // assert(s1 == s3);
+        assert(s1 == s3);
 
         cout << "Longest palindromic subsequence: " << s1 << endl;
 
@@ -54,6 +54,7 @@ class LongestPalindromicSubsequence {
     string longestPalinRec2(string s) {
         return longestPalinRec2(s, 0, s.length() - 1);
     }
+
     string longestPalinRec2(string str, int l, int r) {
         if (l > r) return "";
         if (l == r) return str.substr(l, r - l + 1);
@@ -118,12 +119,13 @@ class LongestPalindromicSubsequence {
         for (int k = 1; k <= n; k++) {
             for (int i = 0; i < n - k + 1; i++) {
                 int j = i + k - 1;
+
                 if (i == j)
                     table[i][j] = 1;  // palin size=1
                 else if (i + 1 == j && str[i] == str[j])
                     table[i][j] = 2;  // palin size=2
                 else if (str[i] == str[j])
-                    table[i][j] = max(table[i][j], 2 + table[i + 1][j - 1]);
+                    table[i][j] = 2 + table[i + 1][j - 1];
                 else
                     table[i][j] = max(table[i + 1][j], table[i][j - 1]);
             }
@@ -173,7 +175,7 @@ class LongestPalindromicSubsequence {
     int longestPalinSubseqUsingLCSDP(string& s1) {
         int n = s1.length();
         string s2 = s1;
-        reverse(s2.begin(), s2.end());
+        std::reverse(s2.begin(), s2.end());
         vector<vector<int>> table(n + 1, vector<int>(n + 1));
 
         for (int i = 0; i <= n; i++) {
@@ -218,7 +220,7 @@ class LongestPalindromicSubsequence {
                 j--;
             }
         }
-        reverse(result.begin(), result.end());
+        std::reverse(result.begin(), result.end());
 
         return result;
     }

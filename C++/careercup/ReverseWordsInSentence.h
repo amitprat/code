@@ -19,10 +19,10 @@ class ReverseWordsInSentence {
 
         int s = 0;
         int e = 0;
-        for (int i = 0; i <= input.size(); i++) {
-            if (i == input.size() || isspace(input[i])) {
-                reverse(result, s, i - 1);
-                s = i + 1;
+        for (e = 0; e <= input.size(); e++) {
+            if (e == input.size() || isspace(input[e])) {
+                reverse(result, s, e - 1);
+                s = e + 1;
             }
         }
 

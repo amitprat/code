@@ -1,46 +1,35 @@
-package programs.string;
+package Java.string;
 
-import programs.types.Pair;
+import Java.types.Pair;
 
 /*
-Hash <char, firstseenindex> for each string.
+https://www.careercup.com/question?id=5389627422670848
 
-The encoding of first seenindices shud match.
+Given two (dictionary) words as Strings, determine if they are isomorphic. Two words are called isomorphic
+if the letters in one word can be remapped to get the second word. Remapping a letter means replacing all
+occurrences of it with another letter while the ordering of the letters remains unchanged. No two letters
+may map to the same letter, but a letter may map to itself.
+
+Example:
+given "foo", "app"; returns true
+we can map 'f' -> 'a' and 'o' -> 'p'
+given "bar", "foo"; returns false
+we can't map both 'a' and 'r' to 'o'
+
+given "turtle", "tletur"; returns true
+we can map 't' -> 't', 'u' -> 'l', 'r' -> 'e', 'l' -> 'u', 'e' -'r'
+
+given "ab", "ca"; returns true
+we can map 'a' -> 'c', 'b'
+
+Hash <char, firstseenindex> for each string.
+The encoding of first seen indices should match.
 
 E.g. Foo and app both encode to 011
 Abcd and hole both encode to 0123
 
 Hate and hell do not match
 As encodings are 0123 and 0122
-
-def string_color_distribution(s):
-    max_color_so_far = -1
-    color_mapping = {}
-    color_distribution = []
-    for c in s:
-        if c in color_mapping:
-            curr_color = color_mapping[c]
-        else:
-            curr_color = max_color_so_far + 1
-            max_color_so_far += 1
-            color_mapping[c] = curr_color
-        color_distribution.append(curr_color)
-    return color_distribution
-
-def are_isomorphs(s1, s2):
-    if len(s1) != len(s2) or len(set(a)) != len(set(b)):
-        return False
-    s1_cd = string_color_distribution(s1)
-    s2_cd = string_color_distribution(s2)
-
-    for i, color in enumerate(s1_cd):
-        if color != s2_cd[i]:
-            return False
-    return True
-
-a = raw_input()
-b = raw_input()
-print are_isomorphs(a,b)
  */
 public class IsomorphicString {
     public static void test() {
@@ -56,26 +45,32 @@ public class IsomorphicString {
         System.out.println(obj.isomorphic(input4.first, input4.second));
     }
 
+    boolean isomorphic(String first, String second) {
+        var dist1 = getDistribution(first);
+        var dist2 = getDistribution(second);
+
+        System.out.println("Dist1:" + dist1 + ", " + "Dist2:" + dist2);
+
+        for (int i = 0; i < dist1.length(); i++) {
+            if (dist1.charAt(i) != dist2.charAt(i))
+                return false;
+        }
+
+        return true;
+    }
+
     private String getDistribution(String str) {
         StringBuilder sb = new StringBuilder();
+
         int[] arr = new int[256];
         int i = 0;
         for (var ch : str.toCharArray()) {
             i++;
             arr[ch] = (arr[ch] == 0 ? i : arr[ch]);
-            if (arr[ch] != 0) sb.append(arr[ch]);
+            if (arr[ch] != 0)
+                sb.append(arr[ch]);
         }
-        return sb.toString();
-    }
 
-    boolean isomorphic(String first, String second) {
-        var dist1 = getDistribution(first);
-        var dist2 = getDistribution(second);
-        System.out.println("Dist1:" + dist1 + ", " + "Dist2:" + dist2);
-        for (int i = 0; i < dist1.length(); i++) {
-            if (dist1.charAt(i) != dist2.charAt(i))
-                return false;
-        }
-        return true;
+        return sb.toString();
     }
 }

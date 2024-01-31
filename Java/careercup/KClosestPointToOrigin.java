@@ -1,9 +1,12 @@
-package programs.careercup;
+package Java.careercup;
 
-import org.jetbrains.annotations.NotNull;
-import programs.types.Point;
+import Java.types.Point;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 public class KClosestPointToOrigin {
@@ -24,24 +27,32 @@ public class KClosestPointToOrigin {
                 new Point(rand.nextInt(10), rand.nextInt(10))
         };
 
-        System.out.println(Arrays.toString(points));
+        System.out.println("Input Points: " + Arrays.toString(points));
 
-        var res = obj.findKClosestPoints(points, 5);
+        var res1 = obj.findKClosestPoints(points, 5);
         System.out.println("K Closest points: ");
-        System.out.println(Arrays.toString(res));
+        System.out.println(Arrays.toString(res1));
+
+        var res2 = obj.findKClosestPoints2(Arrays.asList(points), new Point(0, 0), 5);
+        System.out.println("K Closest points: ");
+        System.out.println(res2);
+
+        obj.findKClosestPoints2();
     }
 
     private Node[] findKClosestPoints(Point[] points, int k) {
         Node[] res = new Node[k];
+
         MaxHeap maxHeap = new MaxHeap(k);
-        for (var p : points) maxHeap.add(p);
+        for (var p : points)
+            maxHeap.add(p);
 
         int index = 0;
         while (!maxHeap.empty()) {
             res[index++] = maxHeap.pop();
         }
 
-        Arrays.sort(res);
+        Arrays.sort(res, (f, s) -> Double.compare(f.distance, s.distance));
 
         return res;
     }
@@ -83,8 +94,13 @@ public class KClosestPointToOrigin {
             int l = 2 * index + 1;
             int r = 2 * index + 2;
             int mx = index;
-            if (l < size && arr[l].distance < arr[mx].distance) mx = l;
-            if (r < size && arr[r].distance < arr[mx].distance) mx = r;
+
+            if (l < size && arr[l].distance > arr[mx].distance)
+                mx = l;
+
+            if (r < size && arr[r].distance > arr[mx].distance)
+                mx = r;
+
             if (mx != index) {
                 var tmp = arr[mx];
                 arr[mx] = arr[index];
@@ -95,7 +111,7 @@ public class KClosestPointToOrigin {
         }
 
         void upHeapify(int index) {
-            int p = index / 2;
+            int p = (index - 1) / 2;
 
             while (p != 0 && arr[p].distance < arr[index].distance) {
                 var tmp = arr[index];
@@ -103,7 +119,7 @@ public class KClosestPointToOrigin {
                 arr[p] = tmp;
 
                 index = p;
-                p = index / 2;
+                p = (index - 1) / 2;
             }
         }
 
@@ -116,7 +132,7 @@ public class KClosestPointToOrigin {
         }
     }
 
-    class Node implements Comparable {
+    class Node implements Comparable<Node> {
         Point point;
         double distance;
 
@@ -126,17 +142,76 @@ public class KClosestPointToOrigin {
         }
 
         @Override
+        public int compareTo(Node o) {
+            double res = distance - o.distance;
+            return (int) res;
+        }
+
+        @Override
         public String toString() {
             return "Node{" +
                     "point=" + point +
                     ", distance=" + distance +
                     '}';
         }
+    }
+
+    // Using build-in priority queue
+    public void findKClosestPoints2() {
+        List<Point> points = new ArrayList<>();
+        points.add(new Point(0, 1));
+        points.add(new Point(2, 5));
+        points.add(new Point(5, 2));
+        points.add(new Point(1, 2));
+        points.add(new Point(1, 0));
+
+        int k = 3;
+        Point src = new Point(0, 0);
+        List<Point> result = this.findKClosestPoints2(points, src, k);
+
+        System.out.println("K Closest Points " + result);
+    }
+
+    private List<Point> findKClosestPoints2(List<Point> points, Point src, int k) {
+        PriorityQueue<PointWithDistance> sortedPointsByDistance = new PriorityQueue<>(
+                (o1, o2) -> Double.compare(o1.d, o2.d));
+
+        for (var point : points) {
+            sortedPointsByDistance.add(new PointWithDistance(point, distance(src, point)));
+        }
+
+        List<Point> result = new ArrayList<>();
+        while (k-- > 0) {
+            result.add(sortedPointsByDistance.poll().p);
+        }
+
+        return result;
+    }
+
+    double distance(Point src, Point dst) {
+        return Math.sqrt(Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2));
+    }
+
+    class PointWithDistance implements Comparator<PointWithDistance> {
+        Point p;
+        double d;
+
+        public PointWithDistance(Point p, double d) {
+            this.p = p;
+            this.d = d;
+        }
 
         @Override
-        public int compareTo(@NotNull Object o) {
-            double res = distance - ((Node) o).distance;
-            return (int) res;
+        public int compare(PointWithDistance o1, PointWithDistance o2) {
+            return Double.compare(o1.d, o2.d);
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "point=" + p +
+                    ", distance=" + d +
+                    '}';
         }
     }
 }

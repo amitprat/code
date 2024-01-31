@@ -1,9 +1,9 @@
-#include "careercup/ProbabilityOfBeingAlive.h"
+#include "careercup/FindPathInMatrix.h"
 
 using namespace std;
 
 int main() {
-    ProbabilityOfBeingAlive::test();
+    FindPathInMatrix::test();
 
     return 0;
 }

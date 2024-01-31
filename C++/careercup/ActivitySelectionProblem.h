@@ -1,8 +1,10 @@
+#pragma once
 #include "../header.h"
 /*
 https://www.careercup.com/question?id=6306164115505152
 
-We have a day to work and we have different kinds works do to which has start-time and end-time. We have to choose the different works so that we can achieve the maximum number of minutes in a day to work. Chosen works should not overlaps to each other.
+We have a day to work and we have different kinds works do to which has start-time and end-time. We have to choose the different works so that
+we can achieve the maximum number of minutes in a day to work. Chosen works should not overlaps to each other.
 Ex-1:
 Start-Time End-Time
 W1: 6:00 9:30
@@ -61,6 +63,7 @@ class ActivitySelectionProblem {
         }
     }
 
+   private:
     static void selectMaximumNumberOfNonConflictingActivities(vector<Interval> tasks) {
         sort(tasks.begin(), tasks.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
 
@@ -74,6 +77,7 @@ class ActivitySelectionProblem {
         cout << endl;
     }
 
+   private:
     static int selectJobsWithMaximumWeight(vector<Job>& weightedJobs) {
         sort(weightedJobs.begin(), weightedJobs.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
         int n = weightedJobs.size();
@@ -92,6 +96,7 @@ class ActivitySelectionProblem {
         return memo[n];
     }
 
+   private:
     static int selectJobsWithMaximumWeightOptimizedLinearSearch(vector<Job>& weightedJobs) {
         if (weightedJobs.empty()) return 0;
 
@@ -118,6 +123,7 @@ class ActivitySelectionProblem {
         return -1;
     }
 
+   private:
     static int selectJobsWithMaximumWeightOptimizedBinarySearch(vector<Job>& weightedJobs) {
         if (weightedJobs.empty()) return 0;
 

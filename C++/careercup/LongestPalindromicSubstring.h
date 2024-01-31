@@ -5,13 +5,14 @@ class LongestPalindromicSubstring {
    public:
     static void test() {
         LongestPalindromicSubstring obj;
-        vector<stirng> inputs = {"forgeeksskeegfor", "abcsdc", "sdfacxcasvsa"};
+        vector<string> inputs = {"forgeeksskeegfor", "abcsdc", "sdfacxcasvsa"};
         for (auto& str : inputs) {
             auto res = obj.longestPalSubstr(str);
-            cout << format("Longest palindromic substring for str='{}' is '{}'", str, res) << endl;
+            cout << std::format("Longest palindromic substring for str='{}' is '{}'", str, res) << endl;
         }
     }
 
+   public:
     string longestPalSubstr(string str) {
         string res1 = longestPalSubstrExpandAroundCenter(str);
         string res2 = longestPalSubstrDP(str);
@@ -66,9 +67,9 @@ class LongestPalindromicSubstring {
                 if (l == 2 && str[i] == str[j])
                     table[i][j] = true;
                 else if (str[i] == str[j])
-                    table[i][j] = table[i - 1][+1];
+                    table[i][j] = table[i - 1][j + 1];
 
-                if (l > longest.length()) {
+                if (table[i][j] && l > longest.length()) {
                     longest = str.substr(i, l);
                 }
             }
@@ -80,16 +81,16 @@ class LongestPalindromicSubstring {
    private:
     int longestPalSubstrDP2(string s) {
         int l = s.length();
-        int table[l][l];
-        memset(table, 0, l * l * sizeof(int));
+        vector<vector<int>> table(l, vector<int>(l));
 
         int max = 1;
-
         for (int i = 0; i < l; i++)
             table[i][i] = 1;
+
         for (int cl = 2; cl < l; cl++) {
             for (int i = 0; i < l - cl + 1; i++) {
                 int j = i + cl - 1;
+
                 if (cl == 2)
                     table[i][j] = ((s[i] == s[j]) ? 2 : 0);
                 else if (s[i] == s[j])
@@ -98,6 +99,7 @@ class LongestPalindromicSubstring {
                 if (table[i][j] > max) max = table[i][j];
             }
         }
+
         return max;
     }
 };

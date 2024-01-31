@@ -1,9 +1,8 @@
-#include "../header.h"
+#pragma once
+#include "../Header.h"
 /*
 * https://www.careercup.com/question?id=14960662
-*
 * Given a array of integers , find 3 indexes i,j,k such that, i<j<k and a[i] < a[j] < a[k]. Best possible is a O(n) algorithm.
-*
 * This question is answered in the Amazon questions
 
 a[i]<a[j]<a[k] s.t i<j<k
@@ -14,7 +13,6 @@ consider the following array:
 a =4,7,5,1,3,8,9,6,2
 LMin=0,0,0,3,3,3,3,3,3
 RMax=6,6,6,6,6,6,6,7,8
-
 
 Now for i=1 to n if a[LMin[i]] < a[i] < a[RMax[i] print LMin[i],a[i],RMax[i]
 Time complexity: O(n)
@@ -34,6 +32,7 @@ class FindIJAndKInElementsOrder {
         printOrder3();
     }
 
+   private:
     static void printOrder1() {
         vector<int> arr = {4, 7, 5, 1, 3, 8, 9, 6, 2};
         int n = arr.size();
@@ -51,10 +50,10 @@ class FindIJAndKInElementsOrder {
                 cout << left[i] << ", " << arr[i] << ", " << right[i] << endl;
             }
         }
-        cout << endl
-             << endl;
+        cout << endl;
     }
 
+   private:
     static void printOrder2() {
         vector<int> arr = {4, 7, 5, 1, 3, 8, 9, 6, 2};
         int n = arr.size();
@@ -71,10 +70,10 @@ class FindIJAndKInElementsOrder {
             rightMax = max(rightMax, arr[i]);
         }
 
-        cout << endl
-             << endl;
+        cout << endl;
     }
 
+   private:
     static void printOrder3() {
         vector<int> arr = {4, 7, 5, 1, 3, 8, 9, 6, 2};
         int n = arr.size();
@@ -97,6 +96,7 @@ class FindIJAndKInElementsOrder {
         cout << endl;
     }
 
+   private:
     std::vector<int> findTriplets(std::vector<int>& nums) {
         int first = INT_MAX, second = INT_MAX;
         int first_index = -1, second_index = -1;
@@ -113,6 +113,7 @@ class FindIJAndKInElementsOrder {
                 result.push_back(first_index);
                 result.push_back(second_index);
                 result.push_back(i);
+
                 return result;
             }
         }

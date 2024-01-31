@@ -43,7 +43,7 @@ class GenerateValidCodes {
 
         generateCodes(input, i + 1, n, cur + string(1, ('a' + input[i] - '1')), result);
 
-        if (i + 1 < n && input[i] <= '2' && input[i + 1] <= '6') {
+        if (i + 1 < n && (input[i] <= '1' || (input[i] <= '2' && input[i + 1] <= '6'))) {
             int val = (input[i] - '0') * 10 + (input[i + 1] - '0');
             generateCodes(input, i + 2, n, cur + string(1, ('a' + val - 1)), result);
         }

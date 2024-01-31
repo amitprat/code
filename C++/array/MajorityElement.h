@@ -1,17 +1,18 @@
+#pragma once
 #include "../header.h"
-
+/*
 // majority element
 // https://www.careercup.com/question?id=14099679
-
-/*
 Design an algorithm that, given a list of n elements in an array, finds all the elements that appear more than n/3 times
 in the list. The algorithm should run in linear time ( n >=0 )
 
 You are expected to use comparisons and achieve linear time. No hashing/excessive space/ and don't use standard linear
- time deterministic selection algo
+time deterministic selection algo
 
 I have a correct solution to it. I am gonna post a small piece of code. You need a compiler that support C++ 11 to run the code.
-But don't worry if you don't have such one. I know that most of people would prefer English to code. I will explain the idea in English afterward, but, excuse me for I am not a native English speaker.
+But don't worry if you don't have such one. I know that most of people would prefer English to code. I will explain the idea in
+English afterward, but, excuse me for I am not a native English speaker.
+
 The algorithm here is actually not designed dedicatedly to solve this question but to handle a more general case:
 Given an array of N numbers, finds all the elements that appear more than N/M times and report the their frequencies.
 The time complexity is O(2*N*logM) and space complexity is O(M)
@@ -62,6 +63,7 @@ class MajorityElement {
 
         if (count > input.size() / 2)
             return {candidate, count};
+
         return {-1, -1};
     }
 
@@ -149,7 +151,7 @@ class MajorityElement {
             if (ret_map.size() == n) {
                 for (auto iter = ret_map.begin(); iter != ret_map.end();) {
                     --(*iter).second;
-                    --total;
+
                     if ((*iter).second == 0)
                         ret_map.erase(iter++);
                     else

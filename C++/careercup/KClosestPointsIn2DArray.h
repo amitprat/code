@@ -1,5 +1,5 @@
 #include "../header.h"
-
+#include "ds/PriorityQueue.h"
 /*
 https://careercup.com/question?id=5309537623998464
 
@@ -11,20 +11,9 @@ You can do it in O(n), but you have to avoid heaps.
 First build an array with the distances to the origin and the corresponding point. O(n)
 Then find the Kth largest distance using the Selection algorithm. O(n)
 The K-1 smallest distances are to the left of the Kth distance, in no particular order.
-
 */
+
 class KClosestPointsIn2DArray {
-    struct Point {
-        int x, y;
-        Point(int x, int y) : x(x), y(y) {}
-
-        string to_string() {
-            stringstream ss;
-            ss << "{" << x << "," << y << "}";
-            return ss.str();
-        }
-    };
-
    public:
     static void test() {
         KClosestPointsIn2DArray obj;
@@ -36,29 +25,28 @@ class KClosestPointsIn2DArray {
         points.push_back(Point(2, 2));
 
         Point origin(0, 0);
+        int k = 3;
         {
             cout << "K Closest points using heap: ";
-            vector<Point> result = obj.kClosestPointsUsingHeap(points, origin, 3);
-
-            for (auto &p : result)
-                cout << p.to_string() << ", ";
-
-            cout << endl;
+            vector<Point> result = obj.kClosestPointsUsingHeap(points, origin, k);
+            cout << result << endl;
         }
 
         {
             cout << "K Closest points using partitioning: ";
-            vector<Point> result = obj.kClosestPointsUsingPartition(points, origin, 3);
+            vector<Point> result = obj.kClosestPointsUsingPartition(points, origin, k);
+            cout << result << endl;
+        }
 
-            for (auto &p : result)
-                cout << p.to_string() << ", ";
-
-            cout << endl;
+        {
+            cout << "K Closest points using priority queue: ";
+            vector<Point> result = obj.kClosestPointsUsingPriorityQueue(points, origin, k);
+            cout << result << endl;
         }
     }
 
    private:
-    vector<Point> kClosestPointsUsingHeap(vector<Point> &points, Point &origin, int k) {
+    vector<Point> kClosestPointsUsingPriorityQueue(vector<Point> &points, Point &origin, int k) {
         // prepare minheap of {distance, Point}
         using P = pair<double, Point>;
         auto comp = [&](auto &l, auto &r) { return l.first < r.first; };
@@ -82,9 +70,11 @@ class KClosestPointsIn2DArray {
         // create result
         vector<Point> result;
         while (!pq.empty()) {
-            result.push_back(pq.top());
+            result.push_back(pq.top().second);
             pq.pop();
         }
+
+        std::reverse(result.begin(), result.end());
 
         return result;
     }
@@ -94,7 +84,10 @@ class KClosestPointsIn2DArray {
         vector<pair<double, Point>> distances = getDistances(points, origin);
 
         // partition distances array such that smallest k points are on left.
-        int p = kClosestPoints(distances, 0, distances.size() - 1, k);
+        int p = kClosestPointsUsingPartition(distances, 0, distances.size() - 1, k);
+
+        // sort the part of vector only
+        sort(distances.begin(), distances.begin() + p + 1, [](const auto &f, const auto &s) { return f.first < s.first; });
 
         // get result.
         vector<Point> result;
@@ -105,17 +98,18 @@ class KClosestPointsIn2DArray {
         return result;
     }
 
-    int kClosestPoints(vector<pair<double, Point>> &distances, int l, int r, int k) {
+    int kClosestPointsUsingPartition(vector<pair<double, Point>> &distances, int l, int r, int k) {
         if (l > r) return -1;
 
         int p = partition(distances, l, r);
         int q = p - l + 1;
+
         if (q == k)
             return p;
         else if (q < k)
-            return kClosestPoints(distances, p + 1, r, k - q);
+            return kClosestPointsUsingPartition(distances, p + 1, r, k - q);
         else
-            return kClosestPoints(distances, l, p - 1, k);
+            return kClosestPointsUsingPartition(distances, l, p - 1, k);
     }
 
     int partition(vector<pair<double, Point>> &distances, int l, int r) {
@@ -132,7 +126,6 @@ class KClosestPointsIn2DArray {
         return low;
     }
 
-   private:
     double distance(Point p1, Point p2) {
         return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
     }
@@ -142,6 +135,32 @@ class KClosestPointsIn2DArray {
         for (auto &p : points) {
             result.push_back({this->distance(origin, p), p});
         }
+
+        return result;
+    }
+
+   private:
+    vector<Point> kClosestPointsUsingHeap(vector<Point> &points, Point &origin, int k) {
+        using P = pair<double, Point>;
+        auto compare = [](const auto &first, const auto &second) -> bool { return first.first > second.first; };
+        PriorityQueue<P> heap(compare);
+
+        vector<P> pointDistancePairs = getDistances(points, origin);
+
+        for (auto &pointDistancePair : pointDistancePairs) {
+            if (heap.size() >= k && heap.top().first > pointDistancePair.first) {
+                heap.pop();
+            }
+            if (heap.size() < k) heap.insert(pointDistancePair);
+        }
+
+        // get result.
+        vector<Point> result;
+        while (!heap.empty()) {
+            result.push_back(heap.pop().second);
+        }
+
+        std::reverse(result.begin(), result.end());
 
         return result;
     }

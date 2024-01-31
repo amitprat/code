@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -15,50 +16,37 @@ print:
 3 5 7
 6 8
 9
-
-let i be row number (0 to N-1), and j be col number (O to N-1)
-
-diagonal 1 has i+j =0
-diagonal 2 has i+j =1
-...
-
-So define D = i+j
-
-Loop with D from 0 to 2*(N-1)
-
-Now if D = i+j then j=D-i
-So we have reduced the problem to two variables: D and i (two loops)
-
-
-for D from 0 to 2*(N-1)
-{
-   for i from 0 to D
-       print(A[i][D-i])
-
-  println();
-}
 */
-
 class PrintMatrixDiagonally {
    public:
     static void test() {
         PrintMatrixDiagonally obj;
+
         vector<vector<vector<int>>> inputs = {
             {{1}},
             {{1, 2}, {4, 5}},
             {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}};
+
         for (auto& input : inputs) {
-            obj.printDiags(arr);
-            obj.printDiags2(arr);
+            cout << "Print matrix diagonally for:" << endl;
+            cout << input << endl;
+
+            cout << "printDiags1:" << endl;
+            obj.printDiags1(input);
+            cout << endl;
+
+            cout << "printDiags1:" << endl;
+            obj.printDiags2(input);
+            cout << endl;
         }
     }
 
    private:
-    void printDiags(vector<vector<int>> arr) {
+    void printDiags1(const vector<vector<int>>& arr) {
         int N = arr.size();
         for (int d = 0; d <= 2 * (N - 1); d++) {
             for (int i = 0; i <= d; i++) {
-                if (i < N && (d - i) < N) {
+                if (i < N && d - i < N) {
                     cout << arr[i][d - i] << " ";
                 }
             }
@@ -66,7 +54,7 @@ class PrintMatrixDiagonally {
         }
     }
 
-    void printDiags2(vector<vector<int>> arr) {
+    void printDiags2(const vector<vector<int>>& arr) {
         int n = arr.size();
         Point start = {0, 0};
 
@@ -83,6 +71,7 @@ class PrintMatrixDiagonally {
                 start.x++;
             else
                 start.y++;
+
         } while (start.x < n);
     }
 };

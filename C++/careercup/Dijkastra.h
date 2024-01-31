@@ -1,19 +1,19 @@
 #pragma once
 #include "../Header.h"
 
-class Dijkastra {
-public:
+class DijkastraMatrix {
+   public:
     static void test() {
-        Dijkastra obj;
-        vector<vector<int>> graph = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
-                    { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
-                    { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
-                    { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
-                    { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
-                    { 0, 0, 4, 14, 10, 0, 2, 0, 0 },
-                    { 0, 0, 0, 0, 0, 2, 0, 1, 6 },
-                    { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
-                    { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+        DijkastraMatrix obj;
+        vector<vector<int>> graph = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
+                                     {4, 0, 8, 0, 0, 0, 0, 11, 0},
+                                     {0, 8, 0, 7, 0, 4, 0, 0, 2},
+                                     {0, 0, 7, 0, 9, 14, 0, 0, 0},
+                                     {0, 0, 0, 9, 0, 10, 0, 0, 0},
+                                     {0, 0, 4, 14, 10, 0, 2, 0, 0},
+                                     {0, 0, 0, 0, 0, 2, 0, 1, 6},
+                                     {8, 11, 0, 0, 0, 0, 1, 0, 7},
+                                     {0, 0, 2, 0, 0, 0, 6, 7, 0}};
 
         int s = 0;
         vector<int> dist = obj.dijkstra(graph, s);
@@ -43,7 +43,7 @@ public:
         return dist;
     }
 
-private:
+   private:
     int minWeightVertex(vector<int> dist, vector<bool> visited) {
         int r = -1;
         int mnW = INT_MAX;
@@ -59,15 +59,17 @@ private:
 
 class DijkastraAdjGraph {
     class Graph {
-    public:
+       public:
         class Edge {
-        public:
+           public:
             int v, w;
-            Edge(int v, int w) :v(v), w(w) {}
+            Edge(int v, int w) : v(v), w(w) {}
         };
         unordered_map<int, vector<Edge>> vertices;
+
+       public:
         void add(int u) {
-            vertices.insert({ u, {} });
+            vertices.insert({u, {}});
         }
 
         void add(int u, int v, int w) {
@@ -83,10 +85,13 @@ class DijkastraAdjGraph {
     class Minheap {
         vector<pair<int, int>> arr;
         unordered_map<int, int> positions;
-    public:
+
+       public:
         void put(pair<int, int> u) {
-            if (exits(u))  update(u);
-            else insert(u);
+            if (exits(u))
+                update(u);
+            else
+                insert(u);
         }
         int size() { return arr.size(); }
         pair<int, int> pop() {
@@ -106,14 +111,17 @@ class DijkastraAdjGraph {
         bool contains(int u) {
             return positions.find(u) != positions.end();
         }
-    private:
+
+       private:
         bool exits(pair<int, int> u) { return positions.find(u.first) != positions.end(); }
         void update(pair<int, int> u) {
             int p = positions[u.first];
             arr[p] = u;
             positions[u.first] = p;
-            if (u.second > arr[p].second) downHeapify(p);
-            else upHeapify(p);
+            if (u.second > arr[p].second)
+                downHeapify(p);
+            else
+                upHeapify(p);
         }
         void insert(pair<int, int> u) {
             arr.push_back(u);
@@ -123,9 +131,13 @@ class DijkastraAdjGraph {
         void downHeapify(int p) {
             int mn = p;
             int lp = left(p);
-            if (lp < arr.size() && arr[lp].second < arr[mn].second) { mn = lp; }
+            if (lp < arr.size() && arr[lp].second < arr[mn].second) {
+                mn = lp;
+            }
             int rp = right(p);
-            if (rp < arr.size() && arr[rp].second < arr[mn].second) { mn = rp; }
+            if (rp < arr.size() && arr[rp].second < arr[mn].second) {
+                mn = rp;
+            }
 
             if (mn != p) {
                 swap(arr[mn], arr[p]);
@@ -152,7 +164,8 @@ class DijkastraAdjGraph {
             return 2 * u + 2;
         }
     };
-public:
+
+   public:
     static void test() {
         DijkastraAdjGraph obj;
         Graph g;
@@ -181,9 +194,9 @@ public:
     vector<int> dijkstra(Graph g, int s) {
         Minheap mh;
         for (auto v : g.vertices) {
-            mh.put({ v.first, INT_MAX });
+            mh.put({v.first, INT_MAX});
         }
-        mh.put({ s, 0 });
+        mh.put({s, 0});
         vector<int> dist(g.vertices.size(), INT_MAX);
 
         while (mh.size() != 0) {
@@ -194,7 +207,7 @@ public:
                 if (mh.contains(v.v)) {
                     int wt = mh.get(v.v);
                     if (u.second + v.w < wt) {
-                        mh.put({ v.v, u.second + v.w });
+                        mh.put({v.v, u.second + v.w});
                     }
                 }
             }

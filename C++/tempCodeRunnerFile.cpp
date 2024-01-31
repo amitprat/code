@@ -1,9 +1,9 @@
-#include "careercup/GetRepeatedStringPeriod.h"
+#include "careercup/LongestPalindromicSubstring.h"
 
 using namespace std;
 
 int main() {
-    GetRepeatedStringPeriod::test();
+    LongestPalindromicSubstring::test();
 
     return 0;
 }
