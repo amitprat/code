@@ -18,6 +18,7 @@ class DivideWithoutDivisionOperator {
         int x = abs(dividend);
         int y = abs(divisor);
         if (x == INT_MIN) x = INT_MAX;
+
         unsigned int m = 1;
         unsigned int q = 0;
 

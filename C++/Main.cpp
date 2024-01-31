@@ -1,9 +1,8 @@
-#include "careercup/ProbabilityOfBeingAlive.h"
-
+#include "tree/BinarySearchTreeToDoublyLinkedList.h"
 using namespace std;
 
 int main() {
-    ProbabilityOfBeingAlive::test();
+    BinarySearchTreeToDoublyLinkedList::test();
 
     return 0;
 }

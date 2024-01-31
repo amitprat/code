@@ -1,11 +1,25 @@
 #pragma once
 #include "../header.h"
 
-
 class Card {
-public:
-    enum class Suite { DIAMOND, SPADE, HEART, CLUB };
-    enum class Type { ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING };
+   public:
+    enum class Suite { DIAMOND,
+                       SPADE,
+                       HEART,
+                       CLUB };
+    enum class Type { ACE,
+                      TWO,
+                      THREE,
+                      FOUR,
+                      FIVE,
+                      SIX,
+                      SEVEN,
+                      EIGHT,
+                      NINE,
+                      TEN,
+                      JACK,
+                      QUEEN,
+                      KING };
 
     const unordered_map<Suite, string> suiteStrings = {
         {Suite::DIAMOND, "Diamond"},
@@ -22,11 +36,11 @@ public:
     Card(Suite suite, Type type) : suite(suite), type(type) {}
     Card(Suite suite, Type type, int val) : suite(suite), type(type), val(val) {}
 
-    bool operator ==(const Card& that) {
+    bool operator==(const Card& that) {
         return this->suite == that.suite && this->type == that.type;
     }
 
-    void operator =(const Card& that) {
+    void operator=(const Card& that) {
         this->suite = that.suite;
         this->type = that.type;
         this->val = that.val;
@@ -37,13 +51,14 @@ public:
 };
 
 class CardDeck {
-public:
+   public:
     enum class Pos { TOP };
 
-private:
+   private:
     vector<Card> cards;
     const int DECK_SIZE = 52;
-public:
+
+   public:
     CardDeck() {
         srand(time(nullptr));
         init();
@@ -94,18 +109,18 @@ public:
         return cards.size();
     }
 
-private:
+   private:
     void init() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 13; j++) {
-                cards.push_back({ Card::Suite(i), Card::Type(j),getValue(i,j) });
+                cards.push_back({Card::Suite(i), Card::Type(j), getValue(i, j)});
             }
         }
     }
 };
 
 class BlackjackCardDeck : public CardDeck {
-public:
+   public:
     int getValue(int i, int j) override {
         if (j > 0 && j < 10) return j + 1;
         if (j == 10) return 10;
@@ -116,7 +131,7 @@ public:
 };
 
 class Hand {
-public:
+   public:
     vector<Card> cards;
     void add(vector<Card> cards) {
         for (auto& card : cards) {
@@ -137,8 +152,10 @@ public:
     int value() {
         int val = 0;
         for (auto& card : cards) {
-            if (card.val == 1 && val + card.val + 10 <= 21) val += 11;
-            else val += card.val;
+            if (card.val == 1 && val + card.val + 10 <= 21)
+                val += 11;
+            else
+                val += card.val;
         }
         return val;
     }
@@ -147,7 +164,7 @@ public:
 class Player {
     bool done = false;
 
-public:
+   public:
     Hand hand;
     string name;
     double chips;
@@ -196,12 +213,12 @@ public:
 };
 
 class Dealer : public Player {
-private:
+   private:
     bool isFirstServe = true;
     int countsInFirstServe = 2;
     int followupServes = 1;
 
-public:
+   public:
     Dealer() : Player() {}
     Dealer(string name) : Player(name) {}
     bool deal(BlackjackCardDeck& deck, vector<Player>& players) {
@@ -212,8 +229,7 @@ public:
         if (isFirstServe) {
             count = countsInFirstServe;
             isFirstServe = false;
-        }
-        else {
+        } else {
             count = followupServes;
         }
 
@@ -228,7 +244,7 @@ public:
         return res;
     }
 
-private:
+   private:
     vector<Card> getCards(BlackjackCardDeck& deck, int count) {
         vector<Card> cards;
         for (int i = 0; i < count; i++) {
@@ -239,14 +255,14 @@ private:
 };
 
 class Blackjack {
-private:
+   private:
     Dealer dealer;
     vector<Player> players;
     BlackjackCardDeck cardDeck;
     int betVal = 5;
     const int BLACK_JACK = 21;
 
-public:
+   public:
     void registerPlayer(Player player) {
         players.push_back(player);
     }
@@ -266,12 +282,10 @@ public:
             if (player.hand.value() == BLACK_JACK) {
                 dealer.withdrawChips(betVal);
                 player.addChips(1.5 * (double)betVal);
-            }
-            else if (player.hand.value() < dealer.hand.value()) {
+            } else if (player.hand.value() < dealer.hand.value()) {
                 player.withdrawChips(betVal);
                 dealer.addChips(betVal);
-            }
-            else {
+            } else {
                 dealer.withdrawChips(betVal);
                 player.addChips(betVal);
             }
@@ -298,7 +312,7 @@ public:
 };
 
 class BlackjackGame {
-public:
+   public:
     static void test() {
         Blackjack game;
         game.registerPlayer(Player("player1", 50));
@@ -312,7 +326,8 @@ public:
             cout << "------------------" << endl;
             game.startGame(activePlayers);
             game.showStats(activePlayers);
-            cout << "==================" << endl << endl;
+            cout << "==================" << endl
+                 << endl;
 
             game.resetGame(activePlayers);
             activePlayers = game.getActivePlayersSet();
@@ -322,7 +337,7 @@ public:
 };
 
 class BlackjackCardDeckTest {
-public:
+   public:
     static void test() {
         BlackjackCardDeck deck;
         deck.shuffle();
@@ -331,7 +346,7 @@ public:
 };
 
 class BlackjackCardDealerTest {
-public:
+   public:
     static void test() {
         BlackjackCardDeck deck;
         deck.shuffle();

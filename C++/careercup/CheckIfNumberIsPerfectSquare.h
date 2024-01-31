@@ -1,5 +1,5 @@
+#pragma once
 #include "../header.h"
-
 /*
 https://careercup.com/question?id=19638671
 
@@ -11,14 +11,15 @@ o/p : True
 i/p : 44
 o/p: False
 */
-
-class CheckIfNumberIsPerfectSqaure {
+class CheckIfNumberIsPerfectSquare {
    public:
     static void test() {
-        int num = 25;
-        CheckIfNumberIsPerfectSqaure obj;
-        bool res = obj.IsPerfectSquare(num);
-        cout << res << endl;
+        CheckIfNumberIsPerfectSquare obj;
+
+        for (int num = 1; num <= 25; num++) {
+            bool res = obj.IsPerfectSquare(num);
+            cout << format("Is num={} perfect square={}", num, res) << endl;
+        }
     }
 
     bool IsPerfectSquare(int num) {
@@ -28,8 +29,8 @@ class CheckIfNumberIsPerfectSqaure {
             i += 2;
         }
 
-        if (num == 0)
-            return true;
+        if (num == 0) return true;
+
         return false;
     }
 };

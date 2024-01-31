@@ -2,9 +2,9 @@
 #include "../header.h"
 
 class BoundedBuffer {
-private:
+   private:
     class Node {
-    public:
+       public:
         string label;
         int time;
         Node(string label, int time) : label(label), time(time) {}
@@ -12,15 +12,15 @@ private:
             return "{" + label + "," + std::to_string(time) + "}";
         }
     };
-private:
+
+   private:
     deque<Node> dq;
     int capacity;
     int oldestAllowedTime;
 
-public:
+   public:
     BoundedBuffer(int capacity, int oldest)
         : capacity(capacity), oldestAllowedTime(oldest) {}
-
 
     static void test() {
         BoundedBuffer buffer(50, 10);

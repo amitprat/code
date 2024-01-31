@@ -1,12 +1,9 @@
 #pragma once
 #include "../Header.h"
-
 /*
 https://www.careercup.com/question?id=23823662
 
-
 Given an equation in the form 2^i * 3^j * 5^k * 7^l where i,j,k,l >=0 are integers.write a program to generate numbers from that equation in sorted order efficiently.
-
 for example numbers from that equation will be in the order 2,3,5,6,7,8,9.....and so on..
 
 These are basically referred to as ugly numbers . Here is the code for it:
@@ -23,17 +20,18 @@ class PrintMultiplesOfUglyNumbers {
         PrintMultiplesOfUglyNumbers obj;
         vector<int> inputs = {0, 1, 2, 10, 20};
         for (auto& num : inputs) {
-            auto res1 = obj.printAllMultiples(num);
-            auto res3 = obj.printAllMultiplesCareercup(num);
-            obj.printKUglyNumbersUsingQueue(num);
+            auto res1 = obj.getMultiplesOfUglyNumbers1(num);
+            auto res2 = obj.getMultiplesOfUglyNumbers2(num);
+            auto res3 = obj.getMultiplesOfUglyNumbers3(num);
 
+            assert(res1 == res2);
             assert(res1 == res3);
             cout << to_string(res1) << endl;
         }
     }
 
    private:
-    vector<int> printAllMultiples(int n) {
+    vector<int> getMultiplesOfUglyNumbers1(int n) {
         if (n == 0) return {};
 
         vector<int> result(n);
@@ -42,6 +40,7 @@ class PrintMultiplesOfUglyNumbers {
         for (int i = 1; i < n; i++) {
             int minMultiple = min(min(2 * result[i2], 3 * result[i3]), min(5 * result[i5], 7 * result[i7]));
             result[i] = minMultiple;
+
             if (minMultiple == 2 * result[i2]) i2++;
             if (minMultiple == 3 * result[i3]) i3++;
             if (minMultiple == 5 * result[i5]) i5++;
@@ -52,37 +51,51 @@ class PrintMultiplesOfUglyNumbers {
     }
 
    private:
-    void printKUglyNumbersUsingQueue(int n) {
-        queue<int> q2, q3, q5;
+    vector<int> getMultiplesOfUglyNumbers2(int n) {
+        if (n == 0) return {};
+
+        queue<int> q2, q3, q5, q7;
         vector<int> numbers;
         numbers.push_back(1);
         q2.push(2);
         q3.push(3);
         q5.push(5);
+        q7.push(7);
 
         while (n-- > 1) {
-            int mn = min(q2.front(), min(q3.front(), q5.front()));
+            int mn = min4(q2.front(), q3.front(), q5.front(), q7.front());
             numbers.push_back(mn);
-            if (mn == q5.front()) {
+
+            if (mn == q7.front()) {
+                q7.pop();
+
+                q7.push(7 * mn);
+            } else if (mn == q5.front()) {
                 q5.pop();
+
+                q5.push(5 * mn);
+                q7.push(7 * mn);
             } else if (mn == q3.front()) {
                 q3.pop();
+
                 q3.push(3 * mn);
+                q5.push(5 * mn);
+                q7.push(7 * mn);
             } else if (mn == q2.front()) {
                 q2.pop();
 
                 q2.push(2 * mn);
                 q3.push(3 * mn);
+                q5.push(5 * mn);
+                q7.push(7 * mn);
             }
-
-            q5.push(5 * mn);
         }
 
-        cout << "K ugly numbers = " << to_string(numbers) << endl;
+        return numbers;
     }
 
    private:
-    vector<int> printAllMultiplesCareercup(int n) {
+    vector<int> getMultiplesOfUglyNumbers3(int n) {
         if (n == 0) return {};
 
         unsigned* ugly = (unsigned*)malloc(n * sizeof(unsigned*));
@@ -120,6 +133,7 @@ class PrintMultiplesOfUglyNumbers {
         return result;
     }
 
+   private:
     int min4(int a, int b, int c, int d) {
         return min(a, min(b, min(c, d)));
     }

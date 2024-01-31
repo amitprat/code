@@ -1,84 +1,68 @@
 #pragma once
-#include "../Header.h"
-using namespace std;
+#include "../header.h"
+#include "tree/Tree.h"
 
-class BT
-{
-public:
-    class Node
-    {
-    public:
-        int val;
-        Node* left, * right;
-        Node(int val, Node* left = nullptr, Node* right = nullptr) : val(val), left(left), right(right) {}
-    };
+class SerializeDeserializeBT {
+   public:
+    static void test() {
+        SerializeDeserializeBT obj;
+        Tree<int> tree;
+        tree.root = new Tree<int>::Node(23);
+        tree.root->left = new Tree<int>::Node(1);
+        tree.root->right = new Tree<int>::Node(51);
+        tree.root->left->right = new Tree<int>::Node(20);
+        tree.root->right->left = new Tree<int>::Node(2);
 
-    static void test()
-    {
-        BT obj;
-        Node* node = new Node(23);
-        node->left = new Node(1);
-        node->right = new Node(51);
-        node->left->right = new Node(20);
-        node->right->left = new Node(2);
+        cout << "Original: " << tree.inorder() << endl;
 
-        cout << "Original: ";
-        obj.print(node);
-        cout << endl;
-
-        string serialized = obj.serialize(node);
+        string serialized = obj.serialize(tree.root);
         cout << "Serialized :" << serialized << endl;
 
-        Node* deserialized = obj.deserialize(serialized);
-        cout << "De serialized:";
-        obj.print(node);
+        Tree<int> deserializeTree;
+        deserializeTree.root = obj.deserialize(serialized);
+        cout << "Deserialized:" << deserializeTree.inorder() << endl;
     }
 
-    void print(Node* node) {
-        if (node) {
-            print(node->left);
-            cout << node->val << " ";
-            print(node->right);
-        }
-    }
-
-    string serialize(Node* node)
-    {
+   public:
+    string serialize(Tree<int>::Node* node) {
         if (!node) return "#";
-        string result;
-        result += std::to_string(node->val);
+
+        string result = std::to_string(node->val);
+
         result += " " + serialize(node->left);
         result += " " + serialize(node->right);
 
         return result;
     }
 
-    Node* deserialize(string serilized)
-    {
+    Tree<int>::Node* deserialize(string serilized) {
         vector<int> items = split(serilized);
         int index = 0;
+
         return deserialize(items, index, INT_MIN);
     }
 
-    Node* deserialize(vector<int> items, int& index, int marker)
-    {
+    Tree<int>::Node* deserialize(const vector<int>& items, int& index, int marker) {
         if (index >= items.size()) return nullptr;
         if (items[index] == marker) return nullptr;
-        Node* root = new Node(items[index++]);
+
+        Tree<int>::Node* root = new Tree<int>::Node(items[index++]);
+
         root->left = deserialize(items, index, marker);
         root->right = deserialize(items, index, marker);
 
         return root;
     }
 
-    vector<int> split(string serialized)
-    {
+   private:
+    vector<int> split(string serialized) {
         vector<int> result;
-        for (char ch : serialized) {
-            if (ch == ' ') continue;
-            if (ch == '#') result.push_back(INT_MIN);
-            else result.push_back(ch - '0');
+        stringstream ss(serialized);
+        string word;
+        while (ss >> word) {
+            result.push_back(stoi(word));
         }
+
         return result;
     }
 };

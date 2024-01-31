@@ -1,18 +1,21 @@
 #pragma once
 #include "../header.h"
-#include "../design/GFG_SudokuSolver.h"
+#include "../design/SudokuSolver.h"
 
 namespace sudoku {
     static const int SIZE = 9;
     static const int BOXSIZE = 3;
     static const int MARKER_EMPTY = 0;
 
+    using IBoard = vector<vector<int>>;
+    const int UNASSIGNED = 0;
+
     class Move {
     public:
-        Position pos;
+        Point pos;
         int num;
         Move() {}
-        Move(Position pos, int num) : pos(pos), num(num) {}
+        Move(Point pos, int num) : pos(pos), num(num) {}
     };
 
     class SudokuSolver {
@@ -25,7 +28,7 @@ namespace sudoku {
 
     private:
         bool hasMultipleSolution(IBoard& board, int& count) {
-            Position pos;
+            Point pos;
             if (!hasNextEmptyPosition(board, pos)) { count++; return true; }
             for (int num = 1; num <= SIZE; num++) {
                 if (isValid(board, pos, num)) {
@@ -37,7 +40,7 @@ namespace sudoku {
             return false;
         }
 
-        bool hasNextEmptyPosition(IBoard& board, Position& pos) {
+        bool hasNextEmptyPosition(IBoard& board, Point& pos) {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (board[i][j] == MARKER_EMPTY) { pos = { i,j }; return true; }
@@ -46,7 +49,7 @@ namespace sudoku {
             return false;
         }
 
-        bool isValid(IBoard& board, Position& pos, int num) {
+        bool isValid(IBoard& board, Point& pos, int num) {
             //check row
             for (int j = 0; j < SIZE; j++) {
                 if (board[pos.x][j] == num) return false;
@@ -84,7 +87,7 @@ namespace sudoku {
             int curEmptyCells = 0;
             if (res == false) return;
             do {
-                Position pos = randomPosition(board);
+                Point pos = randomPosition(board);
                 board[pos.x][pos.y] = MARKER_EMPTY;
                 curEmptyCells++;
             } while (curEmptyCells < emptyCells[(int)level] || !solver.hasExtactOneSol(board));
@@ -92,7 +95,7 @@ namespace sudoku {
         }
 
         bool generateFullBoard(IBoard& board) {
-            Position pos;
+            Point pos;
             if (!hasNextEmptyPosition(board, pos)) return true;
             for (int num = 1; num <= SIZE; num++) {
                 if (isValid(board, pos, num)) {
@@ -103,7 +106,7 @@ namespace sudoku {
             }
             return false;
         }
-        bool isValid(IBoard& board, Position& pos, int num) {
+        bool isValid(IBoard& board, Point& pos, int num) {
             //check row
             for (int j = 0; j < SIZE; j++) {
                 if (board[pos.x][j] == num) return false;
@@ -126,7 +129,7 @@ namespace sudoku {
             return true;
         }
     private:
-        bool hasNextEmptyPosition(IBoard& board, Position& pos) {
+        bool hasNextEmptyPosition(IBoard& board, Point& pos) {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (board[i][j] == MARKER_EMPTY) { pos = { i,j }; return true; }
@@ -135,8 +138,8 @@ namespace sudoku {
             return false;
         }
 
-        Position randomPosition(IBoard& board) {
-            Position pos;
+        Point randomPosition(IBoard& board) {
+            Point pos;
             do {
                 pos.x = rand() % 9;
                 pos.y = rand() % 9;
@@ -189,8 +192,8 @@ namespace sudoku {
             return ::to_string(board);
         }
 
-        vector<Position> getEmptyPositions() {
-            vector<Position> positions;
+        vector<Point> getEmptyPositions() {
+            vector<Point> positions;
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (board[i][j] == MARKER_EMPTY) positions.push_back({ i,j });
@@ -199,7 +202,7 @@ namespace sudoku {
             return positions;
         }
 
-        void set(Position pos, int num) {
+        void set(Point pos, int num) {
             board[pos.x][pos.y] = num;
         }
 
@@ -208,7 +211,7 @@ namespace sudoku {
                 for (int j = 0; j < SIZE; j++) {
                     int num = board[i][j];
                     board[i][j] = MARKER_EMPTY;
-                    Position pos(i, j);
+                    Point pos(i, j);
                     if (!generator.isValid(board, pos, num)) {
                         board[i][j] = num;
                         return false;
@@ -237,7 +240,7 @@ namespace sudoku {
             if (!isGameInProgress) {
                 isGameInProgress = true; totalGames++;
             }
-            vector<Position> positions = board.getEmptyPositions();
+            vector<Point> positions = board.getEmptyPositions();
             int r = rand() % positions.size();
             auto p = positions[r];
             int num = rand() % 9 + 1;
@@ -322,7 +325,7 @@ namespace sudoku {
             cout << board.to_string() << endl;
             cout << solver.hasExtactOneSol(board.getRaw()) << endl;
 
-            gfg_sudoku::GFG_SudokuSolver gfg_solver;
+            SudokuSolver gfg_solver;
             gfg_solver.SolveSudoku(board.getRaw());
             cout << board.to_string() << endl;
             cout << "Is Board Valid: " << gfg_solver.isValid(board.getRaw()) << endl;

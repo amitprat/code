@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 class MergeTree {
@@ -10,7 +11,7 @@ class MergeTree {
 
    private:
     static void test() {
-        IterativeInorderTraversal obj;
+        MergeTree obj;
 
         Node* node1 = new Node(10);
         node1->left = new Node(5);

@@ -1,20 +1,5 @@
 #pragma once
-
-#include <time.h>
-#include <stdlib.h>
-#include <thread>
-#include <vector>
-#include <iostream>
-#include <atomic>
-#include <mutex>
-#include <time.h>
-#include <fstream>
-#include <tuple>
-#include <queue>
-#include <unordered_map>
-#include <string>
-
-using namespace std;
+#include "../header.h"
 
 class TimeFormat
 {

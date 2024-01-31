@@ -1,30 +1,28 @@
+#pragma once
+#include "../header.h"
+
 /*
 Balanced Partitioning Problem;
 Devide given set into two subsets such that the minimum difference between sum of two sets is minimum.
-example  - 
-[5,1,2,1]
+example  - [5,1,2,1]
 Sum = 9
 S1 = [5], S2 = [1,2,1]
-*/
 
-/*
 Algorithm:
 Firstly this algorithm can be viewed as knapsack problem where individual array elements are the weights and half the sum as total weight of the knapsack.
-
 1.take a solution array as boolean array sol[] of size sum/2+1
-
 2. For each array element,traverse the array and set sol [j] to be true if sol [j – value of array] is true
-
 3.Let halfsumcloser be the closest reachable number to half the sum and partition are sum-halfsumcloser and halfsumcloser.
-
 4.start from halfsum and decrease halfsumcloser once everytime until you find that sol[halfsumcloser] is true
 */
+
 int minDiff ( int a[], int n ) {
-  int s = sum(a,n);
+  int s = accumulate(a, a+n, 0);
   int d = s/2;
   
   while ( d > 0 && !subsetSum(a,n,d) )
     d--;
+
   return d;
 }
 
@@ -36,10 +34,12 @@ bool subsetSum(int a[],int n,int d) {
   for(int i=1;i<=d;i++) {
     for(int j=1;j<=n;j++) {
       table[i][j] = table[i][j-1];
+
       if(i >= a[j-1])
-        table[i]j] |=table[i-a[j-1]][j-1]
+        table[i][j] |=table[i-a[j-1]][j-1];
     }
   }
+
   return table[d][n];
 }
 
@@ -137,9 +137,10 @@ public class Main {
 		for(int i=0; i<array.length; i++){
 			sum += array[i];
 		}
-		if(sum%1 == 1){
+		if(sum%2 == 1){
 			return false;
 		}
+    
 		boolean[][] partition = new boolean[sum/2+1][array.length+1];
 		for(int i=0;i<array.length+1;i++){
 			partition[0][i] = true;

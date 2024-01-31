@@ -25,6 +25,9 @@ class CelebrityProblem {
             {0, 0, 1, 0},
             {0, 0, 0, 0},
             {0, 0, 1, 0}};
+
+        assert(obj.findCelebrity(mat, 4) == obj.findCelebrity2(mat, 4));
+
         cout << obj.findCelebrity(mat, 4) << endl;
     }
 

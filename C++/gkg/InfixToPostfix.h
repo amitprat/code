@@ -1,8 +1,9 @@
 #pragma once
 #include "../Header.h"
 
+// obselete
 class InfixToPostfix {
-public:
+   public:
     static void test() {
         string exp = "a+b*(c^d-e)^(f+g*h)-i";
         auto res = infixToPostfix(exp);
@@ -19,9 +20,11 @@ public:
         string res;
 
         for (auto ch : str) {
-            if (isOperand(ch)) res += ch;
+            if (isOperand(ch))
+                res += ch;
             else {
-                if (ch == '(') st.push(ch);
+                if (ch == '(')
+                    st.push(ch);
                 else if (ch == ')') {
                     while (!st.empty() && st.top() != '(') {
                         res += st.top();
@@ -30,8 +33,7 @@ public:
 
                     if (st.top() != '(') throw exception("Invalid");
                     st.pop();
-                }
-                else {
+                } else {
                     while (!st.empty() && prec(st.top()) >= prec(ch)) {
                         res += st.top();
                         st.pop();
@@ -41,7 +43,8 @@ public:
             }
         }
         while (!st.empty()) {
-            res += st.top(); st.pop();
+            res += st.top();
+            st.pop();
         }
 
         return res;
@@ -49,16 +52,16 @@ public:
 
     static int prec(char ch) {
         switch (ch) {
-        case '(':
-            return 0;
-        case '+':
-        case '-':
-            return 1;
-        case '*':
-        case '/':
-            return 2;
-        case '^':
-            return 3;
+            case '(':
+                return 0;
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
         }
     }
 
@@ -69,10 +72,11 @@ public:
         for (auto ch : str) {
             if (isOperand(ch)) {
                 st.push(ch - '0');
-            }
-            else {
-                auto s = st.top(); st.pop();
-                auto f = st.top(); st.pop();
+            } else {
+                auto s = st.top();
+                st.pop();
+                auto f = st.top();
+                st.pop();
                 st.push(apply(f, s, ch));
             }
         }
@@ -82,17 +86,16 @@ public:
 
     static double apply(double f, double s, char oper) {
         switch (oper) {
-        case '^':
-            return pow(f, s);
-        case '+':
-            return f + s;
-        case '-':
-            return f - s;
-        case '*':
-            return f * s;
-        case '/':
-            return f / s;
-
+            case '^':
+                return pow(f, s);
+            case '+':
+                return f + s;
+            case '-':
+                return f - s;
+            case '*':
+                return f * s;
+            case '/':
+                return f / s;
         }
     }
 

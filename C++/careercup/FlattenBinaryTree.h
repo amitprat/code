@@ -2,7 +2,9 @@
 #include "../Header.h"
 
 class FlattenBinaryTree {
-public:
+    using ITNode = TreeNode;
+
+   public:
     static void test() {
         FlattenBinaryTree obj;
         ITNode* node = new ITNode(1);

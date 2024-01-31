@@ -1,13 +1,11 @@
 #pragma once
 #include "../Header.h"
 
-class SubsetSum
-{
-public:
-    static void test()
-    {
+class SubsetSum {
+   public:
+    static void test() {
         SubsetSum obj;
-        vector<int> arr = { 6, 2, 5 };
+        vector<int> arr = {6, 2, 5};
 
         for (int sum = 1; sum <= 15; sum++) {
             cout << "Find sumbset with sum = " << sum << endl;
@@ -25,8 +23,7 @@ public:
         }
     }
 
-    vector<vector<int>> findSubsetSum(vector<int> arr, int sum)
-    {
+    vector<vector<int>> findSubsetSum(vector<int> arr, int sum) {
         vector<vector<int>> subsets;
         bool res = findSubsetSum(arr, arr.size(), sum, subsets, {});
         cout << "Subset with sum " << sum << " = " << res << endl;
@@ -34,15 +31,16 @@ public:
         return subsets;
     }
 
-    bool findSubsetSumDP(vector<int> arr, int sum)
-    {
+    bool findSubsetSumDP(vector<int> arr, int sum) {
         int n = arr.size();
         vector<vector<bool>> memo(sum + 1, vector<bool>(n + 1));
 
         for (int s = 0; s <= sum; s++) {
             for (int i = 0; i <= n; i++) {
-                if (s == 0) memo[s][i] = true;
-                else if (i == 0) memo[s][i] = false;
+                if (s == 0)
+                    memo[s][i] = true;
+                else if (i == 0)
+                    memo[s][i] = false;
                 else {
                     memo[s][i] = memo[s][i - 1];
                     if (arr[i - 1] <= s) {
@@ -55,8 +53,7 @@ public:
         return memo[sum][n];
     }
 
-    bool findSubsetSumDPMemoryOptimized(vector<int> arr, int sum)
-    {
+    bool findSubsetSumDPMemoryOptimized(vector<int> arr, int sum) {
         int n = arr.size();
         vector<bool> memo(sum + 1, false);
         memo[0] = true;
@@ -70,9 +67,8 @@ public:
         return memo[sum];
     }
 
-private:
-    bool findSubsetSum(vector<int> arr, int n, int sum, vector<vector<int>>& subsets, vector<int> curset)
-    {
+   private:
+    bool findSubsetSum(vector<int> arr, int n, int sum, vector<vector<int>>& subsets, vector<int> curset) {
         if (sum == 0) {
             subsets.push_back(curset);
             return true;

@@ -1,26 +1,40 @@
+#pragma once
 #include "../header.h"
 
 class PrimeFactorsOfNumber {
-    void printFactors(int number) {
+   public:
+    static void test() {
+        PrimeFactorsOfNumber obj;
+        int number = 100;
+
+        auto res1 = obj.getPrimeFactors(number);
+        cout << format("Prime factors of number = {0} are {1}", number, to_string(res1)) << endl;
+    }
+
+   private:
+    vector<int> getPrimeFactors(int number) {
+        vector<int> primeFactors;
+
         // print factor 2 of number
         while (!(number % 2)) {
-            cout << "2"
-                 << "\t";
+            primeFactors.push_back(2);
             number /= 2;
         }
 
         // print rest of factors
-        int sqNum = sqrt(number);
-        for (int i = 3; i <= sqNum; i += 2)  // check for all possible prime numbers which can devide this number
+        for (int div = 3; div * div <= number; div += 2)  // check for all possible prime numbers which can devide this number
         {
-            int div = i;
             while (number % div == 0) {
-                cout << i << "\t";
-                div *= i;
+                primeFactors.push_back(div);
+                number /= div;
             }
         }
 
         // print last remaining prime number
-        if (n > 2) cout << n << " ";
+        if (number > 2) {
+            primeFactors.push_back(number);
+        }
+
+        return primeFactors;
     }
 };

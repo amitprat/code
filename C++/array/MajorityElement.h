@@ -1,22 +1,25 @@
+#pragma once
 #include "../header.h"
 
+/*
 // majority element
 // https://www.careercup.com/question?id=14099679
-
-/*
 Design an algorithm that, given a list of n elements in an array, finds all the elements that appear more than n/3 times
 in the list. The algorithm should run in linear time ( n >=0 )
 
 You are expected to use comparisons and achieve linear time. No hashing/excessive space/ and don't use standard linear
- time deterministic selection algo
+time deterministic selection algo
 
 I have a correct solution to it. I am gonna post a small piece of code. You need a compiler that support C++ 11 to run the code.
-But don't worry if you don't have such one. I know that most of people would prefer English to code. I will explain the idea in English afterward, but, excuse me for I am not a native English speaker.
+But don't worry if you don't have such one. I know that most of people would prefer English to code. I will explain the idea in
+English afterward, but, excuse me for I am not a native English speaker.
+
 The algorithm here is actually not designed dedicatedly to solve this question but to handle a more general case:
 Given an array of N numbers, finds all the elements that appear more than N/M times and report the their frequencies.
 The time complexity is O(2*N*logM) and space complexity is O(M)
 For this question, M = 3, so the time is O(2log3 N) = O(N), space is O(3) = O(1);
 */
+
 class MajorityElement {
    public:
     static void test() {
@@ -62,6 +65,7 @@ class MajorityElement {
 
         if (count > input.size() / 2)
             return {candidate, count};
+
         return {-1, -1};
     }
 
@@ -69,6 +73,7 @@ class MajorityElement {
     pair<int, int> majorityElementOneThird(vector<int> &input) {
         pair<int, int> candidate1 = {-1, 0};
         pair<int, int> candidate2 = {-1, 0};
+
         for (int i = 0; i < input.size(); i++) {
             if (candidate1.second == 0)
                 candidate1 = {input[i], 0};
@@ -110,6 +115,7 @@ class MajorityElement {
     vector<int> majorityElementOneThird2(vector<int> &nums) {
         int cnt1 = 0, cnt2 = 0;
         int a, b;
+
         for (int n : nums) {
             if (cnt1 == 0 || n == a) {
                 cnt1++;
@@ -135,10 +141,12 @@ class MajorityElement {
         vector<int> result;
         if (cnt1 > nums.size() / 3) result.push_back(a);
         if (cnt2 > nums.size() / 3) result.push_back(b);
+
         return result;
     }
 
    private:
+    // nth majority element.
     using Map = std::map<int, int>;
     Map findOverNth(vector<int> arr, int size, int n) {
         Map ret_map;
@@ -149,7 +157,7 @@ class MajorityElement {
             if (ret_map.size() == n) {
                 for (auto iter = ret_map.begin(); iter != ret_map.end();) {
                     --(*iter).second;
-                    --total;
+
                     if ((*iter).second == 0)
                         ret_map.erase(iter++);
                     else
@@ -167,6 +175,7 @@ class MajorityElement {
             else
                 iter++;
         }
+
         return ret_map;
     }
 };

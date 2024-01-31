@@ -15,46 +15,61 @@ class RemoveBAndAC {
    public:
     static void test() {
         RemoveBAndAC obj;
-        vector<string> inputs = {"reababcct", "babcaaabcccbccabbc"};
+        vector<string> inputs = {"ad", "acbac", "aaac", "react", "aa", "ababaac", "reababcct", "babcaaabcccbccabbc"};
 
         for (auto &str : inputs) {
             // auto res1 = replace(const_cast<char *>(str.c_str()));
-            string res1 = obj.remove(str);
-            string res2 = obj.remove1(str);
+            string res1 = obj.remove1(str);
+            string res2 = obj.remove2(str);
             string res3 = obj.removeUsingStack(str);
 
             assert(res1 == res2);
             assert(res1 == res3);
 
+            int n = str.length();
+            char *charArr1 = new char[n];
+            strcpy(charArr1, str.c_str());
+            obj.replace(charArr1);
+
+            char *charArr2 = new char[n];
+            strcpy(charArr2, str.c_str());
+            obj.remove3(charArr2);
+
+            assert(res1 == string(charArr1));
+            assert(res1 == string(charArr2));
+
             cout << res1 << endl;
         }
     }
 
+   private:
     // the one taken from careercup (pointer and char array version)
     void replace(char *str) {
+        int n = strlen(str);
         int i = 0;
         char *q = str;
         while (*q) {
             if (*q == 'b')
                 q++;
             else {
-                if (*q == 'c' && (str[i - 1] == 'a' && i > ; 0)) {
+                if (*q == 'c' && (i > 0 && str[i - 1] == 'a')) {
                     q++;
                     i--;
-                }
-
-                else {
+                } else {
                     str[i] = *q;
                     q++;
                     i++;
                 }
             }
         }
-        str[i] = '\0';
+
+        // remove rest of characters
+        for (; i < n; i++) str[i] = '\0';
     }
 
+   private:
     // Mine (string and index version)
-    string remove(string str) {
+    string remove1(string str) {
         int i = 0, j = 0;
         while (j < str.length()) {
             if (str[j] == 'b')
@@ -69,6 +84,7 @@ class RemoveBAndAC {
         return str.substr(0, i);
     }
 
+   private:
     // Alternative implementation of above remove
     string remove2(string str) {
         int i = 0;
@@ -102,8 +118,35 @@ class RemoveBAndAC {
             res.push_back(st.top());
             st.pop();
         }
-        reverse(res.begin(), res.end());
+        std::reverse(res.begin(), res.end());
 
         return res;
+    }
+
+   private:
+    void remove3(char str[]) {
+        int n = strlen(str);
+        int k = 0;
+        for (int i = 0; i < n; i++) {
+            switch (str[i]) {
+                case 'a':
+                    str[k++] = 'a';
+                    break;
+                case 'b':
+                    break;
+                case 'c':
+                    if (k > 0 && str[k - 1] != 'a')
+                        str[k++] = 'c';
+                    else
+                        k--;  // remove 'a'
+                    break;
+                default:
+                    str[k++] = str[i];
+                    break;
+            }
+        }
+
+        // remove rest of characters
+        for (; k < n; k++) str[k] = '\0';
     }
 };

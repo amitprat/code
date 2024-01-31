@@ -1,4 +1,4 @@
-package programs.arrays;
+package Java.arrays;
 
 public class SumOfPrimesLessThanN {
     public static void test() {
@@ -15,6 +15,8 @@ public class SumOfPrimesLessThanN {
         for (int i = 2; i < n; i++) {
             if (!arr[i]) {
                 curSum += i;
+
+                // mark all the multiples of current number as not prime.
                 for (int j = 2; j * i < n; j++) {
                     arr[j * i] = true;
                 }

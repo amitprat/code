@@ -2,13 +2,26 @@
 #include "../header.h"
 using namespace std;
 
-class PrintProductSubArraysUnderGivenSum
-{
-public:
-    static void test()
-    {
+/*
+https://leetcode.com/problems/subarray-product-less-than-k/description/
+
+Subarray Product Less Than K
+
+Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all
+the elements in the subarray is strictly less than k.
+
+Input: nums = [10,5,2,6], k = 100
+Output: 8
+Explanation: The 8 subarrays that have product less than 100 are:
+[10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]
+Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.
+*/
+
+class PrintProductSubArraysUnderGivenSum {
+   public:
+    static void test() {
         PrintProductSubArraysUnderGivenSum obj;
-        vector<int> v = { 2,3,5,7 };
+        vector<int> v = {2, 3, 5, 7};
         int k = 31;
         auto res = obj.findSubArrays(v, k);
         for (auto i : res) {
@@ -21,8 +34,7 @@ public:
         cout << "Count = " << obj.countSubArr(v, k) << endl;
     }
 
-    vector<vector<int>> findSubArrays(vector<int> v, int k)
-    {
+    vector<vector<int>> findSubArrays(vector<int> v, int k) {
         vector<vector<int>> result;
         int i = 0;
         int j = 0;
@@ -33,8 +45,7 @@ public:
                 cur *= v[j];
                 subResult.push_back(v[j++]);
                 result.push_back(subResult);
-            }
-            else {
+            } else {
                 cur = 1;
                 i++;
                 j = i;
@@ -45,8 +56,7 @@ public:
         return result;
     }
 
-    int countSubArr(vector<int> v, int k)
-    {
+    int countSubArr(vector<int> v, int k) {
         int start = 0;
         int end = 0;
         int prod = 1;
@@ -56,8 +66,7 @@ public:
                 prod *= v[end];
                 cnt += end - start + 1;
                 end++;
-            }
-            else {
+            } else {
                 prod /= v[start++];
             }
         }

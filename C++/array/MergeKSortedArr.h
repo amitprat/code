@@ -2,6 +2,7 @@
 #include "../header.h"
 
 class MergeKSortedArr {
+   private:
     template <class T, class C>
     class PriorityQueue {
        private:
@@ -11,17 +12,22 @@ class MergeKSortedArr {
 
        public:
         PriorityQueue(C comparator, int capacity) : comparator(comparator), capacity(capacity) {}
+
         void push(T item) {
             container.push_back(item);
 
             upHeapify(container.size() - 1);
         }
+
         T top() {
-            if (container.empty()) throw exception("Empty");
+            if (container.empty()) throw runtime_error("Empty");
+
             return container.front();
         }
+
         T pop() {
-            if (container.empty()) throw exception("Empty");
+            if (container.empty()) throw runtime_error("Empty");
+
             auto item = container[0];
             container[0] = container[container.size() - 1];
             container.pop_back();
@@ -30,9 +36,11 @@ class MergeKSortedArr {
 
             return item;
         }
+
         bool isFull() {
             return container.size() == capacity;
         }
+
         bool empty() {
             return container.empty();
         }
@@ -46,8 +54,10 @@ class MergeKSortedArr {
                 p = parent(idx);
             }
         }
+
         void downHeapify(int idx) {
             int sm = idx;
+
             int l = left(idx);
             if (l < container.size() && container[l] < container[idx]) sm = l;
 
@@ -68,25 +78,6 @@ class MergeKSortedArr {
     };
 
    public:
-    static void test() {
-        MergeKSortedArr obj;
-
-        vector<vector<int>> arr =
-            {
-                {2, 6, 12, 34},
-                {1, 9, 20, 1000},
-                {23, 34, 90, 2000}};
-        cout << "Original Arrays:" << to_string(arr) << endl;
-
-        int k = 3;
-        vector<int> output = obj.merge(arr, k);
-        cout << "Merged array is " << to_string(output) << endl;
-
-        Solution sol;
-        auto res = sol.mergeKSortedArrays(arr);
-        cout << to_string(res) << endl;
-    }
-
     vector<int> merge(vector<vector<int>>& arrs, int k) {
         auto Comparator = [](auto f, auto s) { return f < s; };
         PriorityQueue<int, decltype(Comparator)> pq(Comparator, k);
@@ -113,37 +104,56 @@ class MergeKSortedArr {
         return result;
     }
 
-    class Solution {
-       public:
-        using Node = tuple<int, int, int>;
-        struct Compare {
-            bool operator()(Node& f, Node& s) {
-                return get<0>(f) > get<0>(s);
-            }
-        };
-
-        vector<int> mergeKSortedArrays(vector<vector<int>>& arrays) {
-            priority_queue<Node, vector<Node>, Compare> pq;
-
-            int i = 0;
-            for (auto& arr : arrays) {
-                if (arr.size() > 0) pq.push({arr[0], i, 0});
-                i++;
-            }
-
-            vector<int> result;
-            while (!pq.empty()) {
-                auto elem = pq.top();
-                pq.pop();
-                result.push_back(get<0>(elem));
-
-                int arrIndex = get<1>(elem), pos = get<2>(elem);
-                if (pos + 1 < arrays[arrIndex].size()) {
-                    pq.push({arrays[arrIndex][pos + 1], arrIndex, pos + 1});
-                }
-            }
-
-            return result;
+   private:
+    using Node = tuple<int, int, int>;
+    struct Compare {
+        bool operator()(Node& f, Node& s) {
+            return get<0>(f) > get<0>(s);
         }
     };
+
+   public:
+    vector<int> mergeKSortedArrays(vector<vector<int>>& arrays) {
+        priority_queue<Node, vector<Node>, Compare> pq;
+
+        int i = 0;
+        for (auto& arr : arrays) {
+            if (arr.size() > 0) pq.push({arr[0], i, 0});
+            i++;
+        }
+
+        vector<int> result;
+        while (!pq.empty()) {
+            auto elem = pq.top();
+            pq.pop();
+
+            result.push_back(get<0>(elem));
+
+            int arrIndex = get<1>(elem), pos = get<2>(elem);
+            if (pos + 1 < arrays[arrIndex].size()) {
+                pq.push({arrays[arrIndex][pos + 1], arrIndex, pos + 1});
+            }
+        }
+
+        return result;
+    }
+
+   public:
+    static void test() {
+        MergeKSortedArr obj;
+
+        vector<vector<int>> arr = {
+            {2, 6, 12, 34},
+            {1, 9, 20, 1000},
+            {23, 34, 90, 2000}};
+        cout << "Original Arrays:\n"
+             << arr << endl;
+
+        int k = 3;
+        vector<int> output = obj.merge(arr, k);
+        cout << "Merged array is " << output << endl;
+
+        output = obj.mergeKSortedArrays(arr);
+        cout << "Merged array is " << output << endl;
+    }
 };

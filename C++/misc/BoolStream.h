@@ -1,31 +1,15 @@
 #pragma once
-
-#include <time.h>
-#include <stdlib.h>
-#include <thread>
-#include <vector>
-#include <iostream>
-#include <atomic>
-#include <algorithm>
-#include <time.h>
-#include <fstream>
-#include <tuple>
-#include <queue>
-#include <unordered_map>
-#include <string>
-#include <unordered_set>
+#include "../header.h"
 using namespace std;
 
-class BoolStream
-{
+class BoolStream {
     using BitStream = vector<int>;
 
-private:
+   private:
     BitStream stream;
 
-public:
-    static void test(vector<int> input)
-    {
+   public:
+    static void test(vector<int> input) {
         BoolStream obj;
         int mx = 0;
         for (auto index : input) {
@@ -34,19 +18,19 @@ public:
             cout << res << ", ";
 
             obj.setTrue(index);
-            //res = obj.getIndex(index);
-            //cout << res << ", ";
+            // res = obj.getIndex(index);
+            // cout << res << ", ";
 
-            //obj.setFalse(index);
-            //res = obj.getIndex(index);
-            //cout << res << ", ";
+            // obj.setFalse(index);
+            // res = obj.getIndex(index);
+            // cout << res << ", ";
 
-            //obj.setAllTrue();
-            //res = obj.getIndex(index);
-            //cout << res << ", ";
+            // obj.setAllTrue();
+            // res = obj.getIndex(index);
+            // cout << res << ", ";
 
-            //obj.setAllFalse();
-            //res = obj.getIndex(index);
+            // obj.setAllFalse();
+            // res = obj.getIndex(index);
             cout << res << "}" << endl;
             mx = max(mx, index);
         }

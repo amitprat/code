@@ -1,6 +1,7 @@
 #include "../header.h"
 
 /*
+https://www.careercup.com/question?id=5826758028820480
 https://careercup.com/question?id=5179916190482432
 
 input [2,3,1,4]
@@ -12,7 +13,7 @@ Restrictions:
 1. no use of division
 2. complexity in O(n)
 */
-
+// Self excluding product.
 class MultiplyAllNumbersExceptItself {
    public:
     static void test() {

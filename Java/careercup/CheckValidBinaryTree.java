@@ -1,13 +1,11 @@
-package programs.careercup;
+package Java.careercup;
 
 import java.util.*;
 
 /*
 https://www.careercup.com/question?id=5724387312402432
-
 Write a program to check whether it is a valid binary tree or not. Check all test cases (e.g. No left Node case).
- */
-
+*/
 public class CheckValidBinaryTree {
     class Graph {
         Set<String> vertices = new HashSet<>();
@@ -16,27 +14,32 @@ public class CheckValidBinaryTree {
         void add(String src) {
             vertices.add(src);
         }
+
         void addEdge(String src, String dst) {
             vertices.add(src);
             vertices.add(dst);
 
-            if(!edges.containsKey(src)) edges.put(src, new HashSet<>());
+            if (!edges.containsKey(src))
+                edges.put(src, new HashSet<>());
             edges.get(src).add(dst);
         }
 
         void bfs(String src) {
             Set<String> visited = new HashSet<>();
+
             Queue<String> q = new LinkedList<>();
             q.add(src);
+
             visited.add(src);
 
             List<String> result = new ArrayList<>();
-            while(!q.isEmpty()) {
+
+            while (!q.isEmpty()) {
                 String u = q.poll();
                 result.add(u);
 
-                for(var v : edges.get(u)) {
-                    if(!visited.contains(v)) {
+                for (var v : edges.get(u)) {
+                    if (!visited.contains(v)) {
                         q.add(v);
                         visited.add(v);
                     }
@@ -53,9 +56,9 @@ public class CheckValidBinaryTree {
     }
 
     /*
-               0
-          1           2
-        3   4       5   6
+     * 0
+     * 1 2
+     * 3 4 5 6
      */
     public void testGraph1() {
         Graph g = new Graph();
@@ -80,20 +83,31 @@ public class CheckValidBinaryTree {
         Set<String> visited = new HashSet<>();
         String parent = null;
         String src = "0";
-        boolean result =  isACyclicAndHasTwoChildren(g, src, parent, visited);
-        if(!result) return false;
 
+        // check if graph isn't connected undirected graph and has atmost two children.
+        boolean result = isACyclicAndHasTwoChildren(g, src, parent, visited);
+        if (!result)
+            return false;
+
+        // check if all nodes are visited.
         return visited.size() == g.vertices.size();
     }
 
     private boolean isACyclicAndHasTwoChildren(Graph g, String src, String parent, Set<String> visited) {
         visited.add(src);
 
-        if(g.edges.get(src).size() > 3) return false;
-        if(g.edges.get(src).size() > 2 && !g.edges.get(src).contains(parent)) return false;
-        for(var v : g.edges.get(src)) {
-            if(v != parent && visited.contains(v)) return false;
-            if(!visited.contains(v) && !isACyclicAndHasTwoChildren(g, v, src, visited)) return false;
+        if (g.edges.get(src).size() > 3)
+            return false;
+
+        if (g.edges.get(src).size() > 2 && !g.edges.get(src).contains(parent))
+            return false;
+
+        for (var v : g.edges.get(src)) {
+            if (v != parent && visited.contains(v))
+                return false;
+
+            if (!visited.contains(v) && !isACyclicAndHasTwoChildren(g, v, src, visited))
+                return false;
         }
 
         return true;

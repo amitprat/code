@@ -36,7 +36,7 @@ Encoding Part:
 
 One of the most popular URL shortening services simply take the ID in the database of the URL and then convert it to Base 62[a-zA-Z0-9].
 
-
+```java
 import static org.testing.AssertJUnit.assertEquals ;
 
 public class TinyURL {
@@ -70,6 +70,7 @@ public class TinyURL {
         assertEquals ( 123, decode("b9") ) ;
     }
     }
+```
 
 * https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR
 

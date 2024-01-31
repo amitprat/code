@@ -1,6 +1,16 @@
+#pragma once
 #include "../header.h"
 
 class BitsOperations {
+    public:
+    static void test() {
+        BitsOperations obj;
+
+        vector<int> nums = {0,1,2,3,4};
+        for(auto& num : nums) {
+            cout<<format("Num={}, position={} is set {}", num, 0, obj.isset(num , 0));
+        }
+    }
    public:
     bool isset(int a, int index) {
         return a & (1 << index);
@@ -46,7 +56,19 @@ class BitsOperations {
         return ~0;
     }
 
+    bool isPowerOf2(int n) {
+        return n && !(n & (n-1));
+    }
+
+    bool isPowerOf2_1(int n) {
+        return (n & ~(n-1)) == n;
+    }
+
     bool isPowerOf4(int n) {
-        return ~(n & (n - 1)) && (n & 0x55555555);
+        return n && !(n & (n - 1)) && !(n & 0xAAAAAAAA);
+    }
+
+    bool isPowerOf4_1(int n) {
+        return ((n > 0) && ((n & n - 1) == 0) && (n % 3 == 1));
     }
 };

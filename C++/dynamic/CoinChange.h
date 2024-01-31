@@ -1,102 +1,225 @@
 #pragma once
 #include "../header.h"
-using namespace std;
 
-class CoinChange
-{
-public:
-    void test()
-    {
+class CoinChange {
+   public:
+    static void test() {
+        CoinChange obj;
+
         vector<pair<vector<int>, int>> v = {
-            {{9,6,5,1},11}
-        };
+            {{1, 2, 5, 10}, 3},
+            {{1, 2, 5, 10}, 100},
+            {{2, 5, 10}, 1},
+            {{1, 2, 5, 10}, 0},
+            {{1, 5, 6, 9}, 11},
+            {{1, 2, 5}, 5},
+            {{1, 2, 5, 10}, 6}};
 
         for (auto arr : v) {
-            cout << "Processing: {{";
-            for (auto j : arr.first) cout << j << " ";
-            cout << ", amount: " << arr.second;
-            cout << "}" << endl;
+            cout << "Coins: " << arr.first << ", amount: " << arr.second << endl;
 
-            int minCoins = minCoinChange(arr.first, arr.first.size(), arr.second);
-            cout << "MinCoins = " << minCoins << endl;
+            int minCoins1 = obj.minCoinChangeRecursive(arr.first, arr.first.size(), arr.second);
+            // int minCoins2 = obj.minCoinChangeRecursive2(arr.first, arr.first.size(), arr.second);
+            int minCoins3 = obj.minCoinChangeDP1(arr.first, arr.first.size(), arr.second);
+            int minCoins4 = obj.minCoinChangeDP2(arr.first, arr.first.size(), arr.second);
 
-            minCoins = minCoinChangeDP(arr.first, arr.first.size(), arr.second);
-            cout << "minCoinChangeDP = " << minCoins << endl;
+            // greedy doesn't always give correct answer. for example: Coins: [1, 5, 6, 9], amount: 11
+            // greedy gives [9, 1, 1] but correct answer is [5,6]
+            int minCoins5 = obj.minCoinChangeGreedy(arr.first, arr.first.size(), arr.second);
 
-            minCoins = minCoinChangeGreedy(arr.first, arr.first.size(), arr.second);
-            cout << "minCoinChangeGreedy = " << minCoins << endl;
+            // assert(minCoins1 == minCoins2);
+            assert(minCoins1 == minCoins3);
+            assert(minCoins1 == minCoins4);
+            // assert(minCoins1 == minCoins5);
+            cout << "Minimum number of ways to make change = " << minCoins1 << endl;
 
-            int numWays = numWaysToMakeChange(arr.first, arr.first.size(), arr.second);
-            cout << "NumWaysToMakeChange = " << numWays << endl;
+            int numWays1 = obj.numWaysToMakeChangeRecursive(arr.first, arr.first.size(), arr.second);
+            int numWays2 = obj.numWaysToMakeChangeRecursive2(arr.first, arr.first.size(), arr.second);
+            int numWays3 = obj.numWaysToMakeChangeRecursive3(arr.first, arr.first.size(), arr.second);
+            int numWays4 = obj.numWaysRecursive4WithMemoization(arr.first, arr.first.size(), arr.second);
+            int numWays5 = obj.numWaysToMakeChangeMemoization(arr.first, arr.first.size(), arr.second);
+            int numWays6 = obj.numWaysToMakeChangeDP1DTable(arr.first, arr.first.size(), arr.second);
+            int numWays7 = obj.numWaysToMakeChangeDP2DTable(arr.first, arr.first.size(), arr.second);
 
-            numWays = numWaysToMakeChangeDP(arr.first, arr.first.size(), arr.second);
-            cout << "numWaysToMakeChangeDP = " << numWays << endl;
+            assert(numWays1 == numWays2);
+            assert(numWays1 == numWays3);
+            assert(numWays1 == numWays4);
+            assert(numWays1 == numWays5);
+            assert(numWays1 == numWays6);
+            // assert(numWays1 == numWays7);
+            cout << "Number of ways to make change = " << numWays1 << endl;
+
+            cout << endl;
         }
     }
 
-    int minCoinChange(vector<int> denom, int length, int amount)
-    {
-        if (amount <= 0) return 0;
+    // Minimum number of coins required to make change
+   private:
+    int minCoinChangeRecursive(vector<int> denom, int length, int amount) {
+        if (amount < 0) return INT_MAX;
+        if (amount == 0) return 0;
         if (length == 0) return INT_MAX;
 
-        int including = minCoinChange(denom, length, amount - denom[length - 1]);
-        int excluding = minCoinChange(denom, length - 1, amount);
+        int including = minCoinChangeRecursive(denom, length, amount - denom[length - 1]);
+        int excluding = minCoinChangeRecursive(denom, length - 1, amount);
         if (including != INT_MAX) including += 1;
 
         return min(including, excluding);
     }
 
-    int numWaysToMakeChange(vector<int> denom, int length, int amount)
-    {
-        if (amount == 0) return 1;
-        if (length == 0 || amount < 0) return 0;
+   private:
+    // this is taking too long
+    int minCoinChangeRecursive2(vector<int>& denom, int length, int amount) {
+        if (amount == 0) return 0;
+        if (amount < 0 || length <= 0) return INT_MAX;
 
-        int including = numWaysToMakeChange(denom, length, amount - denom[length - 1]);
-        int excluding = numWaysToMakeChange(denom, length - 1, amount);
-
-        return including + excluding;
+        // iteratve over each element of array recursively by including/excluding element and keep updating minimum coins.
+        int mn = INT_MAX;
+        for (int i = 0; i < length; i++) {
+            int tmp = minCoinChangeRecursive2(denom, length, amount - denom[i]);
+            if (tmp != INT_MAX && tmp + 1 < mn)
+                mn = tmp + 1;
+        }
+        return mn;
     }
 
-    int minCoinChangeDP(vector<int> denom, int length, int amount)
-    {
+   private:
+    int minCoinChangeDP1(vector<int> denom, int length, int amount) {
         int* table = new int[amount + 1];
         table[0] = 0;
 
-        for (int am = 1; am <= amount; am++)
-        {
+        for (int am = 1; am <= amount; am++) {
             table[am] = INT_MAX;
             for (int d = 0; d < length; d++) {
                 if (denom[d] <= am && table[am - denom[d]] != INT_MAX) {
-                    table[am] = min(table[am], 1+table[am - denom[d]]);
+                    table[am] = min(table[am], 1 + table[am - denom[d]]);
                 }
             }
         }
-        for (int i = 0; i <= amount; i++) cout << table[i] << " ";
-        cout << endl;
+        // for (int i = 0; i <= amount; i++) cout << table[i] << " ";
+        // cout << endl;
 
         return table[amount];
     }
 
-    int minCoinChangeGreedy(vector<int> denom, int length, int amount)
-    {
-        int result = 0;
-        vector<int> v;
-        for (int i = 0; i < length;)
-        {
-            if (denom[i] <= amount) {
-                amount -= denom[i];
-                v.push_back(denom[i]);
-                result++;
+   private:
+    int minCoinChangeDP2(vector<int> denom, int length, int amount) {
+        vector<int> table(amount + 1, INT_MAX);
+        table[0] = 0;  // we can always make 0 sum.
+
+        for (auto& coin : denom) {
+            for (int j = coin; j <= amount; j++) {
+                table[j] = min(table[j], table[j - coin] == INT_MAX ? INT_MAX : 1 + table[j - coin]);
             }
-            else i++;
         }
-        for (auto j : v) cout << j << " ";
-        cout << endl;
-        return result;
+
+        return table[amount];
     }
 
-    int numWaysToMakeChangeDP(vector<int> denom, int length, int amount)
-    {
+   private:
+    int minCoinChangeGreedy(vector<int> denom, int length, int amount) {
+        if (amount == 0) return 0;
+
+        int result = 0;
+        vector<int> result_coins;  // this is just for printing purpose.
+
+        // this is assuming that coins are in non-decreasing order.
+        for (int i = length - 1; i >= 0;) {
+            if (denom[i] <= amount) {
+                amount -= denom[i];
+                result_coins.push_back(denom[i]);
+                result++;
+            } else
+                i--;
+        }
+
+        // for (auto coin : result_coins) cout << coin << " ";
+        // cout << endl;
+
+        return result == 0 ? INT_MAX : result;  // if there is no such combination possible, return INT_MAX
+    }
+
+    // Number of ways to make change
+   private:
+    int numWaysToMakeChangeRecursive(vector<int> denom, int length, int amount) {
+        if (amount == 0) return 1;
+        if (length == 0 || amount < 0) return 0;
+
+        int including = numWaysToMakeChangeRecursive(denom, length, amount - denom[length - 1]);
+        int excluding = numWaysToMakeChangeRecursive(denom, length - 1, amount);
+
+        return including + excluding;
+    }
+
+   private:
+    int numWaysToMakeChangeRecursive2(vector<int> denom, int length, int amount) {
+        if (amount < 0) return 0;
+        if (amount == 0) return 1;
+        if (length == 0) return 0;
+
+        return numWaysToMakeChangeRecursive2(denom, length - 1, amount) + numWaysToMakeChangeRecursive2(denom, length, amount - denom[length - 1]);
+    }
+
+   private:
+    int numWaysToMakeChangeRecursive3(vector<int> denom, int length, int amount) {
+        return numWaysToMakeChangeRecursive3(denom, 0, length, amount);
+    }
+
+    int numWaysToMakeChangeRecursive3(vector<int> denom, int pos, int length, int amount) {
+        if (amount == 0) return 1;
+        if (pos == length) return 0;
+
+        // try including coin at position 'pos' (from 0 - x times where x is such that x*coins[pos] <= amount)
+        int ways = 0;
+        for (int i = 0; i * denom[pos] <= amount; i++) {
+            ways += numWaysToMakeChangeRecursive3(denom, pos + 1, length, amount - i * denom[pos]);
+        }
+
+        return ways;
+    }
+
+   private:
+    int numWaysRecursive4WithMemoization(vector<int> denom, int length, int amount) {
+        vector<vector<int>> memo(amount + 1, vector<int>(length, 0));
+        return numWaysRecursive4WithMemoization(denom, 0, length, amount, memo);
+    }
+
+    int numWaysRecursive4WithMemoization(vector<int> denom, int pos, int length, int amount, vector<vector<int>>& memo) {
+        if (amount == 0) return 1;
+        if (pos == length) return 0;
+
+        if (memo[amount][pos]) return memo[amount][pos];
+
+        int ways = 0;
+        for (int i = 0; i * denom[pos] <= amount; i++) {
+            ways += numWaysRecursive4WithMemoization(denom, pos + 1, length, amount - i * denom[pos], memo);
+        }
+
+        memo[amount][pos] = ways;
+
+        return memo[amount][pos];
+    }
+
+   private:
+    int numWaysToMakeChangeMemoization(vector<int> denom, int length, int amount) {
+        vector<vector<int>> memo(amount + 1, vector<int>(length + 1, 0));
+
+        return numWaysToMakeChangeMemoization(denom, length, amount, memo);
+    }
+
+    int numWaysToMakeChangeMemoization(vector<int> denom, int length, int amount, vector<vector<int>>& memo) {
+        if (amount == 0) return 1;
+        if (amount < 0 || length == 0) return 0;
+
+        if (memo[amount][length]) return memo[amount][length];
+
+        memo[amount][length] = numWaysToMakeChangeMemoization(denom, length - 1, amount, memo) + numWaysToMakeChangeMemoization(denom, length, amount - denom[length - 1], memo);
+
+        return memo[amount][length];
+    }
+
+   private:
+    int numWaysToMakeChangeDP1DTable(vector<int> denom, int length, int amount) {
         int* table = new int[amount + 1];
         for (int i = 1; i <= amount; i++) table[i] = 0;
         table[0] = 1;
@@ -106,5 +229,23 @@ public:
                 table[j] += table[j - denom[i]];
 
         return table[amount];
+    }
+
+   private:
+    int numWaysToMakeChangeDP2DTable(vector<int>& coins, int n, int amount) {
+        vector<vector<int>> table(amount + 1, vector<int>(n + 1, 0));
+
+        for (int i = 0; i <= amount; i++) table[i][0] = 0;  // if no coins, then 0 ways to make change
+        for (int j = 0; j < n; j++) table[0][j] = 1;        // if 0 amount, then always 1 way to make change
+
+        for (int am = 1; am <= amount; am++) {
+            for (int i = 1; i <= n; i++) {
+                table[am][i] = table[am][i - 1];
+
+                if (coins[i - 1] <= am) table[am][i] += table[am - coins[i - 1]][i];
+            }
+        }
+
+        return table[amount][n];
     }
 };

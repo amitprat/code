@@ -2,7 +2,7 @@
 #include "../Header.h"
 
 class GenerateBinary {
-public:
+   public:
     static void test() {
         int n = 7;
         vector<string> res = generate(n);
@@ -16,7 +16,8 @@ public:
         q.push("1");
 
         while (n--) {
-            auto f = q.front(); q.pop();
+            auto f = q.front();
+            q.pop();
             res.push_back(f);
 
             q.push(f + "0");

@@ -25,6 +25,6 @@ public class IsValidBST {
         if (cur.val < mn || cur.val > mx)
             return false;
 
-        return isBST(cur.left, mn, cur.val) || isBST(cur.right, cur.val, mx);
+        return isBST(cur.left, mn, cur.val) && isBST(cur.right, cur.val, mx);
     }
 }

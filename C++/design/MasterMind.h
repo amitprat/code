@@ -2,7 +2,7 @@
 #include "../header.h"
 
 class MasterMind {
-public:
+   public:
     static void test() {
         MasterMind obj;
         int hits = 0;
@@ -16,8 +16,10 @@ public:
     void calculate(string sol, string guess, int& hits, int& phits) {
         vector<int> map(4, 0);
         for (int i = 0; i < sol.length(); i++) {
-            if (sol[i] == guess[i]) hits++;
-            else map[code(sol[i])]++;
+            if (sol[i] == guess[i])
+                hits++;
+            else
+                map[code(sol[i])]++;
         }
         for (auto& ch : guess) {
             if (map[code(ch)] > 0) {

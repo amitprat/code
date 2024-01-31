@@ -39,17 +39,17 @@ public class IntersectionOfLinkedLists {
     private int getIntersection1(Node head1, Node head2) {
         int l1 = length(head1);
         int l2 = length(head2);
-        int d = l1-l2;
-        while(d > 0) {
+        int d = l1 - l2;
+        while (d > 0) {
             head1 = head1.next;
             d--;
         }
-        while(d < 0) {
+        while (d < 0) {
             head2 = head2.next;
             d++;
         }
 
-        while(head1 != null && head2 != null && head1.val != head2.val) {
+        while (head1 != null && head2 != null && head1.val != head2.val) {
             head1 = head1.next;
             head2 = head2.next;
         }
@@ -59,12 +59,12 @@ public class IntersectionOfLinkedLists {
 
     private int getIntersection2(Node head1, Node head2) {
         Set<Node> set = new HashSet<>();
-        while(head1 != null) {
+        while (head1 != null) {
             set.add(head1);
             head1 = head1.next;
         }
 
-        while(head2 != null && !set.contains(head2)) {
+        while (head2 != null && !set.contains(head2)) {
             head2 = head2.next;
         }
 
@@ -73,7 +73,7 @@ public class IntersectionOfLinkedLists {
 
     int length(Node node) {
         int l = 0;
-        while(node != null) {
+        while (node != null) {
             node = node.next;
             l++;
         }

@@ -11,10 +11,6 @@ public:
         for (int i = 0; i < 10; i++) {
             auto res = obj.searchRange(arr, i);
             cout << format("Search for element={} in array={}, found between={}", i, to_string(arr), to_string(res)) << endl;
-            if (res[0] != -1) {
-                cout << "Output array: " << to_string(arr, res[0], res[1]) << endl;
-            }
-            cout << endl;
         }
     }
 

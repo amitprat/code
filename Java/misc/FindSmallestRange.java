@@ -1,7 +1,6 @@
-package programs.misc;
+package Java.misc;
 
-import programs.types.Pair;
-
+import Java.types.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +20,7 @@ public class FindSmallestRange {
         int minDiff = Integer.MAX_VALUE;
         List<Integer> indices = new ArrayList<>(Collections.nCopies(lists.size(), 0));
         List<Integer> result = null;
+
         boolean done = false;
         while (!done) {
             Pair<Integer, Integer> curMinDiff = getDiff(lists, indices);

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 template <class T>
 class TwoDArray {
@@ -24,10 +24,10 @@ class TwoDArray {
     }
 
     T operator[][](int i, int j) {
-
+        return arr[i][j];
     }
 
-public:
+   public:
     static void test() {
         TwoDArray* obj = new TwoDArray(5, 3);
         for (int i = 0; i < 5; i++) {

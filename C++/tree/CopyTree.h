@@ -1,51 +1,64 @@
 #pragma once
 #include "../header.h"
-#include "TreeNode.h"
+#include "Tree.h"
 
 class CopyTree {
-public:
+    using Node = Tree<int>::Node;
+
+   public:
     static void test() {
         CopyTree obj;
-        TreeNode<int>* root1 = new TreeNode<int>(1);
-        root1->left = new TreeNode<int>(2);
-        root1->left->left = new TreeNode<int>(3);
-        root1->left->left->right = new TreeNode<int>(4);
-        root1->right = new TreeNode<int>(5);
-        root1->right->left = new TreeNode<int>(6);
-        root1->right->right = new TreeNode<int>(7);
+
+        Tree<int> tree;
+        tree.root = new Node(1);
+        tree.root->left = new Node(2);
+        tree.root->left->left = new Node(3);
+        tree.root->left->left->right = new Node(4);
+        tree.root->right = new Node(5);
+        tree.root->right->left = new Node(6);
+        tree.root->right->right = new Node(7);
 
         cout << "Original tree:" << endl;
-        printLevelOrder(root1);
+        tree.printLevelOrder();
 
-        TreeNode<int>* root2 = obj.copyTree(root1);
+        Tree<int> tree2;
+        tree2.root = obj.copyTree(tree.root);
         cout << "Original tree (after copy):" << endl;
-        printLevelOrder(root1);
-        cout << "New tree (after copy):" << endl;
-        printLevelOrder(root2);
+        tree.printLevelOrder();
 
-        root1 = obj.deleteTree(root1);
+        cout << "New tree (after copy):" << endl;
+        tree2.printLevelOrder();
+
+        Tree<int> tree3;
+        tree3.root = obj.deleteTree(tree2.root);
 
         cout << "Original tree (after delete):" << endl;
-        printLevelOrder(root1);
+        tree.printLevelOrder();
+
         cout << "New tree (after delete):" << endl;
-        printLevelOrder(root2);
+        tree3.printLevelOrder();
     }
 
-    TreeNode<int>* copyTree(TreeNode<int>* root) {
+   public:
+    Node* copyTree(Node* root) {
         if (!root) return nullptr;
-        TreeNode<int>* newRoot = new TreeNode<int>(root->val);
+
+        Node* newRoot = new Node(root->val);
         newRoot->left = copyTree(root->left);
         newRoot->right = copyTree(root->right);
 
         return newRoot;
     }
 
-    TreeNode<int>* deleteTree(TreeNode<int>* root) {
+    Node* deleteTree(Node* root) {
         if (!root) return nullptr;
+
         root->left = deleteTree(root->left);
         root->right = deleteTree(root->right);
+
         delete root;
         root = nullptr;
+
         return root;
     }
 };

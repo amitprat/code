@@ -90,7 +90,7 @@ class NextHigherLowerNumber {
             res += (num % 2) + '0';
             num /= 2;
         }
-        reverse(res.begin(), res.end());
+        std::reverse(res.begin(), res.end());
         int n = res.length();
         res = string(numBits - n, '0') + res;
 

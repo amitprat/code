@@ -1,6 +1,18 @@
 #include "../header.h"
 
 class PrimeNumbers {
+   public:
+    static void test() {
+        PrimeNumbers obj;
+
+        auto res1 = obj.generatePrimes1(100);
+        auto res2 = obj.generatePrimes2(100);
+
+        assert(areEqual(res1, res2));
+
+        cout << "Primes: " << res1 << endl;
+    }
+
    private:
     bool isPrime(int number) {
         if (number <= 1) return false;
@@ -31,30 +43,34 @@ class PrimeNumbers {
 
    private:
     // generate first n prime numbers
-    vector<int> generatePrimes(int n) {
-        if (n <= 0) return {};
+    vector<int> generatePrimes1(int n) {
+        vector<int> result;
 
-        vector<int> result(n);
-        result[0] = 2;
-        int cnt = 1;
-        for (int i = 3; cnt <= n; i += 2) {
-            if (isPrime(i)) {
-                result[cnt] = i;
-                cnt++;
+        if (n < 2) return result;
+
+        result.push_back(2);
+
+        for (int mul = 3; mul < n; mul += 2) {
+            if (isPrime(mul)) {
+                result.push_back(mul);
             }
         }
 
         return result;
     }
 
+   private:
     // get all primes numbers between 1..n
-    vector<int> getAllPrimes(int n) {
+    vector<int> generatePrimes2(int n) {
         vector<bool> primes(n + 1, true);
         primes[0] = primes[1] = false;
 
         for (int i = 2; i <= n; i++) {
-            if (primes[i]) {  // if current number is prime, then mark all its multiples as non-prime
-                for (int j = i * i; j <= n; j += i) primes[j] = false;
+            if (primes[i]) {
+                // if current number is prime, then mark all its multiples as non-prime
+                for (int j = i * i; j <= n; j += i) {
+                    primes[j] = false;
+                }
             }
         }
 

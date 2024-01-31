@@ -5,14 +5,12 @@ class BinaryTreeViews {
    public:
     static void test() {
         BinaryTreeViews obj;
-        BinaryTreeNode<int>* root = new BinaryTreeNode<int>(1);
-        root->left = new BinaryTreeNode<int>(2);
-        root->right = new BinaryTreeNode<int>(3);
-        root->left->right = new BinaryTreeNode<int>(4);
-        root->left->right->right = new BinaryTreeNode<int>(5);
-        root->left->right->right->right = new BinaryTreeNode<int>(6);
-
-        cout << to_string(root) << endl;
+        Tree::Node* root = new Tree::Node(1);
+        root->left = new Tree::Node(2);
+        root->right = new Tree::Node(3);
+        root->left->right = new Tree::Node(4);
+        root->left->right->right = new Tree::Node(5);
+        root->left->right->right->right = new Tree::Node(6);
 
         cout << "Left View:" << endl;
         obj.printLeftView(root);
@@ -36,11 +34,11 @@ class BinaryTreeViews {
     }
 
    private:
-    void printLeftView(BinaryTreeNode<int>* node) {
+    void printLeftView(Tree::Node* node) {
         int mxLevel = -1;
         printLeftView(node, 0, mxLevel);
     }
-    void printLeftView(BinaryTreeNode<int>* node, int curLevel, int& maxLevelSeenSoFar) {
+    void printLeftView(Tree::Node* node, int curLevel, int& maxLevelSeenSoFar) {
         if (!node) return;
         if (maxLevelSeenSoFar < curLevel) {
             cout << node->val << " ";
@@ -51,11 +49,11 @@ class BinaryTreeViews {
     }
 
    private:
-    void printRightView(BinaryTreeNode<int>* node) {
+    void printRightView(Tree::Node* node) {
         int mxLevel = -1;
         printRightView(node, 0, mxLevel);
     }
-    void printRightView(BinaryTreeNode<int>* node, int curLevel, int& maxLevelSeenSoFar) {
+    void printRightView(Tree::Node* node, int curLevel, int& maxLevelSeenSoFar) {
         if (!node) return;
         if (maxLevelSeenSoFar < curLevel) {
             cout << node->val << " ";
@@ -66,13 +64,13 @@ class BinaryTreeViews {
     }
 
    private:
-    void printBottomView(BinaryTreeNode<int>* node) {
-        unordered_map<int, pair<int, BinaryTreeNode<int>*>> nodeMap;
+    void printBottomView(Tree::Node* node) {
+        unordered_map<int, pair<int, Tree::Node*>> nodeMap;
         printBottomView(node, 0, 0, nodeMap);
         print(nodeMap);
     }
-    void printBottomView(BinaryTreeNode<int>* node, int hd, int vd,
-                         unordered_map<int, pair<int, BinaryTreeNode<int>*>>& nodeMap) {
+    void printBottomView(Tree::Node* node, int hd, int vd,
+                         unordered_map<int, pair<int, Tree::Node*>>& nodeMap) {
         if (!node) return;
         if (nodeMap.find(hd) == nodeMap.end() || vd > nodeMap[hd].first) nodeMap[hd] = {vd, node};
 
@@ -81,13 +79,13 @@ class BinaryTreeViews {
     }
 
    private:
-    void printTopView(BinaryTreeNode<int>* node) {
-        unordered_map<int, pair<int, BinaryTreeNode<int>*>> nodeMap;
+    void printTopView(Tree::Node* node) {
+        unordered_map<int, pair<int, Tree::Node*>> nodeMap;
         printTopView(node, 0, 0, nodeMap);
         print(nodeMap);
     }
-    void printTopView(BinaryTreeNode<int>* node, int hd, int vd,
-                      unordered_map<int, pair<int, BinaryTreeNode<int>*>>& nodeMap) {
+    void printTopView(Tree::Node* node, int hd, int vd,
+                      unordered_map<int, pair<int, Tree::Node*>>& nodeMap) {
         if (!node) return;
         if (nodeMap.find(hd) == nodeMap.end() || vd < nodeMap[hd].first) nodeMap[hd] = {vd, node};
         printTopView(node->left, hd - 1, vd + 1, nodeMap);
@@ -95,12 +93,12 @@ class BinaryTreeViews {
     }
 
    private:
-    void printVertical(BinaryTreeNode<int>* node) {
-        unordered_map<int, vector<BinaryTreeNode<int>*>> nodeMap;
+    void printVertical(Tree::Node* node) {
+        unordered_map<int, vector<Tree::Node*>> nodeMap;
         printVertical(node, 0, nodeMap);
         print(nodeMap);
     }
-    void printVertical(BinaryTreeNode<int>* node, int hd, unordered_map<int, vector<BinaryTreeNode<int>*>>& nodeMap) {
+    void printVertical(Tree::Node* node, int hd, unordered_map<int, vector<Tree::Node*>>& nodeMap) {
         if (!node) return;
         nodeMap[hd].push_back(node);
         printVertical(node->left, hd - 1, nodeMap);
@@ -108,7 +106,7 @@ class BinaryTreeViews {
     }
 
    private:
-    void print(unordered_map<int, pair<int, BinaryTreeNode<int>*>> nodeMap) {
+    void print(unordered_map<int, pair<int, Tree::Node*>> nodeMap) {
         vector<pair<int, int>> v;
         for (auto& e : nodeMap) v.push_back({e.first, e.second.second->val});
         sort(v.begin(), v.end(), [](auto f, auto s) { return (f.first < s.second); });
@@ -116,7 +114,7 @@ class BinaryTreeViews {
         cout << endl;
     }
 
-    void print(unordered_map<int, vector<BinaryTreeNode<int>*>>& nodeMap) {
+    void print(unordered_map<int, vector<Tree::Node*>>& nodeMap) {
         vector<pair<int, int>> v;
         for (auto& e : nodeMap) {
             for (auto& s : e.second) {

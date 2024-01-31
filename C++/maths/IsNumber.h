@@ -1,15 +1,13 @@
 #pragma once
 #include "../header.h"
 
+/*
+https://www.careercup.com/question?id=5753629812195328
+
+Write a function to determine if a string is a number without using any built-in function.
+*/
 class IsNumber {
-public:
-    enum class State {
-        Invalid,
-        Num,
-        Dot,
-        Exp,
-        Sign
-    };
+   public:
     static void test() {
         IsNumber obj;
         vector<string> inputs = {
@@ -29,14 +27,13 @@ public:
             "1,",
             ".12.12",
             "e-10",
-                        "+-",
+            "+-",
             "*2021341.23.2.34.`2..12",
             "+-1.1.1",
             "+-1.",
             "1,-1.",
             "...",
-            ".."
-        };
+            ".."};
 
         for (auto input : inputs) {
             cout << "Is Valid (" + input + ") = " << obj.isNumberMap(input) << endl;
@@ -57,6 +54,7 @@ public:
         }
     }
 
+   public:
     bool isNumber(string input) {
         int i = 0;
         bool end = false;
@@ -98,9 +96,11 @@ public:
                     return false;
             }
         }
+
         return end;
     }
 
+   public:
     bool isNumberIfLadder(string input) {
         int i = 0;
         bool end = false;
@@ -115,50 +115,55 @@ public:
                 allowSign = false;
                 allowDot = false;
                 end = false;
-            }
-            else if (allowDot && ch == '.') {
+            } else if (allowDot && ch == '.') {
                 allowDot = false;
                 end = false;
                 isDotSeen = true;
-            }
-            else if (allowExp && ch == 'e') {
+            } else if (allowExp && ch == 'e') {
                 allowExp = false;
                 allowSign = true;
                 allowDot = false;
                 end = false;
                 isExpSeen = false;
-            }
-            else if (ch >= '0' && ch <= '9') {
+            } else if (ch >= '0' && ch <= '9') {
                 if (!isExpSeen) allowExp = true;
                 allowSign = false;
                 if (!isDotSeen) allowDot = true;
                 end = true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
         return end;
     }
 
+   private:
+    enum class State {
+        Invalid,
+        Num,
+        Dot,
+        Exp,
+        Sign
+    };
+
+   public:
     bool isNumberMap(string input) {
         vector<vector<State>> validStates = {
             {State::Num},
-            {State::Num,State::Exp,State::Num},
-            {State::Num,State::Exp,State::Sign,State::Num},
+            {State::Num, State::Exp, State::Num},
+            {State::Num, State::Exp, State::Sign, State::Num},
 
             {State::Sign, State::Num},
-                        {State::Sign,State::Num,State::Exp,State::Num},
-            {State::Sign,State::Num,State::Exp,State::Sign,State::Num},
+            {State::Sign, State::Num, State::Exp, State::Num},
+            {State::Sign, State::Num, State::Exp, State::Sign, State::Num},
 
             {State::Num, State::Dot, State::Num},
-            {State::Num, State::Dot, State::Num,State::Exp,State::Num},
-            {State::Num, State::Dot, State::Num,State::Exp,State::Sign,State::Num},
+            {State::Num, State::Dot, State::Num, State::Exp, State::Num},
+            {State::Num, State::Dot, State::Num, State::Exp, State::Sign, State::Num},
 
             {State::Sign, State::Num, State::Dot, State::Num},
-            {State::Sign, State::Num, State::Dot, State::Num,State::Exp,State::Num},
-            {State::Sign, State::Num, State::Dot, State::Num,State::Exp,State::Sign,State::Num}
-        };
+            {State::Sign, State::Num, State::Dot, State::Num, State::Exp, State::Num},
+            {State::Sign, State::Num, State::Dot, State::Num, State::Exp, State::Sign, State::Num}};
 
         vector<int> curAllowedStates;
         for (int i = 0; i < validStates.size(); i++) curAllowedStates.push_back(i);
@@ -169,13 +174,16 @@ public:
             for (auto it = curAllowedStates.begin(); it != curAllowedStates.end();) {
                 if (validStates.empty()) return false;
                 if (i >= validStates[*it].size()) return false;
-                if (validStates[*it][i] != state) it = curAllowedStates.erase(it);
-                else it++;
+                if (validStates[*it][i] != state)
+                    it = curAllowedStates.erase(it);
+                else
+                    it++;
             }
         }
         return true;
     }
 
+   private:
     State getState(char ch) {
         if (ch >= '0' && ch <= '9')
             return State::Num;

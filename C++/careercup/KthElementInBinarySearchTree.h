@@ -5,6 +5,17 @@ You are given a binary search tree and a positive integer K. Return the K-th ele
 No pre-processing or modifying of the tree is allowed.
 */
 class KthElementInBinarySearchTree {
+    struct Node {
+        int val;
+        int size = 0;
+        Node *left, *right;
+        Node(int val, int size) : val(val), size(size), left(nullptr), right(nullptr) {}
+        string to_string() {
+            return std::to_string(val);
+        }
+    };
+
+   public:
     int kthElement(Node *root, int &k) {
         if (!root) return INT_MIN;
         int left = kthElement(root->left, k);
@@ -46,5 +57,11 @@ class KthElementInBinarySearchTree {
         root->size++;
         if (element < root->val) return insert(root->left, element);
         return insert(root->right, element);
+    }
+
+   private:
+    int size(Node *node) {
+        if (!node) return 0;
+        return node->size;
     }
 };

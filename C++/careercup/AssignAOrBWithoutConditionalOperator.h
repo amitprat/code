@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 /*
 https://www.careercup.com/question?id=5135296679116800

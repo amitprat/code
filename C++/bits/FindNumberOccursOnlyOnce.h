@@ -1,9 +1,12 @@
+#pragma once
 #include "../header.h"
 
 /*
 https://careercup.com/question?id=7902674
 
-You are given an array that contains integers. The integers content is such that every integer occurs 3 times in that array leaving one integer that appears only once.
+You are given an array that contains integers. The integers content is such that every integer occurs 3 times
+in that array leaving one integer that appears only once.
+
 Fastest way to find that single integer
 -- using memory.
 -- not using any external memory.
@@ -12,6 +15,7 @@ eg: [2,1,4,5,1,4,2,2,4,1]
 
 Add the numbers bitwise mod 3. I guess too many people were just saying "XOR" without understanding properly.
 */
+
 class FindNumberOccursOnlyOnce {
    public:
     static void test() {

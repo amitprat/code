@@ -1,86 +1,93 @@
-/*
-Implementating iterator over binary search tree to print
-items in sorted order.
-
-Inorder traversal:  2 4 5
-Iterator traversal: 2 4 5
-Inorder traversal:  1
-Iterator traversal: 1
-Inorder traversal:  1 19
-Iterator traversal: 1 19
-Inorder traversal:  1 2 4 10 19 122 200 1000
-Iterator traversal: 1 2 4 10 19 122 200 1000
-Inorder traversal:
-Iterator traversal:
-*/
 #pragma once
 #include "../header.h"
-using namespace std;
 
 template <class T>
-class BinarySearchTree {
-    class Node;
-
+class BinarySearchTreeIterator {
    private:
-    Node* root = nullptr;
+    TreeNode *root = nullptr;
 
    public:
-    class Node {
-       public:
-        T val;
-        Node* left;
-        Node* right;
-        Node(T val, Node* left = nullptr, Node* right = nullptr) : val(val), left(left), right(right) {}
-    };
-
     class Iterator {
        private:
-        Node* root = nullptr;
-        stack<Node*> st;
+        TreeNode *root = nullptr;
+        stack<TreeNode *> st;
 
        public:
         Iterator() : root(nullptr) {}
-        Iterator(Node* otherRoot) : root(otherRoot) {
+        Iterator(TreeNode *root) : root(root) {
             if (root) {
                 while (root) {
                     st.push(root);
                     root = root->left;
                 }
+
                 root = st.top();
                 st.pop();
             }
         }
-        Iterator operator=(Node& node) {
+        Iterator &operator=(const TreeNode &node) {
             this->root = node;
             return *this;
         }
-        Iterator operator++();
+        Iterator operator++() {
+            if (root == nullptr) {
+                return Iterator(nullptr);
+            }
+
+            // Move to next
+            root = root->right;
+            while (root) {
+                st.push(root);
+                root = root->left;
+            }
+
+            if (!st.empty()) {
+                root = st.top();
+                st.pop();
+            }
+
+            return *this;
+        }
 
         Iterator operator++(int) {
             Iterator iter = *this;
             ++*this;
+
             return iter;
         }
 
-        bool operator!=(Iterator& other) {
+        bool operator!=(const Iterator &other) {
             return root != other.root;
         }
 
         T operator*() {
             return root->val;
         }
+
+        TreeNode &operator->() {
+            return root;
+        }
+
+       public:
+        Iterator begin() const noexcept {
+            return Iterator(this->root);
+        }
+
+        Iterator end() const noexcept {
+            return Iterator();
+        }
     };
 
     void add(T val) {
         if (root == nullptr)
-            root = new Node(val);
+            root = new TreeNode(val);
         else
             add(val, root);
     }
 
-    Node* add(T val, Node* cur) {
+    TreeNode *add(T val, TreeNode *cur) {
         if (cur == nullptr) {
-            cur = new Node(val);
+            cur = new TreeNode(val);
         } else {
             if (val < cur->val) {
                 cur->left = add(val, cur->left);
@@ -103,7 +110,7 @@ class BinarySearchTree {
         return ss.str();
     }
 
-    void inorder(Node* root, stringstream& ss) {
+    void inorder(TreeNode *root, stringstream &ss) {
         if (root) {
             inorder(root->left, ss);
             ss << root->val << " ";
@@ -111,10 +118,13 @@ class BinarySearchTree {
         }
     }
 
+    // pretty print
     string to_string() {
-        if (!root) return "";
+        if (!root)
+            return "";
+
         stringstream ss;
-        queue<pair<Node*, int>> q;
+        queue<pair<TreeNode *, int>> q;
         q.push({root, 20});
 
         while (!q.empty()) {
@@ -149,56 +159,37 @@ class BinarySearchTree {
     }
 };
 
-template <typename T>
-typename BinarySearchTree<T>::Iterator BinarySearchTree<T>::Iterator::operator++() {
-    if (root == nullptr) {
-        return Iterator(nullptr);
-    }
-    // Move to next
-    root = root->right;
-    while (root) {
-        st.push(root);
-        root = root->left;
-    }
-    if (!st.empty()) {
-        root = st.top();
-        st.pop();
-    }
-    return *this;
-}
-
-class BinarySearchTreeTest {
+class BinarySearchTreeIteratorTest {
    public:
     static void test() {
         {
-            BinarySearchTree<int> bst;
+            BinarySearchTreeIterator<int> bst;
             bst.add(5);
             bst.add(4);
             bst.add(2);
 
-            cout << bst.to_string() << endl;
             cout << "Inorder traversal:  " << bst.inorder() << endl;
 
             cout << "Iterator traversal: ";
-            for (auto i : bst) {
+            for (const auto &i : bst) {
                 cout << i << " ";
             }
             cout << endl;
         }
         {
-            BinarySearchTree<int> bst;
+            BinarySearchTreeIterator<int> bst;
             bst.add(1);
 
             cout << "Inorder traversal:  " << bst.inorder() << endl;
 
             cout << "Iterator traversal: ";
-            for (auto i : bst) {
+            for (const auto &i : bst) {
                 cout << i << " ";
             }
             cout << endl;
         }
         {
-            BinarySearchTree<int> bst;
+            BinarySearchTreeIterator<int> bst;
             bst.add(1);
             bst.add(19);
 
@@ -212,7 +203,7 @@ class BinarySearchTreeTest {
         }
 
         {
-            BinarySearchTree<int> bst;
+            BinarySearchTreeIterator<int> bst;
             bst.add(1);
             bst.add(200);
             bst.add(19);
@@ -221,17 +212,6 @@ class BinarySearchTreeTest {
             bst.add(1000);
             bst.add(122);
             bst.add(4);
-
-            cout << "Inorder traversal:  " << bst.inorder() << endl;
-
-            cout << "Iterator traversal: ";
-            for (auto i : bst) {
-                cout << i << " ";
-            }
-            cout << endl;
-        }
-        {
-            BinarySearchTree<int> bst;
 
             cout << "Inorder traversal:  " << bst.inorder() << endl;
 

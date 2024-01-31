@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -6,6 +7,7 @@
   4       5               5   4             5       4
 */
 /*construct seperate mirror tree*/
+
 class MirrorBinaryTree {
     struct Node {
         int val;
@@ -23,12 +25,11 @@ class MirrorBinaryTree {
         obj.swap_node(root);
     }
 
-   private:
-    // by constructing duplicate copy of it.
+   public:
     Node *mirror(Node *root) {
-        if (!root) return NULL;
+        if (!root) return nullptr;
 
-        Node *newTree = new Node(root->data);
+        Node *newTree = new Node(root->val);
         newTree->left = mirror(root->right);
         newTree->right = mirror(root->left);
 
@@ -44,4 +45,21 @@ class MirrorBinaryTree {
         swap_node(root->left);
         swap_node(root->right);
     }
-}
+
+    bool isMirror(Node *originalNode, Node *mirrorNode) {
+        if (originalNode == nullptr && mirrorNode == nullptr) return true;
+        if (originalNode == nullptr || mirrorNode == nullptr) return false;
+
+        return originalNode->val == mirrorNode->val &&
+               isMirror(originalNode->left, mirrorNode->right) &&
+               isMirror(originalNode->right, mirrorNode->left);
+    }
+
+    void printTree(Node *node) {
+        if (node) {
+            cout << node->val << " ";
+            printTree(node->left);
+            printTree(node->right);
+        }
+    }
+};

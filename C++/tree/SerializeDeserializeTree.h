@@ -1,30 +1,27 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 using namespace std;
 
-struct BinaryTreeNode
-{
+struct BinaryTreeNode {
     int val;
-    BinaryTreeNode* left, * right;
+    BinaryTreeNode *left, *right;
 };
 
-struct NaryTreeNode
-{
+struct NaryTreeNode {
     int val;
     vector<NaryTreeNode*> children;
 };
 
-class SerializeDeserializeBinaryTree
-{
+class SerializeDeserializeBinaryTree {
     vector<char> serializedTree;
-public:
-    static void testBinaryTree()
-    {
-        BinaryTreeNode* root = new BinaryTreeNode({ 1 });
-        root->left = new BinaryTreeNode({ 2 });
-        root->right = new BinaryTreeNode({ 3 });
-        root->left->left = new BinaryTreeNode({ 4 });
-        root->right->left = new BinaryTreeNode({ 5 });
+
+   public:
+    static void testBinaryTree() {
+        BinaryTreeNode* root = new BinaryTreeNode({1});
+        root->left = new BinaryTreeNode({2});
+        root->right = new BinaryTreeNode({3});
+        root->left->left = new BinaryTreeNode({4});
+        root->right->left = new BinaryTreeNode({5});
 
         SerializeDeserializeBinaryTree obj;
         cout << "Serialized Tree:";
@@ -40,8 +37,7 @@ public:
         cout << endl;
     }
 
-    void Serialize(BinaryTreeNode* node, int index)
-    {
+    void Serialize(BinaryTreeNode* node, int index) {
         if (index >= serializedTree.size()) serializedTree.resize(index + 1);
         if (node == nullptr) {
             serializedTree[index] = '\0';
@@ -52,23 +48,23 @@ public:
         Serialize(node->right, 2 * index + 2);
     }
 
-    BinaryTreeNode* Deserialize(int index)
-    {
+    BinaryTreeNode* Deserialize(int index) {
         if (index >= serializedTree.size() || serializedTree[index] == '\0') return nullptr;
 
-        BinaryTreeNode* tmp = new BinaryTreeNode({ serializedTree[index] - '0' });
+        BinaryTreeNode* tmp = new BinaryTreeNode({serializedTree[index] - '0'});
         tmp->left = Deserialize(2 * index + 1);
         tmp->right = Deserialize(2 * index + 2);
 
         return tmp;
     }
 
-    string str()
-    {
+    string str() {
         stringstream ss;
         for (auto ch : serializedTree) {
-            if (ch == '\0') ss << "NULL";
-            else ss << (ch - '0');
+            if (ch == '\0')
+                ss << "NULL";
+            else
+                ss << (ch - '0');
             ss << " ";
         }
 
@@ -76,8 +72,7 @@ public:
     }
 
     void printTree(BinaryTreeNode* node) {
-        if (node)
-        {
+        if (node) {
             cout << node->val << " ";
             printTree(node->left);
             printTree(node->right);
@@ -85,17 +80,16 @@ public:
     }
 };
 
-class SerializeDeserializeBinarySearchTree
-{
+class SerializeDeserializeBinarySearchTree {
     vector<char> serializedTree;
-public:
-    static void testBinarySearchTree()
-    {
-        BinaryTreeNode* root = new BinaryTreeNode({ 3 });
-        root->left = new BinaryTreeNode({ 2 });
-        root->right = new BinaryTreeNode({ 5 });
-        root->left->left = new BinaryTreeNode({ 1 });
-        root->right->left = new BinaryTreeNode({ 4 });
+
+   public:
+    static void testBinarySearchTree() {
+        BinaryTreeNode* root = new BinaryTreeNode({3});
+        root->left = new BinaryTreeNode({2});
+        root->right = new BinaryTreeNode({5});
+        root->left->left = new BinaryTreeNode({1});
+        root->right->left = new BinaryTreeNode({4});
 
         SerializeDeserializeBinarySearchTree obj;
         cout << "Serialized Tree:";
@@ -111,33 +105,32 @@ public:
         cout << endl;
     }
 
-    void Serialize(BinaryTreeNode* node)
-    {
+    void Serialize(BinaryTreeNode* node) {
         if (node == nullptr) return;
         serializedTree.push_back(node->val + '0');
         Serialize(node->left);
         Serialize(node->right);
     }
 
-    BinaryTreeNode* Deserialize(int mn, int mx)
-    {
+    BinaryTreeNode* Deserialize(int mn, int mx) {
         static int index = 0;
         if (index >= serializedTree.size()) return nullptr;
         if (serializedTree[index] - '0' <= mn || serializedTree[index] - '0' >= mx) return nullptr;
 
-        BinaryTreeNode* tmp = new BinaryTreeNode({ serializedTree[index++] - '0' });
+        BinaryTreeNode* tmp = new BinaryTreeNode({serializedTree[index++] - '0'});
         tmp->left = Deserialize(mn, tmp->val);
         tmp->right = Deserialize(tmp->val, mx);
 
         return tmp;
     }
 
-    string str()
-    {
+    string str() {
         stringstream ss;
         for (auto ch : serializedTree) {
-            if (ch == '\0') ss << "NULL";
-            else ss << (ch - '0');
+            if (ch == '\0')
+                ss << "NULL";
+            else
+                ss << (ch - '0');
             ss << " ";
         }
 
@@ -145,8 +138,7 @@ public:
     }
 
     void printTree(BinaryTreeNode* node) {
-        if (node)
-        {
+        if (node) {
             printTree(node->left);
             cout << node->val << " ";
             printTree(node->right);
@@ -154,17 +146,16 @@ public:
     }
 };
 
-class SerializeDeserializeNaryTree
-{
+class SerializeDeserializeNaryTree {
     vector<char> serializedTree;
-public:
-    static void testNaryTree()
-    {
-        NaryTreeNode* root = new NaryTreeNode({ 0 });
+
+   public:
+    static void testNaryTree() {
+        NaryTreeNode* root = new NaryTreeNode({0});
         for (int i = 1; i < 4; i++) {
-            root->children.push_back(new NaryTreeNode({ i }));
+            root->children.push_back(new NaryTreeNode({i}));
             for (int j = i * 10; j < i * 10 + 3; j++) {
-                root->children[i - 1]->children.push_back(new NaryTreeNode({ j }));
+                root->children[i - 1]->children.push_back(new NaryTreeNode({j}));
             }
         }
 
@@ -182,8 +173,7 @@ public:
         cout << endl;
     }
 
-    void Serialize(NaryTreeNode* node)
-    {
+    void Serialize(NaryTreeNode* node) {
         if (node == nullptr) return;
 
         serializedTree.push_back(node->val + '0');
@@ -193,12 +183,11 @@ public:
         serializedTree.push_back('\0');
     }
 
-    NaryTreeNode* Deserialize()
-    {
+    NaryTreeNode* Deserialize() {
         static int index = 0;
         if (index >= serializedTree.size()) return nullptr;
 
-        NaryTreeNode* tmp = new NaryTreeNode({ serializedTree[index++] - '0' });
+        NaryTreeNode* tmp = new NaryTreeNode({serializedTree[index++] - '0'});
         while (serializedTree[index] != '\0') {
             tmp->children.push_back(Deserialize());
         }
@@ -207,12 +196,13 @@ public:
         return tmp;
     }
 
-    string str()
-    {
+    string str() {
         stringstream ss;
         for (auto ch : serializedTree) {
-            if (ch == '\0') ss << "NULL";
-            else ss << (ch - '0');
+            if (ch == '\0')
+                ss << "NULL";
+            else
+                ss << (ch - '0');
             ss << " ";
         }
 
@@ -220,11 +210,9 @@ public:
     }
 
     void printTree(NaryTreeNode* node) {
-        if (node)
-        {
+        if (node) {
             cout << node->val << " ";
-            for (auto& ch : node->children)
-            {
+            for (auto& ch : node->children) {
                 printTree(ch);
             }
         }

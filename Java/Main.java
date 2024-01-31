@@ -1,9 +1,9 @@
 package Java;
 
-import Java.dp.ProbabilityOfBeingAlive;;
+import Java.arrays.SumOfPrimesLessThanN;
 
 public class Main {
     public static void main(String[] args) {
-        ProbabilityOfBeingAlive.test();
+        SumOfPrimesLessThanN.test();
     }
 }
