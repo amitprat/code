@@ -65,4 +65,25 @@ class PrintMatrixInSpiralOrder {
             }
         }
     }
+
+   private:
+    void spiral(vector<vector<int>>& mat) {
+        int N = mat.size();
+        int k = (N - 1) / 2;
+
+        for (int layer = 0; layer <= k; layer++) {
+            for (int i = layer; i < N - layer - 1; i++) {
+                cout << mat[i][layer] << " ";
+            }
+            for (int j = layer; j < N - layer - 1; j++) {
+                cout << mat[N - layer - 1][j] << " ";
+            }
+            for (int i = N - layer - 1; i > layer; i--) {
+                cout << mat[i][N - layer - 1] << " ";
+            }
+            for (int j = N - layer - 1; j > layer; j--) {
+                cout << mat[layer][j] << " ";
+            }
+        }
+    }
 };

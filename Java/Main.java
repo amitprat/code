@@ -1,9 +1,9 @@
 package Java;
 
-import Java.misc.NumberOfCommonChars;
+import Java.dp.MaximumProductSubset;
 
 public class Main {
     public static void main(String[] args) {
-        NumberOfCommonChars.test();
+        MaximumProductSubset.test();
     }
 }

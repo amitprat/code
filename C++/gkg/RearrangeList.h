@@ -2,19 +2,29 @@
 #include "../Header.h"
 
 class RearrangeList {
-public:
+   public:
     static void test() {
         RearrangeList obj;
-        LinkedListNode<int>* root = Create<int>({ 1,2,3 });
-        cout << to_string(root) << endl;
+        vector<ListNode*> lists = {
+            ListNode::create({}),
+            ListNode::create({1}),
+            ListNode::create({1, 2}),
+            ListNode::create({1, 2, 3}),
+            ListNode::create({1, 2, 3, 4}),
+            ListNode::create({1, 2, 3, 4, 5}),
+            ListNode::create({1, 2, 3, 4, 5, 6}),
+            ListNode::create({1, 2, 3, 4, 5, 6, 7})};
 
-        root = obj.rearrange(root);
-
-        cout << to_string(root) << endl;
+        for (ListNode* root : lists) {
+            cout << "Original List: " << root << endl;
+            root = obj.rearrange(root);
+            cout << "Rearranged List: " << root << endl;
+            cout << endl;
+        }
     }
 
-    LinkedListNode<int>* rearrange(LinkedListNode<int>* root) {
-        LinkedListNode<int>* first = nullptr, * second = nullptr;
+    ListNode* rearrange(ListNode* root) {
+        ListNode *first = nullptr, *second = nullptr;
         split(root, first, second);
         if (second == nullptr || first->next == second) return root;
 
@@ -29,7 +39,9 @@ public:
         return root;
     }
 
-    void split(LinkedListNode<int>* root, LinkedListNode<int>*& first, LinkedListNode<int>*& second) {
+    void split(ListNode* root, ListNode*& first, ListNode*& second) {
+        if (!root) return;
+
         first = root;
         second = root->next;
         while (second && second->next) {
@@ -42,7 +54,7 @@ public:
 
         first = root;
 
-        cout << "First List After Split: " << to_string(first) << endl;
-        cout << "Second List After Split: " << to_string(second) << endl;
+        cout << "First List After Split: " << first << endl;
+        cout << "Second List After Split: " << second << endl;
     }
 };

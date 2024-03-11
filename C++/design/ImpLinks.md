@@ -10,6 +10,8 @@
 
 - [C++ Talks - Concurrency, Asynchronous Talk](https://www.youtube.com/watch?v=0i_pFZSijZc&list=PLrR3oTpJZ9TjkdzwIxhlxb4Ku7yVWij5V&index=17)
 
+- [C++ - ASIO And Coroutines](https://www.youtube.com/watch?v=0i_pFZSijZc&list=PLrR3oTpJZ9TjkdzwIxhlxb4Ku7yVWij5V&index=19)
+
 - [Network programming using coroutines](https://habr.com/en/articles/768418/)
 
 - [C++20 Coroutines: sketching a minimal async framework](https://www.jeremyong.com/cpp/2021/01/04/cpp20-coroutines-a-minimal-async-framework/)
@@ -78,8 +80,15 @@
 
 
 - [Design a Geo-Spatial index for real-time location search](https://kousiknath.medium.com/system-design-design-a-geo-spatial-index-for-real-time-location-search-10968fe62b9c)
-    - 
 
+- [Development with Large Language Models Tutorial – OpenAI, Langchain, Agents, Chroma](https://www.youtube.com/watch?v=xZDB1naRUlk)
+- [Github](https://github.com/pythonontheplane123/LLM_course_part_1)
+- [NLP Projects](https://github.com/costezki/awesome-nlprojects?tab=readme-ov-file)
+- [Plagiarism-checker-Python](https://github.com/Kalebu/Plagiarism-checker-Python/blob/master/app.py)
+- [Regression Intro - Practical Machine Learning Tutorial with Python p.2](https://www.youtube.com/watch?v=JcI5Vnw0b2c&list=PLQVvvaa0QuDfKTOs3Keq_kaG2P55YRn5v&index=2)
+- [Predict The Stock Market With Machine Learning And Python](https://www.youtube.com/watch?v=1O_BenficgE)
+- [Project 2: Diabetes Prediction using Machine Learning with Python | End To End Python ML Project](https://www.youtube.com/watch?v=xUE7SjVx9bQ&list=PLfFghEzKVmjvuSA67LszN1dZ-Dd_pkus6&index=2)
+- [End To End LLM Project Using LLAMA 2- Open Source LLM Model From Meta](https://www.youtube.com/watch?v=cMJWC-csdK4)
 
 ## Appendix
 ```mermaid

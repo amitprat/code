@@ -141,6 +141,7 @@ class LongestCommonSubstringAndSubsequence {
         for (int i = 0; i <= n; i++) {
             for (int j = 0; j <= m; j++) {
                 table[i][j] = 0;
+
                 if (i == 0 || j == 0)
                     table[i][j] = 0;
                 else if (a[i - 1] == b[j - 1])

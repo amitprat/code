@@ -3,18 +3,19 @@
 /*
 https://www.careercup.com/question?id=19286669
 
-Given life time of different animals. Find period when maximum number of animals lived. ex [5, 11], [6, 18], [2, 5],[3,12] etc. year in which max no animals exists.
-
+Given life time of different animals. Find period when maximum number of animals lived. ex [5, 11], [6, 18], [2, 5],[3,12] etc.
+year in which max no animals exists.
 Input intervals (or lifetimes): [5, 11], [6, 18], [2, 5], [3,12]
 
-1. Put the end and start times of the intervals in one array. Sort it!. Always put the start time before end time in case they are equal. Maintain flags to identify a start/end interval. For above input I'll do something like:
-2S, 3S, 5S, 5E, 6S, 11E, 12E, 18E
+1. Put the end and start times of the intervals in one array. Sort it!. Always put the start time before end time in case they are equal.
+Maintain flags to identify a start/end interval. For above input I'll do something like: [2S, 3S, 5S, 5E, 6S, 11E, 12E, 18E]
 
-2. Now scan the array from left to right keeping track of how many intervals we are in. (This would be equal to total numbers of start intervals - total number of end intervals encountered so far). For above input I'll get something like:
-1, 2, 3, 2, 3, 2, 1, 0
+2. Now scan the array from left to right keeping track of how many intervals we are in.
+(This would be equal to total numbers of start intervals - total number of end intervals encountered so far).
+For above input I'll get something like: [1, 2, 3, 2, 3, 2, 1, 0]
 
-3. Now pick the maxima points from step 2. All the maxima points will be Start intervals and the point next to a maxima point will always be an end interval (which will be the end of the maxima start interval). So we'll get:
-[5S,5E] and [6S,11E].
+3. Now pick the maxima points from step 2. All the maxima points will be Start intervals and the point next to a maxima point will
+always be an end interval (which will be the end of the maxima start interval). So we'll get: [5S,5E] and [6S,11E].
 
 Hence the result is [5,5], [6,11]
 
@@ -25,17 +26,18 @@ class MaximumAnimalLivedPeriod {
    public:
     static void test() {
         MaximumAnimalLivedPeriod obj;
-        vector<Interval> intervals = {
-            {5, 11}, {6, 18}, {2, 5}, {3, 12}};
+        vector<Interval> intervals = {{5, 11}, {6, 18}, {2, 5}, {3, 12}};
 
         {
-            auto res = obj.findMaxPeriod(intervals);
-            cout << "Max Period = " << res.first << ":" << res.second.to_string() << endl;
+            auto res = obj.findMaxPeriod1(intervals);
+            cout << "Max Period (Approach1) = " << res.first << ":" << res.second.to_string() << endl;
+
+            auto res2 = obj.findMaxPeriod2(intervals);
+            cout << "Max Period (Approach2) = " << res2.first << ", " << res2.second << endl;
+
+            auto res3 = obj.findMaxPeriod3(intervals);
+            cout << "Max Period (Approach3) = " << res3.first << ", " << res3.second << endl;
         }
-        // vector<pair<int, Interval>> res = obj.findPeriod2(intervals);
-        // for (auto r : res) {
-        //     cout << r.first << ":" << r.second.to_string() << endl;
-        // }
     }
 
    private:
@@ -43,7 +45,7 @@ class MaximumAnimalLivedPeriod {
     // Then sort the array in increasing order keeping start interval first if both are same.
     // Then iterate over the array and count the max number of starts by incrementing on 'S' and decreasing on 'E'.
     // The max interval is the [max(Starts), min(End)]
-    pair<int, Interval> findMaxPeriod(vector<Interval> intervals) {
+    pair<int, Interval> findMaxPeriod1(vector<Interval> intervals) {
         multimap<int, char> m;
         int period = 0;
         Interval curPeriod = {INT_MIN, INT_MAX};
@@ -75,7 +77,8 @@ class MaximumAnimalLivedPeriod {
 
    private:
     // Similar to above approach but keeping them seperate arrays to sort.
-    vector<Interval> solution(Interval in[], int n) {
+    pair<int, vector<Interval>> findMaxPeriod2(vector<Interval>& in) {
+        int n = in.size();
         vector<int> s(n);
         vector<int> e(n);
 
@@ -91,17 +94,22 @@ class MaximumAnimalLivedPeriod {
 
         int i = 0, j = 0;
         while (i < n && j < n) {
-            if (s[i] <= e[j]) {
+            if (s[i + 1] <= e[j]) {
                 i++;
             } else {
-                maxDiff = max(maxDiff, i - j + 1);
-                results.push_back(Interval(s[i], e[j]));
+                if (i - j + 1 > maxDiff) {
+                    maxDiff = i - j + 1;
+                    results.clear();
+                    results.push_back(Interval(s[i], e[j]));
+                } else if (i - j + 1 >= maxDiff) {
+                    results.push_back(Interval(s[i], e[j]));
+                }
 
                 j++;
             }
         }
 
-        return results;
+        return {maxDiff, results};
     }
 
    private:
@@ -115,6 +123,30 @@ class MaximumAnimalLivedPeriod {
     3.now traverse again and you got all intervals for max value.
     i think in this case time complexity is O(n).
     */
+    pair<int, vector<Interval>> findMaxPeriod3(vector<Interval>& intervals) {
+        int range = 100;  // consider max age range is 100
+        vector<int> lifetime(range, 0);
+
+        for (auto& it : intervals) {
+            for (int i = it.start; i <= it.end; i++) lifetime[i]++;
+        }
+
+        int maxAnimals = 0;
+        for (int i = 0; i < range; i++) {
+            maxAnimals = max(maxAnimals, lifetime[i]);
+        }
+
+        vector<Interval> result;
+        for (int i = 0; i < range - 1; i++) {
+            if (lifetime[i] == maxAnimals) {
+                int j = i;
+                while (j < range && lifetime[j] == lifetime[i]) j++;
+                result.push_back({i, j - 1});
+            }
+        }
+
+        return {maxAnimals, result};
+    }
 
    private:
     /*

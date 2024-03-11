@@ -1,9 +1,9 @@
-#include "careercup/FindPathInMatrix.h"
+#include "matrix/FindRowWithMaxOnes.h"
 
 using namespace std;
 
 int main() {
-    FindPathInMatrix::test();
+    FindRowWithMaxOnes::test();
 
     return 0;
 }
