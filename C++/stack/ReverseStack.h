@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class ReverseStack {
    public:
@@ -24,6 +24,7 @@ class ReverseStack {
 
         char ch = st.top();
         st.pop();
+
         reverseRecursive(st);
 
         insertAtBottom(st, ch);

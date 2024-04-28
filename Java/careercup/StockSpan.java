@@ -1,6 +1,7 @@
 package programs.careercup;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 public class StockSpan {
@@ -32,5 +33,21 @@ public class StockSpan {
         }
 
         System.out.println(Arrays.toString(span));
+    }
+
+    List<Integer> stockSpan2(int[] prices) {
+        int[] span = new int[prices.length];
+        Stack<Integer> indices = new Stack<>();
+
+        for (int i = 0; i < n; i++) {
+            var price = prices.get(i);
+            while (!indices.empty() && prices[indices.peek()] < price) {
+                indices.pop();
+            }
+            span[i] = indices.empty() ? (i + 1) : (i - indices.peek());
+            indices.push(i);
+        }
+
+        return span;
     }
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://careercup.com/question?id=5705581721550848
@@ -11,6 +11,7 @@ key: "helloworld" --> return true
 key: "superman" --> return false
 key: "hellohello" --> return true
 */
+
 class WordBreak {
    public:
     static void test() {
@@ -41,6 +42,9 @@ class WordBreak {
                 cout << "No word break exists!";
             }
             cout << endl;
+
+            auto res = obj.minimumWordBreaksDP(word, dict);
+            cout << format("Minimum word breaks for {0} are {1}.", word, res) << endl;
         }
     }
 
@@ -127,6 +131,31 @@ class WordBreak {
             for (int j = 0; j <= i; j++) {
                 string cur = str.substr(j, i - j);
                 if (table[j] && dict.find(cur) != dict.end()) table[i] = true;
+            }
+        }
+
+        return table[n];
+    }
+
+   private:
+    int minimumWordBreaksDP(string str, unordered_set<string>& dict) {
+        int n = str.length();
+        vector<int> table(n + 1, INT_MAX);
+        table[0] = 1;
+
+        int mnBreaks = INT_MAX;
+
+        for (int i = 1; i <= n; i++) {
+            string first = str.substr(0, i);
+            if (dict.find(first) != dict.end()) table[i] = 1;
+
+            if (table[i] != INT_MAX) {
+                for (int j = i + 1; j <= n; j++) {
+                    string rest = str.substr(i, j - i);
+                    if (dict.find(rest) != dict.end()) {
+                        table[j] = min(table[j], 1 + table[i]);
+                    }
+                }
             }
         }
 

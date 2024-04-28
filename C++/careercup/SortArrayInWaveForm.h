@@ -28,7 +28,6 @@ op : 4 2 8 6 20 10
   }
 
 2) T = O(n)
-
 Trick : Just consider EVEN position elements, make sure it is on crest (i.e. bigger than previous and next element)
 
 for(int i=0;i<n;i+=2) {
@@ -42,37 +41,26 @@ class SortArrayInWaveForm {
    public:
     static void test() {
         SortArrayInWaveForm obj;
+        vector<vector<int>> arrs = {
+            {10, 90, 49, 2, 1, 5, 23}};
 
-        {
-            int arr[] = {10, 90, 49, 2, 1, 5, 23};
-            int n = sizeof(arr) / sizeof(arr[0]);
-            obj.sortInWave1(arr, n);
-            for (int i = 0; i < n; i++)
-                cout << arr[i] << " ";
-            cout << endl;
-        }
+        for (const auto& arr : arrs) {
+            auto copy1 = arr;
+            auto copy2 = arr;
+            auto copy3 = arr;
+            obj.sortInWave1(copy1);
+            obj.sortInWave2(copy2);
+            obj.sortInWave3(copy3);
+            assert(areEqual(copy1, copy2));
+            // assert(areEqual(copy1, copy3));
 
-        {
-            int arr[] = {10, 90, 49, 2, 1, 5, 23};
-            int n = sizeof(arr) / sizeof(arr[0]);
-            obj.sortInWave2(arr, n);
-            for (int i = 0; i < n; i++)
-                cout << arr[i] << " ";
-            cout << endl;
-        }
-
-        {
-            int arr[] = {10, 90, 49, 2, 1, 5, 23};
-            int n = sizeof(arr) / sizeof(arr[0]);
-            obj.sortInWave3(arr, n);
-            for (int i = 0; i < n; i++)
-                cout << arr[i] << " ";
-            cout << endl;
+            cout << "Sorted: " << copy1 << endl;
         }
     }
 
    private:
-    void sortInWave1(int arr[], int n) {
+    void sortInWave1(vector<int>& arr) {
+        int n = arr.size();
         for (int i = 0; i < n; i += 2) {
             if (i > 0 && arr[i] < arr[i - 1])
                 swap(arr[i], arr[i - 1]);
@@ -82,7 +70,8 @@ class SortArrayInWaveForm {
     }
 
    private:
-    void sortInWave2(int arr[], int n) {
+    void sortInWave2(vector<int>& arr) {
+        int n = arr.size();
         for (int i = 0; i < n - 1; i++) {
             if (!(i & 1) && arr[i] < arr[i + 1]) swap(arr[i], arr[i + 1]);
             if ((i & 1) && (arr[i] > arr[i + 1])) swap(arr[i], arr[i + 1]);
@@ -90,9 +79,9 @@ class SortArrayInWaveForm {
     }
 
    private:
-    // Sort array first and swap pairs of numbers?
-    void sortInWave3(int arr[], int n) {
-        sort(arr, arr + n);
+    void sortInWave3(vector<int>& arr) {
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
         for (int i = 0; i < n - 1; i += 2) swap(arr[i], arr[i + 1]);
     }
 };

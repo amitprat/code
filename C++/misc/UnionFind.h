@@ -1,16 +1,14 @@
 #pragma once
 #include "../header.h"
 
-class UnionFind
-{
-private:
+class UnionFind {
+   private:
     int* indx;
     int sz = 0;
     int* rank;
 
-public:
-    UnionFind(int sz)
-    {
+   public:
+    UnionFind(int sz) {
         indx = new int[sz];
         rank = new int[sz];
         this->sz = sz;
@@ -20,26 +18,21 @@ public:
         }
     }
 
-    int find(int p)
-    {
+    int Find(int p) {
         while (p != indx[p]) p = indx[p];
 
         return p;
     }
 
-    bool Union(int a, int b)
-    {
-        int aRoot = find(a);
-        int bRoot = find(b);
-        if (aRoot != bRoot)
-        {
+    bool Union(int a, int b) {
+        int aRoot = Find(a);
+        int bRoot = Find(b);
+        if (aRoot != bRoot) {
             if (rank[aRoot] < rank[bRoot]) {
                 indx[aRoot] = bRoot;
-            }
-            else if (rank[bRoot] < rank[aRoot]) {
+            } else if (rank[bRoot] < rank[aRoot]) {
                 indx[bRoot] = aRoot;
-            }
-            else {
+            } else {
                 indx[aRoot] = bRoot;
                 rank[bRoot]++;
             }
@@ -48,13 +41,11 @@ public:
         return false;
     }
 
-    bool Connected(int a, int b)
-    {
-        return find(a) == find(b);
+    bool Connected(int a, int b) {
+        return Find(a) == Find(b);
     }
 
-    string toString(int n)
-    {
+    string toString(int n) {
         stringstream ss;
         for (int i = 0; i < sz; i++) {
             ss << "{" << indx[i] / n << "," << indx[i] % n << "} ";

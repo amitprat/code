@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class InfixToPostfix {
-public:
+   public:
     static void test() {
         InfixToPostfix obj;
         string exp = "a+b*(c*d-e)-i";
@@ -21,8 +21,7 @@ public:
                     st.pop();
                 }
                 if (st.empty() || st.top() != ')') st.push(ch);
-            }
-            else {
+            } else {
                 result += ch;
             }
         }

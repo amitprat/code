@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -15,9 +16,8 @@ Answer: 3
 0 0
 0 0
 Answer: 4
-Update: Expected complexity is O(log(N)). The best I've seen in comments is still O(N).
 
-Update2: Alright, guys, sorry for a bit of trolling. Obviously this is not possible to do faster than O(N).
+Obviously this is not possible to do faster than O(N).
 Here is why: take a diagonal (N, 1), (N-1, 2), ... (1, N). Suppose input matrix has all 0's above this diagonal and all 1's under this diagonal.
 So only diagonal elements vary. Clearly, diagonal elements do not depend on each other. So we have to analyze each diagonal element which is O(N).
 

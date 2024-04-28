@@ -25,8 +25,8 @@ Solution : W1 + W6 + W3 = 390min
 */
 
 /*
-Other question: 
-You are given n activities with their start and finish times. Select the maximum number of activities that can be 
+Other question:
+You are given n activities with their start and finish times. Select the maximum number of activities that can be
 performed by a single person, assuming that a person can only work on a single activity at a time.
 Example:
 
@@ -58,7 +58,7 @@ class ActivitySelectionProblem {
    public:
     static void test() {
         {
-            cout<<"Select jobs with conflicting activities:"<<endl;
+            cout << "Select jobs with conflicting activities:" << endl;
             vector<Interval> tasks = {{5, 9}, {1, 2}, {3, 4}, {0, 6}, {5, 7}, {8, 9}};
             selectMaximumNumberOfNonConflictingActivities(tasks);
         }
@@ -88,7 +88,7 @@ class ActivitySelectionProblem {
         }
     }
 
-    public:
+   public:
     static void selectMaximumNumberOfNonConflictingActivities(vector<Interval> tasks) {
         sort(tasks.begin(), tasks.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
 
@@ -102,7 +102,7 @@ class ActivitySelectionProblem {
         cout << endl;
     }
 
-    public:
+   public:
     static int selectMaximumTasks(vector<Interval> tasks) {
         sort(tasks.begin(), tasks.end(), [](const auto& it1, const auto& it2) { return it1.end < it2.end; });
 
@@ -116,8 +116,8 @@ class ActivitySelectionProblem {
                 finish = tasks[i].end;
             }
         }
-        
-        cout<<"Selected tasks: "<<result<<endl;
+
+        cout << "Selected tasks: " << result << endl;
 
         return result.size();
     }
@@ -153,7 +153,7 @@ class ActivitySelectionProblem {
 
         for (int i = 1; i < n; i++) {
             int j = latestNonConflictingJob(weightedJobs, i);
-            memo[i] = max(memo[i-1], memo[j] + weightedJobs[i].weight);
+            memo[i] = max(memo[i - 1], memo[j] + weightedJobs[i].weight);
         }
 
         return memo[n - 1];
@@ -179,7 +179,7 @@ class ActivitySelectionProblem {
 
         for (int i = 1; i < n; i++) {
             int j = latestNonConflictingJobBinarySearch(weightedJobs, 0, i - 1, i);
-            memo[i] = max(memo[i-1], memo[j] + weightedJobs[i].weight);
+            memo[i] = max(memo[i - 1], memo[j] + weightedJobs[i].weight);
         }
 
         return memo[n - 1];

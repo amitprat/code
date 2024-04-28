@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -15,11 +16,8 @@ STAR- no
 TONE- no
 NOTE- yes
 SAND- yes
-etc.
-
 
 I think the other solutions do not handle usage of the same character twice. Below is the bug free solution.
-
 
 def preProcessBoard(board):
     sz = len(board)

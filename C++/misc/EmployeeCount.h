@@ -2,17 +2,16 @@
 #include "../Header.h"
 
 class EmployeeCount {
-public:
+   public:
     static void test() {
         EmployeeCount obj;
         vector<pair<string, string>> emps = {
-            { "A", "C" },
-            { "B", "C" },
-            { "C", "F" },
-            { "D", "E" },
-            { "E", "F" },
-            { "F", "F" }
-        };
+            {"A", "C"},
+            {"B", "C"},
+            {"C", "F"},
+            {"D", "E"},
+            {"E", "F"},
+            {"F", "F"}};
         obj.printEmpCount(emps);
     }
 
@@ -29,12 +28,12 @@ public:
             counts[emp.first] = getCount(emp.first, empMap);
         }
 
-        print("Employee Count", counts);
+        cout << format("Employee Count: {0}", counts) << endl;
     }
 
     int getCount(string emp, unordered_map<string, vector<string>> empMap) {
         int count = 0;
-        vector<string> tmp = { emp };
+        vector<string> tmp = {emp};
         while (!tmp.empty()) {
             auto cur = tmp.back();
             tmp.pop_back();

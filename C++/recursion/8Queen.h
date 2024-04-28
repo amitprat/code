@@ -2,10 +2,11 @@
 #include "../header.h"
 
 class EightQueen {
-private:
+   private:
     int N = 8;
     int board[8][8];
-public:
+
+   public:
     static void test() {
         EightQueen obj;
         cout << "Num ways to place queen:" << obj.getNumWays() << endl;
@@ -24,7 +25,8 @@ public:
         vector<vector<int>> result;
 
         getNumWays(0, columns, result);
-        print(result);
+        cout << result << endl;
+
         return result.size();
     }
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "../Header.h"
-#include "ds/BinarySearchTree.h"
+#include "../ds/BinarySearchTree.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=15320677
@@ -22,6 +22,37 @@ do this until 2nd_index > 1st_index
 class FindTwoNodesWithGivenSumInBST {
     using Node = BinarySearchTree<int, int>::Node;
 
+    class BinarySearchTreeIterator {
+        stack<Node *> st;
+        Node *root = nullptr;
+        bool leftToRight = true;
+
+       public:
+        BinarySearchTreeIterator(Node *root, bool leftToRight = true) {
+            this->root = root;
+            this->leftToRight = leftToRight;
+        }
+
+        bool hasNext() {
+            return root || !st.empty();
+        }
+
+        Node *next() {
+            while (root) {
+                st.push(root);
+                root = leftToRight ? root->left : root->right;
+            }
+
+            root = st.top();
+            st.pop();
+
+            auto next = root;
+            root = leftToRight ? root->right : root->left;
+
+            return next;
+        }
+    };
+
    public:
     static void test() {
         FindTwoNodesWithGivenSumInBST obj;
@@ -38,13 +69,16 @@ class FindTwoNodesWithGivenSumInBST {
         bst.inorder();
 
         for (int x = 0; x <= 20; x++) {
-            pair<int, int> res = obj.findPairsWithSum(bst.root, x);
-            cout << format("Pair with sum={0} is {1}", x, to_string(res)) << endl;
+            pair<int, int> res1 = obj.findPairsWithSum1(bst.root, x);
+            pair<int, int> res2 = obj.findPairsWithSum2(bst.root, x);
+            assert(res1 == res2);
+
+            cout << format("Pair with sum={0} is {1}", x, to_string(res1)) << endl;
         }
     }
 
    private:
-    pair<int, int> findPairsWithSum(Node *root, int x) {
+    pair<int, int> findPairsWithSum1(Node *root, int x) {
         stack<Node *> left;
         stack<Node *> right;
 
@@ -85,6 +119,29 @@ class FindTwoNodesWithGivenSumInBST {
             } else if (leftNode->val + rightNode->val > x) {
                 moveRight = true;
                 rightNode = rightNode->left;
+            }
+        }
+
+        return {-1, -1};
+    }
+
+   private:
+    pair<int, int> findPairsWithSum2(Node *root, int x) {
+        BinarySearchTreeIterator bstIter1(root);
+        BinarySearchTreeIterator bstIter2(root, false);
+
+        auto left = bstIter1.next();
+        auto right = bstIter2.next();
+
+        while (bstIter1.hasNext() && bstIter2.hasNext()) {
+            if (left == right) break;
+
+            if (left->key + right->key == x) {
+                return {left->key, right->key};
+            } else if (left->key + right->key < x) {
+                left = bstIter1.next();
+            } else {
+                right = bstIter2.next();
             }
         }
 

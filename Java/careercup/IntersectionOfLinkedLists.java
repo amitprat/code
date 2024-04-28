@@ -8,7 +8,7 @@ https://www.careercup.com/question?id=13196682
 
 Find the intersection of two linked list given their head pointer.
 Constraint: You can only traverse a linked list only once.
- */
+*/
 
 public class IntersectionOfLinkedLists {
     class Node {

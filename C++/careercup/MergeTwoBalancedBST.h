@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -13,6 +14,9 @@ This can be done in 3 steps:
 */
 
 class MergeTwoBalancedBST {
+    using TreeNode = BinaryTree<int>::Node;
+    using ListNode = LinkedList<int>::Node;
+
    private:
     TreeNode *mergeBst(TreeNode *root1, TreeNode *root2) {
         ListNode *head1, *head2;
@@ -23,15 +27,17 @@ class MergeTwoBalancedBST {
         ListNode *head = mergeLinkedList(head1, head2);
 
         TreeNode *root = convertSortedListToBst(head);
+
+        return root;
     }
 
     ListNode *inorder(TreeNode *root, ListNode *head) {
         if (!root) return head;
 
         inorder(root->left, head);
-        if (!head)
+        if (!head) {
             head = new ListNode(root->val);
-        else {
+        } else {
             head->next = new ListNode(root->val);
             head = head->next;
         }

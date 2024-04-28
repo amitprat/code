@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=16813665
@@ -28,6 +28,7 @@ class MaxProductSubsequence {
         vector<int> result;
 
         for (int i = 1; i < arr.size() - 1; i++) {
+            // find the highest element on left which is smaller than current element.
             int leftHighestLower = 0;
             for (int j = i - 1; j >= 0; j--) {
                 if (arr[j] < arr[i] && arr[j] > leftHighestLower) {
@@ -35,6 +36,7 @@ class MaxProductSubsequence {
                 }
             }
 
+            // find the highest element on right side which is bigger than current element.
             int rightHighestHigher = 0;
             for (int j = i + 1; j < arr.size(); j--) {
                 if (arr[j] > arr[i] && arr[j] > rightHighestHigher) {
@@ -42,7 +44,10 @@ class MaxProductSubsequence {
                 }
             }
 
+            // consider the product of these 3 elements
             int curMax = leftHighestLower * arr[i] * rightHighestHigher;
+
+            // if current product is greater than max so far, then update it.
             if (curMax > mxProduct) {
                 mxProduct = curMax;
                 result = {leftHighestLower, arr[i], rightHighestHigher};

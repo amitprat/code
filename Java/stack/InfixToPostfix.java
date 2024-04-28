@@ -8,14 +8,16 @@ public class InfixToPostfix {
     private final Map<Character, Integer> precMap;
 
     InfixToPostfix() {
-        precMap = new HashMap<>() {{
-            put('(', 0);
-            put('+', 1);
-            put('-', 1);
-            put('*', 2);
-            put('/', 2);
-            put('^', 3);
-        }};
+        precMap = new HashMap<>() {
+            {
+                put('(', 0);
+                put('+', 1);
+                put('-', 1);
+                put('*', 2);
+                put('/', 2);
+                put('^', 3);
+            }
+        };
     }
 
     public static void test() {
@@ -33,9 +35,11 @@ public class InfixToPostfix {
         String result = "";
         Stack<Character> st = new Stack<>();
         for (var ch : infix.toCharArray()) {
-            if (isOperand(ch)) result += ch;
-            else {
-                if (ch == '(') st.push(ch);
+            if (isOperand(ch)) {
+                result += ch;
+            } else {
+                if (ch == '(')
+                    st.push(ch);
                 else if (ch == ')') {
                     while (!st.empty() && st.peek() != '(') {
                         result += st.pop();
@@ -49,16 +53,21 @@ public class InfixToPostfix {
                 }
             }
         }
-        while (!st.empty()) result += st.pop();
+        while (!st.empty()) {
+            result += st.pop();
+        }
+
         return result;
     }
 
     public double evaluate(String postfix) {
         Stack<Double> st = new Stack<>();
         for (var ch : postfix.toCharArray()) {
-            if (isOperand(ch)) st.push((double) (ch - '0'));
-            else {
-                if (st.size() == 1) return -1;
+            if (isOperand(ch)) {
+                st.push((double) (ch - '0'));
+            } else {
+                if (st.size() == 1)
+                    return -1;
                 var second = st.pop();
                 var first = st.pop();
                 st.push(eval(first, second, ch));

@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 #include "ds/PriorityQueue.h"
 /*

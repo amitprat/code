@@ -2,8 +2,10 @@
 #include "../header.h"
 
 /*
-// majority element
-// https://www.careercup.com/question?id=14099679
+Majority element
+https://www.geeksforgeeks.org/majority-element/
+https://www.careercup.com/question?id=14099679
+
 Design an algorithm that, given a list of n elements in an array, finds all the elements that appear more than n/3 times
 in the list. The algorithm should run in linear time ( n >=0 )
 

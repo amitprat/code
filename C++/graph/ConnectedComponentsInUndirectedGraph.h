@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class ConnectedComponentsInUndirectedGraph {
     struct Graph {
@@ -15,7 +15,7 @@ class ConnectedComponentsInUndirectedGraph {
         }
     };
 
-public:
+   public:
     static void test() {
         ConnectedComponentsInUndirectedGraph obj;
 
@@ -31,6 +31,7 @@ public:
         cout << format("Connected components in graph {}", cnt) << endl;
     }
 
+   public:
     int getConnectedComponents(Graph& g) {
         int V = g.vertices.size();
         unordered_set<int> visited;
@@ -47,6 +48,7 @@ public:
         return components;
     }
 
+   public:
     void printConnectedComponents(Graph& g) {
         int V = g.vertices.size();
         unordered_set<int> visited;

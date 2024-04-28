@@ -1,5 +1,6 @@
 #pragma once
 #include "../header.h"
+
 /*
 https://www.careercup.com/question?id=4681660918398976
 
@@ -27,7 +28,7 @@ in the second round. We denote the threshold as T.
 (6) We now have the correct top ten with correct scores.
 */
 
-class Top10MostVisitedUrls {
+class FindTop10MostVisitedUrls {
     using P = pair<int, string>;
 
    private:
@@ -90,7 +91,7 @@ class Top10MostVisitedUrls {
         servers.push_back(server2);
         servers.push_back(server3);
 
-        Top10MostVisitedUrls obj;
+        FindTop10MostVisitedUrls obj;
         map<string, int> result = obj.findTopKUrls(servers);
         cout << "Result: " << result << endl;
     }

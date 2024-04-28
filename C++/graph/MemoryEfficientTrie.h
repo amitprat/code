@@ -1,58 +1,18 @@
 #pragma once
-
-#include <time.h>
-#include <stdlib.h>
-#include <thread>
-#include <vector>
-#include <iostream>
-#include <atomic>
-#include <mutex>
-#include <time.h>
-#include <fstream>
-#include <stack>
-#include <sstream>
-#include <unordered_map>
-#include <unordered_set>
-#include <cassert>
-#include <algorithm>
-using namespace std;
+#include "../header.h"
 
 template <class T>
-class Node
-{
-public:
+class Node {
+   public:
     unordered_map<char, Node<T>*> children;
     bool end = false;
-
-    Node()
-    {
-        end = false;
-    }
 };
 
-class MemoryEfficientTrie
-{
-private:
+class MemoryEfficientTrie {
     Node<char>* root = nullptr;
 
-    int index(char ch) {
-        return ch - 'a';
-    }
-
-    char getchar(int i) { return i + 'a'; }
-
-    bool isleaf(Node<char>* node)
-    {
-        if (node == nullptr) return true;
-        return node->children.empty();
-    }
-
-    static string TO_BOOL(int result) {
-        return result == 0 ? "False" : "True";
-    }
-public:
-    static void test()
-    {
+   public:
+    static void test() {
         MemoryEfficientTrie trie;
 
         string word = "helloworld";
@@ -63,7 +23,7 @@ public:
         auto result = trie.traverse();
         for (auto& str : result) cout << str << " ";
         cout << endl;
-        auto expected = { "helloworld" };
+        auto expected = {"helloworld"};
         assert(equal(result.begin(), result.end(), expected.begin()));
 
         word = "hello";
@@ -91,7 +51,7 @@ public:
         result = trie.startsWith(word);
         for (auto& str : result) cout << str << " ";
         cout << endl;
-        expected = { "hell", "hello", "helloworld" };
+        expected = {"hell", "hello", "helloworld"};
         assert(equal(result.begin(), result.end(), expected.begin()));
 
         word = "helloworldstart";
@@ -99,47 +59,50 @@ public:
         result = trie.longestPrefix(word);
         for (auto& str : result) cout << str << " ";
         cout << endl;
-        expected = { "hell", "hello", "helloworld" };
+        expected = {"hell", "hello", "helloworld"};
         assert(equal(result.begin(), result.end(), expected.begin()));
 
         word = "hell";
         cout << "Delete => Word: " << word << endl;
-        bool res = trie.deleteWord(word);
+        trie.deleteWord(word);
 
         word = "he";
         cout << "StartsWith => all words starting with word: '" << word << "': ";
         result = trie.startsWith(word);
         for (auto& str : result) cout << str << " ";
         cout << endl;
-        expected = { "hello", "helloworld" };
+        expected = {"hello", "helloworld"};
         assert(equal(result.begin(), result.end(), expected.begin()));
 
         word = "helloworld";
         cout << "Delete => Word: " << word << endl;
-        res = trie.deleteWord(word);
+        trie.deleteWord(word);
 
         word = "he";
         cout << "StartsWith => all words starting with word: '" << word << "': ";
         result = trie.startsWith(word);
         for (auto& str : result) cout << str << " ";
         cout << endl;
-        expected = { "hello" };
+        expected = {"hello"};
         assert(equal(result.begin(), result.end(), expected.begin()));
+    }
+
+   public:
+    MemoryEfficientTrie() {
+        root = new Node<char>();
     }
 
     /*
     Insert given word in trie
     */
-    void insert(string word)
-    {
-        root = insert(root, word.c_str());
+    void insert(string word) {
+        insert(root, word.c_str());
     }
 
     /*
     Return all words in trie
     */
-    vector<string> traverse()
-    {
+    vector<string> traverse() {
         vector<string> result;
         traverse(root, result, "");
         return result;
@@ -148,8 +111,7 @@ public:
     /*
     Check for given word in trie
     */
-    bool search(string word)
-    {
+    bool search(string word) {
         if (root == nullptr) return false;
         if (word.empty()) return root->end;
 
@@ -160,18 +122,14 @@ public:
     /*
     Delete given word from trie
     */
-    bool deleteWord(string word)
-    {
-        auto res = deleteWord(root, word.c_str());
-        if (res && isleaf(root)) { delete root; root = nullptr; }
-        return res;
+    void deleteWord(string word) {
+        deleteWord(root, word.c_str());
     }
 
     /*
     Return all words starting with given word
     */
-    vector<string> startsWith(string start)
-    {
+    vector<string> startsWith(string start) {
         vector<string> result;
         startsWith(root, start.c_str(), result, "");
         return result;
@@ -186,9 +144,8 @@ public:
         return result;
     }
 
-private:
-    Node<char>* insert(Node<char>* node, const char* word)
-    {
+   private:
+    Node<char>* insert(Node<char>* node, const char* word) {
         if (node == nullptr) node = new Node<char>();
         if (!*word) {
             node->end = true;
@@ -200,38 +157,38 @@ private:
         return node;
     }
 
-    bool search(Node<char>* node, const char* word)
-    {
+    bool search(Node<char>* node, const char* word) {
         if (node == nullptr) return false;
         if (!*word) return node->end;
 
         return search(node->children[index(*word)], word + 1);
     }
 
-    void traverse(Node<char>* node, vector<string>& result, string str)
-    {
+    void traverse(Node<char>* node, vector<string>& result, string str) {
         if (node == nullptr) return;
-        if (node->end) { result.push_back(str); }
+        if (node->end) {
+            result.push_back(str);
+        }
         for (auto& child : node->children) {
             traverse(child.second, result, str + getchar(child.first));
         }
     }
 
-    void startsWith(Node<char>* node, const char* word, vector<string>& result, string str)
-    {
+    void startsWith(Node<char>* node, const char* word, vector<string>& result, string str) {
         if (node == nullptr) return;
-        if (node->end) { result.push_back(str); }
-        if (*word) startsWith(node->children[index(*word)], word + 1, result, str + *word);
-        else
-        {
+        if (node->end) {
+            result.push_back(str);
+        }
+        if (*word)
+            startsWith(node->children[index(*word)], word + 1, result, str + *word);
+        else {
             for (auto& child : node->children) {
                 startsWith(child.second, word, result, str + getchar(child.first));
             }
         }
     }
 
-    void longestPrefixMatching(Node<char>* node, const char* word, vector<string>& result, string str)
-    {
+    void longestPrefixMatching(Node<char>* node, const char* word, vector<string>& result, string str) {
         if (node == nullptr) return;
         if (node->end) result.push_back(str);
         if (!*word) return;
@@ -239,8 +196,7 @@ private:
         longestPrefixMatching(node->children[index(*word)], word + 1, result, str + *word);
     }
 
-    bool deleteWord(Node<char>* node, const char* word)
-    {
+    bool deleteWord(Node<char>* node, const char* word) {
         if (node == nullptr) return false;
         if (!*word) {
             node->end = false;
@@ -253,5 +209,21 @@ private:
             node->children[index(*word)] = nullptr;
         }
         return res && isleaf(node);
+    }
+
+   private:
+    int index(char ch) {
+        return ch - 'a';
+    }
+
+    char getchar(int i) { return i + 'a'; }
+
+    bool isleaf(Node<char>* node) {
+        if (node == nullptr) return true;
+        return node->children.empty();
+    }
+
+    static string TO_BOOL(int result) {
+        return result == 0 ? "False" : "True";
     }
 };

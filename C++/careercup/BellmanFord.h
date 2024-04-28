@@ -1,29 +1,30 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class BellmanFord {
     class Graph {
-    public:
+       public:
         struct Edge {
             int u, v, w;
         };
         int V;
         vector<Edge> edges;
-        Graph(int v) :V(v) {}
+        Graph(int v) : V(v) {}
         void add(Edge edge) { edges.push_back(edge); }
     };
-public:
+
+   public:
     static void test() {
         BellmanFord obj;
         Graph g(5);
-        g.add({ 0, 1, -1 });
-        g.add({ 0, 2, 4 });
-        g.add({ 1, 2, 3 });
-        g.add({ 1, 3, 2 });
-        g.add({ 1, 4, 2 });
-        g.add({ 3, 2, 5 });
-        g.add({ 3, 1, 1 });
-        g.add({ 4, 3, -3 });
+        g.add({0, 1, -1});
+        g.add({0, 2, 4});
+        g.add({1, 2, 3});
+        g.add({1, 3, 2});
+        g.add({1, 4, 2});
+        g.add({3, 2, 5});
+        g.add({3, 1, 1});
+        g.add({4, 3, -3});
 
         int s = 0;
         vector<int> dist = obj.bellman(g, s);

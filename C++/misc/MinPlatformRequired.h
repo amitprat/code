@@ -21,14 +21,11 @@ max is nothing but the maximum no of buses going to be there at any point of tim
 so there need to max number of platforms
 */
 
-class MinPlatformRequired
-{
-    class StationTimeChart
-    {
-    public:
-        class Schedule
-        {
-        public:
+class MinPlatformRequired {
+    class StationTimeChart {
+       public:
+        class Schedule {
+           public:
             int arrival;
             int departure;
             Schedule(int arrival, int departure) : arrival(arrival), departure(departure) {}
@@ -39,7 +36,7 @@ class MinPlatformRequired
 
         vector<Schedule> schedules;
 
-    public:
+       public:
         StationTimeChart(vector<pair<int, int>>& schedules) {
             for (auto& s : schedules) {
                 this->schedules.push_back(Schedule(s.first, s.second));
@@ -49,20 +46,20 @@ class MinPlatformRequired
             stringstream ss;
             ss << "[";
             for (auto& i : schedules) ss << i.to_string() << ", ";
-            if (ss.str().size() > 2) { ss.seekp(-2, std::ios_base::end); }
+            if (ss.str().size() > 2) {
+                ss.seekp(-2, std::ios_base::end);
+            }
             ss << "]";
             return ss.str();
         }
     };
 
-public:
-    static void test()
-    {
+   public:
+    static void test() {
         MinPlatformRequired obj;
         vector<vector<pair<int, int>>> trainSchedules = {
-            {{900,910}, {940,1200},{950,1120},{1100,1130},{1500,1900},{1800,2000}},
-            {{1000,1800},{1100, 1700}, {1200,1230},{1300,1400},{1330,1430},{1400,1500},{1600,1700},{1630,1800}}
-        };
+            {{900, 910}, {940, 1200}, {950, 1120}, {1100, 1130}, {1500, 1900}, {1800, 2000}},
+            {{1000, 1800}, {1100, 1700}, {1200, 1230}, {1300, 1400}, {1330, 1430}, {1400, 1500}, {1600, 1700}, {1630, 1800}}};
 
         vector<StationTimeChart> charts;
         for (auto& trainSchedule : trainSchedules) {
@@ -91,16 +88,16 @@ public:
 
     // Maintain seperate queue for each of the bus and look for best queue where we can fit next bus
     // Bad time and space complexity
-    int minPlatforms0(StationTimeChart& chart)
-    {
+    int minPlatforms0(StationTimeChart& chart) {
         int result = 0;
         if (chart.schedules.empty()) return result;
 
         vector<queue<StationTimeChart::Schedule>> vq;
         vector<StationTimeChart::Schedule> schedules = chart.schedules;
-        sort(schedules.begin(), schedules.end(), [](auto& f, auto& s) {return f.arrival < s.arrival; });
+        sort(schedules.begin(), schedules.end(), [](auto& f, auto& s) { return f.arrival < s.arrival; });
 
-        queue<StationTimeChart::Schedule> q; q.push(schedules[0]);
+        queue<StationTimeChart::Schedule> q;
+        q.push(schedules[0]);
         vq.push_back(q);
 
         for (int i = 1; i < schedules.size(); i++) {
@@ -114,7 +111,8 @@ public:
             }
 
             if (!found) {
-                queue<StationTimeChart::Schedule> tmp; tmp.push(schedules[i]);
+                queue<StationTimeChart::Schedule> tmp;
+                tmp.push(schedules[i]);
                 vq.push_back(tmp);
             }
         }
@@ -126,8 +124,7 @@ public:
     Time Complexity: O( N* LogN).
     Since we are inserting into multiset and it maintain elements in sorted order. So N insert operations in multiset requires N*LogN time complexity.
     */
-    int minPlatforms1(StationTimeChart& chart)
-    {
+    int minPlatforms1(StationTimeChart& chart) {
         int result = 0;
         // multimap won't work here if arrival and departure time are same.
         // https://stackoverflow.com/questions/52074218/custom-compare-function-for-stdmultimap-when-keys-are-equal
@@ -135,8 +132,8 @@ public:
 
         multiset<pair<int, char>> multiset;
         for (auto& schedule : chart.schedules) {
-            multiset.insert({ schedule.arrival, 'a' });
-            multiset.insert({ schedule.departure, 'd' });
+            multiset.insert({schedule.arrival, 'a'});
+            multiset.insert({schedule.departure, 'd'});
         }
 
         int platCnt = 0;
@@ -144,16 +141,15 @@ public:
             if (e.second == 'a') {
                 platCnt++;
                 result = max(result, platCnt);
-            }
-            else platCnt--;
+            } else
+                platCnt--;
         }
 
         return result;
     }
 
     // T - O(nlogn)
-    int minPlatforms2(StationTimeChart& chart)
-    {
+    int minPlatforms2(StationTimeChart& chart) {
         int n = chart.schedules.size();
         if (n == 0) return 0;
 
@@ -168,8 +164,10 @@ public:
         int a = 1, d = 0;
         int result = 1;
         while (a < n) {
-            if (endTimes[d] < startTimes[a]) d++;
-            else a++;
+            if (endTimes[d] < startTimes[a])
+                d++;
+            else
+                a++;
 
             result = max(result, a - d);
         }
@@ -183,9 +181,8 @@ public:
     Time Complexity: O(N).
     Space Complexity: O(1).
     */
-    int minPlatforms3(StationTimeChart& chart)
-    {
-        int platform[2361] = { 0 };
+    int minPlatforms3(StationTimeChart& chart) {
+        int platform[2361] = {0};
         int requiredPlatform = 1;
 
         for (int i = 0; i < chart.schedules.size(); i++) {
@@ -212,7 +209,7 @@ public:
         vector<StationTimeChart::Schedule> schedules = chart.schedules;
         if (schedules.empty()) return 0;
 
-        sort(schedules.begin(), schedules.end(), [](auto& f, auto& s) {return f.arrival < s.arrival; });
+        sort(schedules.begin(), schedules.end(), [](auto& f, auto& s) { return f.arrival < s.arrival; });
 
         priority_queue<int, vector<int>, greater<int>> minheap;
         int count = 0;
@@ -221,12 +218,10 @@ public:
             if (minheap.empty()) {
                 count++;
                 minheap.push(schedule.departure);
-            }
-            else {
+            } else {
                 if (schedule.arrival <= minheap.top()) {
                     count++;
-                }
-                else {
+                } else {
                     minheap.pop();
                 }
 
@@ -238,8 +233,7 @@ public:
     }
 
     // https://www.careercup.com/question?id=5142448749674496
-    int minPlatforms5(StationTimeChart& chart)
-    {
+    int minPlatforms5(StationTimeChart& chart) {
         int minPlatformReq = 0;
         if (chart.schedules.empty()) return minPlatformReq;
 
@@ -247,13 +241,15 @@ public:
         sort(schedules.begin(), schedules.end(), [](const auto& f, const auto& s) {
             if (f.departure != s.departure) return f.departure < s.departure;
             return f.arrival < s.arrival;
-            });
+        });
 
         queue<StationTimeChart::Schedule> q;
         q.push(schedules[0]);
 
         for (auto i = 1; i < schedules.size(); i++) {
-            while (!q.empty() && q.front().departure < schedules[i].arrival) { q.pop(); }
+            while (!q.empty() && q.front().departure < schedules[i].arrival) {
+                q.pop();
+            }
 
             q.push(schedules[i]);
             minPlatformReq = max(minPlatformReq, (int)q.size());
@@ -263,7 +259,7 @@ public:
     }
 
     // This won't work
-    //int minPlatforms6(StationTimeChart& chart)
+    // int minPlatforms6(StationTimeChart& chart)
     //{
     //    int minPlatformReq = 0;
     //    if (chart.schedules.empty()) return minPlatformReq;

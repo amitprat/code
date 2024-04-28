@@ -22,28 +22,24 @@ class StackWithMinElementOperation {
     }
 
     T pop() {
-        if (this->empty())
-            throw exception("Stack is empty.");
+        if (this->empty()) throw runtime_error("Stack is empty.");
 
         T val = st.top();
         st.pop();
 
-        if (val == mnSt.top())
-            mnSt.pop();
+        if (val == mnSt.top()) mnSt.pop();
 
         return val;
     }
 
     T top() {
-        if (this->empty())
-            throw exception("Stack is empty.");
+        if (this->empty()) throw runtime_error("Stack is empty.");
 
         return st.top();
     }
 
     T min() {
-        if (this->empty())
-            throw exception("Stack is empty.");
+        if (this->empty()) throw runtime_error("Stack is empty.");
 
         return mnSt.top();
     }

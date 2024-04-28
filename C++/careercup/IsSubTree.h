@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 class IsSubTree {
@@ -25,8 +26,9 @@ class IsSubTree {
         cout << "Is sub tree: " << res << endl;
     }
 
+   public:
     bool isSubTree(Node *root1, Node *root2) {
-        if (!root1 && !root2) return true;
+        if (!root2) return true;
         if (!root1) return false;
 
         if (isSubTreeStartsFromHere(root1, root2)) return true;
@@ -47,6 +49,7 @@ class IsSubTree {
         return false;
     }
 
+   public:
     bool isSubTreeWithInorderAndPreorder(Node *root1, Node *root2) {
         string inorder1, preorder1;
         inorder(root1, inorder1);
@@ -75,6 +78,7 @@ class IsSubTree {
         preorder(root->right, order);
     }
 
+   public:
     bool isSubTreeWithSerializedPreorder(Node *root1, Node *root2) {
         string order1;
         serializedPreorder(root1, order1);

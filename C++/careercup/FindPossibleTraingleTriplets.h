@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -8,6 +9,7 @@ eg: 9 8 10 7
 ans: 9 8 10, 9 8 7, 9 10 7, 7 8 10
 Note : array not sorted, there is no limit on the array length
 */
+
 class FindPossibleTraingleTriplets {
    public:
     static void test() {
@@ -30,6 +32,6 @@ class FindPossibleTraingleTriplets {
             }
         }
 
-        return count;
+        return count / 6;
     }
 };

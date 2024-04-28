@@ -10,11 +10,10 @@ Find
 the Union of these two lists -> the union list should also be sorted
 the Intersection of these two lists -> Intersection list should also be sorted.
 */
-class UnionIntersectionOfSortedArrays
-{
-public:
-    static void test()
-    {
+
+class UnionIntersectionOfSortedArrays {
+   public:
+    static void test() {
         vector<int> first = {1, 23, 26, 40, 45};
         vector<int> second = {-1, 2, 6, 26, 40, 50, 75};
 
@@ -26,54 +25,41 @@ public:
         cout << "Intersection: " << result << endl;
     }
 
-    vector<int> findUnion(vector<int> &first, vector<int> &second)
-    {
+    vector<int> findUnion(vector<int> &first, vector<int> &second) {
         int i = 0, j = 0;
         vector<int> result;
-        while (i < first.size() && j < second.size())
-        {
-            if (first[i] == second[j])
-            {
+        while (i < first.size() && j < second.size()) {
+            if (first[i] == second[j]) {
                 result.push_back(first[i]);
                 i++;
                 j++;
-            }
-            else if (first[i] < second[j])
-            {
+            } else if (first[i] < second[j]) {
                 result.push_back(first[i++]);
-            }
-            else
-            {
+            } else {
                 result.push_back(second[j++]);
             }
         }
 
-        while (i < first.size())
-        {
+        while (i < first.size()) {
             result.push_back(first[i++]);
         }
 
-        while (j < second.size())
-        {
+        while (j < second.size()) {
             result.push_back(second[j++]);
         }
 
         return result;
     }
 
-    vector<int> findIntersection(vector<int> first, vector<int> second)
-    {
+    vector<int> findIntersection(vector<int> first, vector<int> second) {
         int i = 0, j = 0;
         vector<int> result;
-        while (i < first.size() && j < second.size())
-        {
-            if (first[i] == second[j])
-            {
+        while (i < first.size() && j < second.size()) {
+            if (first[i] == second[j]) {
                 result.push_back(first[i]);
                 i++;
                 j++;
-            }
-            else if (first[i] < second[j])
+            } else if (first[i] < second[j])
                 i++;
             else
                 j++;

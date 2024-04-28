@@ -70,7 +70,7 @@ class AnagramSubstringSearch {
         }
 
         for (int i = m; i <= n; i++) {
-            if (match(patFreq, txtFreq)) res.push_back({i - m, i - 1});
+            if (match(patFreq, txtFreq)) res.push_back({i - m, m});
 
             txtFreq[txt[i - m]]--;         // move left pointer
             if (i < n) txtFreq[txt[i]]++;  // move right pointer
@@ -80,8 +80,10 @@ class AnagramSubstringSearch {
     }
 
     bool match(int patFreq[], int txtFreq[]) {
-        for (int i = 0; i < 256; i++)
+        for (int i = 0; i < 256; i++) {
             if (txtFreq[i] != patFreq[i]) return false;
+        }
+
         return true;
     }
 

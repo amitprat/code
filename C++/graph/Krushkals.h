@@ -2,9 +2,8 @@
 #include "../header.h"
 using namespace std;
 
-class Edge
-{
-public:
+class Edge {
+   public:
     int source;
     int destination;
     int weight;
@@ -22,26 +21,22 @@ public:
     }
 };
 
-class Graph
-{
-public:
+class Graph {
+   public:
     unordered_set<int> vertices;
     vector<Edge> edges;
 
-    void addEdge(int s, int d, int w)
-    {
+    void addEdge(int s, int d, int w) {
         edges.push_back(Edge(s, d, w));
         vertices.insert(s);
         vertices.insert(d);
     }
 
-    void sortEdgesByWeight()
-    {
-        sort(edges.begin(), edges.end(), [](auto l, auto r) {return l.weight < r.weight; });
+    void sortEdgesByWeight() {
+        sort(edges.begin(), edges.end(), [](auto l, auto r) { return l.weight < r.weight; });
     }
 
-    string str()
-    {
+    string str() {
         stringstream ss;
         ss << "{";
         for (auto e : edges) {
@@ -53,15 +48,14 @@ public:
     }
 };
 
-class UnionFind
-{
-private:
+class UnionFind {
+   private:
     int* parent = nullptr;
     int* rank = nullptr;
     int sz = 0;
-public:
-    UnionFind(int V)
-    {
+
+   public:
+    UnionFind(int V) {
         sz = V;
         parent = new int[sz];
         rank = new int[sz];
@@ -72,24 +66,21 @@ public:
         }
     }
 
-    void Union(int s, int e)
-    {
+    void Union(int s, int e) {
         int proot = Find(s);
         int eroot = Find(e);
         if (proot != eroot) {
             if (rank[proot] < rank[eroot]) {
                 parent[eroot] = proot;
                 rank[eroot]++;
-            }
-            else {
+            } else {
                 parent[proot] = eroot;
                 rank[proot]++;
             }
         }
     }
 
-    int Find(int e)
-    {
+    int Find(int e) {
         int eroot = parent[e];
         while (eroot != e) {
             e = eroot;
@@ -99,17 +90,14 @@ public:
         return eroot;
     }
 
-    bool Connected(int s, int d)
-    {
+    bool Connected(int s, int d) {
         return Find(s) == Find(d);
     }
 };
 
-class Krushkals
-{
-public:
-    void test()
-    {
+class Krushkals {
+   public:
+    void test() {
         Graph g;
         g.addEdge(0, 1, 10);
         g.addEdge(0, 2, 6);
@@ -122,8 +110,7 @@ public:
         cout << "Result = " << to_string(res) << endl;
     }
 
-    vector<Edge> findMst(Graph g)
-    {
+    vector<Edge> findMst(Graph g) {
         vector<Edge> result;
         g.sortEdgesByWeight();
         int E = g.edges.size();
@@ -131,11 +118,9 @@ public:
         int i = 0;
         UnionFind uf(V);
         int e = 0;
-        while (i < E && e < V - 1)
-        {
+        while (i < E && e < V - 1) {
             auto newEdge = g.edges[i];
-            if (!uf.Connected(newEdge.source, newEdge.destination))
-            {
+            if (!uf.Connected(newEdge.source, newEdge.destination)) {
                 result.push_back(newEdge);
                 e++;
                 uf.Union(newEdge.source, newEdge.destination);
@@ -146,8 +131,7 @@ public:
         return result;
     }
 
-    string to_string(vector<Edge> res)
-    {
+    string to_string(vector<Edge> res) {
         stringstream ss;
         ss << "{";
         for (auto s : res) {

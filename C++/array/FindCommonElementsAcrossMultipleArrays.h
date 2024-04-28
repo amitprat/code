@@ -3,8 +3,12 @@
 
 class FindCommonElementsAcrossMultipleArrays {
    public:
-    static void test(vector<int> v1, vector<int> v2, vector<int> v3) {
+    static void test() {
         FindCommonElementsAcrossMultipleArrays obj;
+
+        vector<int> v1 = {1, 2, 3, 4, 5};
+        vector<int> v2 = {2, 4, 5, 8, 10};
+        vector<int> v3 = {3, 5, 7, 9, 11};
 
         auto res = obj.findCommons(v1, v2, v3);
 
@@ -16,6 +20,7 @@ class FindCommonElementsAcrossMultipleArrays {
         cout << "Output: " << res << endl;
     }
 
+   public:
     vector<int> findCommons(vector<int> v1, vector<int> v2, vector<int> v3) {
         vector<int> res;
         unordered_map<int, unordered_set<int>> m;
@@ -24,7 +29,7 @@ class FindCommonElementsAcrossMultipleArrays {
         for (auto i : v3) m[i].insert(2);
 
         for (auto i : m) {
-            if (i.second.size() > 1) res.push_back(i.first);
+            if (i.second.size() == 3) res.push_back(i.first);
         }
 
         return res;

@@ -4,21 +4,6 @@
 using namespace std;
 /* lis() returns the length of the longest increasing subsequence in
     arr[] of size n */
-int lis( int a[], int n )
-{
-    int lis[n];
-    for(int i=0;i<n;i++) lis[i] = 1;
-    for(int i=0;i<n;i++) {
-        for(int j=i+1;j<n;j++)
-            if(a[j] >= a[i])
-                lis[j] = max(lis[j],lis[i]+1);
-    }
-    int max = -1;
-    for(int i=0;i<n;i++)
-        if(lis[i] > max)
-            max = lis[i];
-    return max;
-}
 
 
 int rec(int a[],int n,int pos,int prev,int &max1) {

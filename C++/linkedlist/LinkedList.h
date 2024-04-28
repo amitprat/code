@@ -1,23 +1,58 @@
 #pragma once
-#include "../header.h"
+#include <sstream>
+#include <string>
+#include <vector>
+using namespace std;
 
 template <class T>
 class LinkedList {
+   public:
     class Node {
        public:
         T val;
+
+        Node* prev = nullptr;
         Node* next = nullptr;
-        Node(T val, Node* next = nullptr) : val(val), next(next) {}
+        Node(T val, Node* prev = nullptr, Node* next = nullptr) : val(val), prev(prev), next(next) {}
+
+        string to_string() {
+            return std::to_string(val);
+        }
     };
 
     Node* head = nullptr;
 
    public:
-    LinkedList<T>& push_front(int val) {
-        if (!head)
-            head = new Node(data);
-        else {
-            Node* tmp = new Node(data);
+    LinkedList() {
+    }
+    LinkedList(const vector<T>& arr) {
+        head = create(arr);
+    }
+
+    static Node* create(const vector<T>& arr) {
+        Node* head = new Node(-1);  // dummy
+        Node* tail = head;
+        for (auto& e : arr) {
+            tail->next = new Node(e);
+            tail->next->prev = tail;
+
+            tail = tail->next;
+        }
+
+        auto next = head->next;
+        delete head;
+
+        head = next;
+        head->prev = nullptr;
+
+        return head;
+    }
+
+    LinkedList<T>& push_front(T val) {
+        if (!head) {
+            head = new Node(val);
+        } else {
+            Node* tmp = new Node(val);
             tmp->next = head;
             head = tmp;
         }
@@ -47,7 +82,7 @@ class LinkedList {
         return ss.str();
     }
 
-    int length(Node* head) {
+    static int length(Node* head) {
         int sz = 0;
         while (head) {
             sz++;
@@ -69,11 +104,13 @@ class LinkedList {
         return head == nullptr;
     }
 
-    friend ostream& operator<<(ostream& out, Node* head) {
+    friend ostream& operator<<(ostream& out, const LinkedList<T>& cur) {
+        auto node = cur->head;
+
         out << "{";
-        while (head) {
-            out << head->to_string() << ", ";
-            head = head->next;
+        while (node) {
+            out << node->to_string() << ", ";
+            node = node->next;
         }
         out << "}";
 

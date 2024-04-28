@@ -1,11 +1,9 @@
 #pragma once
 #include "../header.h"
 
-class SortedRotatedArraySearchAndPivot
-{
-public:
-    static void test()
-    {
+class SortedRotatedArraySearchAndPivot {
+   public:
+    static void test() {
         SortedRotatedArraySearchAndPivot obj;
         vector<vector<int>> tests{
             {},
@@ -24,8 +22,7 @@ public:
         };
 
         srand(time(nullptr));
-        for (auto &test : tests)
-        {
+        for (auto &test : tests) {
             auto pivot = obj.findPivot(test);
 
             int randIndex = rand() % (test.size() + 1);
@@ -38,72 +35,57 @@ public:
         }
     }
 
-private:
+   private:
     // minimum element
-    int findPivot(vector<int> &v)
-    {
-        if (v.empty())
-            return -1;
+    int findPivot(vector<int> &v) {
+        if (v.empty()) return -1;
 
         int l = 0, r = v.size() - 1;
-        while (l < r)
-        {
+        while (l < r) {
             int m = (l + r) / 2;
 
-            if (v[m] > v[r]) // if mid > last, then pivot must be on right side.
+            if (v[m] > v[r])  // if mid > last, then pivot must be on right side.
                 l = m + 1;
-            else // otherwise, pivot could be in left side, including mid elem.
+            else  // otherwise, pivot could be in left side, including mid elem.
                 r = m;
         }
         return l;
     }
 
-private:
+   private:
     // search element in array
-    int search(vector<int> &arr, int x)
-    {
+    int search(vector<int> &arr, int x) {
         return search(arr, 0, arr.size() - 1, x);
     }
 
-    int search(vector<int> &arr, int l, int r, int x)
-    {
-        if (l > r)
-            return -1;
+    int search(vector<int> &arr, int l, int r, int x) {
+        if (l > r) return -1;
 
         int m = (l + r) / 2;
-        if (arr[m] == x)
-            return m;
+        if (arr[m] == x) return m;
 
-        if (arr[m] <= arr[r])
-        {
+        if (arr[m] <= arr[r]) {
             // second half is sorted
-            if (x > arr[m] && x <= arr[r])
-                return search(arr, m + 1, r, x);
+            if (x > arr[m] && x <= arr[r]) return search(arr, m + 1, r, x);
             return search(arr, l, m - 1, x);
-        }
-        else
-        {
+        } else {
             // first half is sorted
-            if (x >= arr[l] && x < arr[m])
-                return search(arr, l, m - 1, x);
+            if (x >= arr[l] && x < arr[m]) return search(arr, l, m - 1, x);
             return search(arr, m + 1, r, x);
         }
     }
 
-private:
+   private:
     // search element in array second method (using offset)
-    int searchElementInArrayUsingOffset(vector<int> &nums, int target)
-    {
-        if (nums.empty())
-            return -1;
+    int searchElementInArrayUsingOffset(vector<int> &nums, int target) {
+        if (nums.empty()) return -1;
 
         // find pivot
         int lo = 0, hi = nums.size() - 1;
-        while (lo < hi)
-        {
+        while (lo < hi) {
             int mid = (lo + hi) / 2;
-            if (nums[mid] == target)
-                return mid;
+            if (nums[mid] == target) return mid;
+
             if (nums[mid] > nums[hi])
                 lo = mid + 1;
             else
@@ -113,12 +95,12 @@ private:
         // now bsearch with rotation as offset
         int rot = lo;
         lo = 0, hi = nums.size() - 1;
-        while (lo <= hi)
-        {
+        while (lo <= hi) {
             int mid = (lo + hi) / 2;
             int realmid = (mid + rot) % nums.size();
-            if (nums[realmid] == target)
-                return realmid;
+
+            if (nums[realmid] == target) return realmid;
+
             if (target < nums[realmid])
                 hi = mid - 1;
             else

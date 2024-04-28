@@ -1,21 +1,19 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class ArrangeElementsSpacesByNumbers {
-public:
+   public:
     static void test() {
         ArrangeElementsSpacesByNumbers obj;
 
-        for (int num = 1; num <= 10; num++)
-        {
+        for (int num = 1; num <= 10; num++) {
             cout << "Arrange elements for " << num << ": ";
             vector<int> arr(2 * num, 0);
             unordered_set<int> visited;
 
             if (obj.canBeArranged(arr, 0, num, visited)) {
                 cout << to_string(arr) << endl;
-            }
-            else {
+            } else {
                 cout << endl;
             }
         }

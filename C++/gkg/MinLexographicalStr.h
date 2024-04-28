@@ -1,8 +1,8 @@
-#include "../Header.h"
+#pragma once
+#include "../header.h"
 
-class MinLexographicalStr
-{
-public:
+class MinLexographicalStr {
+   public:
     static void test() {
         {
             string str = "AAAAA";
@@ -31,10 +31,12 @@ public:
     }
 
     static string minStr(string str) {
-        vector<int> minIndex = { 0 };
+        vector<int> minIndex = {0};
         for (int i = 1; i < str.length(); i++) {
-            if (str[i] < str[minIndex.front()]) minIndex = { i };
-            else if (str[i] == str[minIndex.front()]) minIndex.push_back(i);
+            if (str[i] < str[minIndex.front()])
+                minIndex = {i};
+            else if (str[i] == str[minIndex.front()])
+                minIndex.push_back(i);
         }
 
         for (int j = 1; j < str.length() && minIndex.size() > 1; j++) {
@@ -45,8 +47,7 @@ public:
                     if (str[(minIndex[i] + j) % str.size()] < str[(minIndex[prev] + j) % str.size()]) {
                         minIndex.erase(minIndex.begin() + prev);
                         prev = i - 1;
-                    }
-                    else {
+                    } else {
                         minIndex.erase(minIndex.begin() + i);
                     }
                     i--;
@@ -57,10 +58,10 @@ public:
         }
 
         int idx = minIndex.front();
-        reverse(str.begin(), str.begin() + idx);
-        reverse(str.begin() + idx, str.end());
+        std::reverse(str.begin(), str.begin() + idx);
+        std::reverse(str.begin() + idx, str.end());
 
-        reverse(str.begin(), str.end());
+        std::reverse(str.begin(), str.end());
 
         return str;
     }

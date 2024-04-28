@@ -3,8 +3,12 @@
 #include "BinarySearchTree.h"
 
 /*
-Given a Binary Tree (BT), convert it to a Doubly Linked List(DLL) In-Place. The left and right pointers in nodes are to be used as previous and next pointers respectively in converted DLL. The order of nodes in DLL must be same as Inorder of the given Binary Tree. The first node of Inorder traversal (leftmost node in BT) must be the head node of the DLL.
+Given a Binary Tree (BT), convert it to a Doubly Linked List(DLL) In-Place.
+The left and right pointers in nodes are to be used as previous and next pointers respectively in converted DLL.
+The order of nodes in DLL must be same as Inorder of the given Binary Tree.
+The first node of Inorder traversal (leftmost node in BT) must be the head node of the DLL.
 
+https://www.careercup.com/question?id=6070872
 https://leetcode.com/discuss/interview-question/4177029/Binary-Tree-to-DLL/
 https://www.geeksforgeeks.org/convert-binary-tree-to-doubly-linked-list-using-inorder-traversal/
 */
@@ -20,18 +24,18 @@ class BinarySearchTreeToDoublyLinkedList {
         bst.insert(15);
         bst.insert(20);
         bst.insert(30);
-        cout << "Binary search tree inorder: "<<bst.inorder() << endl;
+        cout << "Binary search tree inorder: " << bst.inorder() << endl;
 
         BinarySearchTree<int>::Node* head = nullptr;
         obj.covertBSTToDLL(bst.root, head);
 
-        cout<<"Converted dll: ";
+        cout << "Converted dll: ";
         while (head) {
             cout << head->val << " ";
             head = head->right;
         }
 
-        cout<<endl;
+        cout << endl;
     }
 
    private:

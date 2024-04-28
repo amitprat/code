@@ -56,7 +56,7 @@ class ConvertToFromExcelColumn {
             num = d;
         }
 
-        reverse(res.begin(), res.end());
+        std::reverse(res.begin(), res.end());
         cout << res << endl;
     }
 };

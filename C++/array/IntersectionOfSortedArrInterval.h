@@ -8,9 +8,9 @@ Given two 2-D arrays which represent intervals. Each 2-D array represents a list
 Each list of intervals is disjoint and sorted in increasing order. Find the intersection or set
 of ranges that are common to both the lists.
 
-Input: 
-arr1[][] = {{0, 4}, {5, 10}, {13, 20}, {24, 25}} 
-arr2[][] = {{1, 5}, {8, 12}, {15, 24}, {25, 26}} 
+Input:
+arr1[][] = {{0, 4}, {5, 10}, {13, 20}, {24, 25}}
+arr2[][] = {{1, 5}, {8, 12}, {15, 24}, {25, 26}}
 Output: {{1, 4}, {5, 5}, {8, 10}, {15, 20}, {24, 24}, {25, 25}}
 
 */
@@ -45,7 +45,7 @@ class IntersectionOfSortedArrInterval {
         }
     }
 
-private:
+   private:
     vector<Interval> mergeSortedIntervals(vector<Interval>& v1, vector<Interval>& v2) {
         vector<Interval> result;
 
@@ -75,7 +75,7 @@ private:
         else {
             Interval v1 = result.back();
             result.pop_back();
-            
+
             if (it.end <= v1.end) return;
 
             result.push_back({it.end + 1, v1.end});
@@ -86,20 +86,20 @@ private:
         return !(it1.start > it2.end || it2.start > it1.end);
     }
 
-    private:
+   private:
     vector<Interval> mergeSortedIntervals2(vector<Interval>& it1, vector<Interval>& it2) {
-        int i=0, j=0, n = it1.size(), m = it2.size();
+        int i = 0, j = 0, n = it1.size(), m = it2.size();
 
         vector<Interval> result;
-        while(i < n && j < m) {
+        while (i < n && j < m) {
             int l = max(it1[i].start, it2[j].start);
             int r = min(it1[i].end, it2[j].end);
 
-            if(l <= r) {
-                result.push_back({l,r});
+            if (l <= r) {
+                result.push_back({l, r});
             }
-            
-            if(it1[i].end < it2[j].end) {
+
+            if (it1[i].end < it2[j].end) {
                 i++;
             } else {
                 j++;

@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 class FindNumberOfIslands {
@@ -49,14 +50,10 @@ class FindNumberOfIslands {
     }
 
     bool safe(vector<vector<int>> &matrix, int r, int c, vector<vector<bool>> &visited) {
-        if (r < 0 || c < 0)
-            return false;
-        if (r >= matrix.size() || c >= matrix.size())
-            return false;
-        if (visited[r][c])
-            return false;
-        if (matrix[r][c] == 0)
-            return false;
+        if (r < 0 || c < 0) return false;
+        if (r >= matrix.size() || c >= matrix.size()) return false;
+        if (visited[r][c]) return false;
+        if (matrix[r][c] == 0) return false;
 
         return true;
     }

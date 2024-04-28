@@ -1,9 +1,8 @@
 #pragma once
 #include "../header.h"
 
-class MinimumWindowSubstring
-{
-public:
+class MinimumWindowSubstring {
+   public:
     static void test() {
         MinimumWindowSubstring obj;
         string s = "ADOBECODEBANC";
@@ -16,8 +15,8 @@ public:
     }
 
     string minWindow(string str, string t) {
-        int tHash[256] = { 0 };
-        int curHash[256] = { 0 };
+        int tHash[256] = {0};
+        int curHash[256] = {0};
         for (auto& ch : t) tHash[ch]++;
 
         int count = 0;

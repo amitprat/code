@@ -1,12 +1,18 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class MaximumOfWindowOfSizeK {
-public:
+   public:
     static void test() {
-        vector<int> arr = { 12, 1, 78, 90, 57, 89, 56 };
+        vector<int> arr = {12, 1, 78, 90, 57, 89, 56};
         int k = 3;
 
+        MaximumOfWindowOfSizeK obj;
+        auto res = obj.maximumOfWindowsOfSizeK(arr, k);
+        cout << "Maxixum array: " << to_string(res) << endl;
+    }
+
+    vector<int> maximumOfWindowsOfSizeK(const vector<int>& arr, int k) {
         deque<int> dq;
 
         vector<int> res;
@@ -16,10 +22,10 @@ public:
 
             dq.push_back(i);
             if (i >= k - 1) {
-                res.push_back(arr[i]);
+                res.push_back(arr[dq.front()]);
             }
         }
 
-        cout << to_string(res) << endl;
+        return res;
     }
 };

@@ -1,14 +1,12 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 using namespace std;
 
-class MakeSmallestStringByRemovingDuplicateCharacters
-{
-public:
-    static void test()
-    {
+class MakeSmallestStringByRemovingDuplicateCharacters {
+   public:
+    static void test() {
         MakeSmallestStringByRemovingDuplicateCharacters obj;
-        vector<string> inputs = { "bcsbc", "cbacdcbc" };
+        vector<string> inputs = {"bcsbc", "cbacdcbc"};
         for (auto& input : inputs) {
             string res = obj.findSmallest(input);
 
@@ -16,8 +14,7 @@ public:
         }
     }
 
-    string findSmallest(string str)
-    {
+    string findSmallest(string str) {
         int len = str.length();
         vector<int> next(len);
 
@@ -41,9 +38,7 @@ public:
             if (next[i] == -1) {
                 res += str[i];
                 visited[cur] = true;
-            }
-            else
-            {
+            } else {
                 // find the next smallest possible character
                 int j = i + 1;
                 char nextSmall = str[i];

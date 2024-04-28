@@ -13,7 +13,7 @@ class ProbabilityOfGenerating1sWith75PercentProbability {
     }
 
    private:
-    int int myRandom() {
+    int myRandom() {
         int roll1 = rand50();
         int roll2 = rand50();
 

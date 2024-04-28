@@ -5,52 +5,36 @@ using namespace std;
 class EvaluateInfixExpr {
    public:
     static void test() {
-        vector<string> expressions = {"10 + 2 * 6", "100 * 2 + 12", "100 * ( 2 + 12 )", "100 * ( 2 + 12 ) / 14"};
+        vector<string> expressions = {
+            "10 + 2 * 6",
+            "100 * 2 + 12",
+            "100 * ( 2 + 12 )",
+            "100 * ( 2 + 12 ) / 14",
+            "3 * 4 + 12 + 23 * 2 / 23",
+            "3 * 4 + 12",
+            "3 + 4 * 12",
+            "3 + 4 * 12 /2",
+            "1^2+3^(4-5)*6",
+            "2^(2+3^(4-5)*6)"};
 
         EvaluateInfixExpr obj;
         for (auto& expr : expressions) {
-            int result = obj.evaluate(expr);
-            cout << format("Infix expression={}, Result={}", expr, result) << endl;
+            int result1 = obj.evaluate(expr);
+            auto result2 = obj.evaluateExpression(expr);
+            assert(result1 == result2);
+
+            cout << format("Infix expression={}, Result={}", expr, result1) << endl;
         }
     }
 
+   public:
+    // evaluate infix expression by first converting it to postfix and then evaluating postfix expression.
     int evaluate(string expr) {
         vector<string> p = postfix(expr);
         cout << format("Postfix expression: {}", to_string(p)) << endl;
         return evaluatePostfix(p);
     }
 
-   private:
-    int evaluatePostfix(vector<string> p) {
-        stack<int> st;
-        for (auto& str : p) {
-            if (isOperand(str)) {
-                st.push(stoi(str));
-            } else if (isOperator(str)) {
-                int s = st.top();
-                st.pop();
-                int f = st.top();
-                st.pop();
-                int r = eval(f, s, str[0]);
-                st.push(r);
-            }
-        }
-
-        return st.top();
-    }
-
-    int eval(int f, int s, char op) {
-        switch (op) {
-            case '*':
-                return f * s;
-            case '/':
-                return f / s;
-            case '+':
-                return f + s;
-            case '-':
-                return f - s;
-        }
-    }
     vector<string> postfix(string expr) {
         vector<string> result;
         stack<char> operStack;
@@ -65,9 +49,9 @@ class EvaluateInfixExpr {
                     operand = string();
                 }
 
-                if (ch == '(')
+                if (ch == '(') {
                     operStack.push(ch);
-                else if (ch == ')') {
+                } else if (ch == ')') {
                     char oper = operStack.top();
                     operStack.pop();
                     while (!operStack.empty() && oper != '(') {
@@ -95,6 +79,105 @@ class EvaluateInfixExpr {
         }
 
         return result;
+    }
+
+    int evaluatePostfix(vector<string> p) {
+        stack<int> st;
+        for (auto& str : p) {
+            if (isOperand(str)) {
+                st.push(stoi(str));
+            } else if (isOperator(str)) {
+                int s = st.top();
+                st.pop();
+                int f = st.top();
+                st.pop();
+                int r = eval(f, s, str[0]);
+                st.push(r);
+            }
+        }
+
+        return st.top();
+    }
+
+   public:
+    double evaluateExpression(string infix) {
+        double val = 0;
+        stack<double> operands;
+        stack<char> operators;
+
+        string cur;
+        for (auto ch : infix) {
+            if (isspace(ch)) continue;
+
+            if (isalnum(ch)) {  // if is operand
+                cur += ch;
+            } else {  // operator
+                if (ch != '(' && cur.empty()) throw runtime_error("Invalid expression.");
+
+                if (!cur.empty()) {
+                    operands.push(stoi(cur));
+                    cur.clear();
+                }
+
+                if (ch == '(') {
+                    operators.push(ch);
+                } else if (ch == ')') {
+                    while (ch != '(') {
+                        auto second = operands.top();
+                        operands.pop();
+                        auto first = operands.top();
+                        operands.pop();
+                        auto op = operators.top();
+                        operators.pop();
+
+                        operands.push(eval(first, second, op));
+                    }
+
+                    operators.pop();  // pop '('
+                } else {
+                    while (!operators.empty() && prec(operators.top()) >= prec(ch)) {
+                        auto second = operands.top();
+                        operands.pop();
+                        auto first = operands.top();
+                        operands.pop();
+                        auto op = operators.top();
+                        operators.pop();
+
+                        operands.push(eval(first, second, op));
+                    }
+
+                    operators.push(ch);
+                }
+            }
+        }
+        if (!cur.empty()) operands.push(stoi(cur));
+
+        while (!operators.empty()) {
+            auto second = operands.top();
+            operands.pop();
+            auto first = operands.top();
+            operands.pop();
+            auto op = operators.top();
+            operators.pop();
+
+            operands.push(eval(first, second, op));
+        }
+
+        return operands.top();
+    }
+
+   private:
+    int eval(int f, int s, char op) {
+        switch (op) {
+            case '*':
+                return f * s;
+            case '/':
+                return f / s;
+            case '+':
+                return f + s;
+            case '-':
+                return f - s;
+        }
     }
 
     bool isOperand(char ch) {

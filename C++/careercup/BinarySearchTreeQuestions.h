@@ -1,14 +1,13 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
-class BinarySearchTreeQuestions
-{
-private:
+class BinarySearchTreeQuestions {
+   private:
     class BinarySearchTree {
-    private:
+       private:
         struct Node {
             int key, val;
-            Node* left, * right;
+            Node *left, *right;
             Node(int key, int val) : key(key), val(val), left(nullptr), right(nullptr) {}
             string to_string() {
                 return format("({}:{})", key, val);
@@ -17,7 +16,7 @@ private:
 
         Node* root = nullptr;
 
-    public:
+       public:
         void insert(int key, int val) {
             root = insert(root, key, val);
         }
@@ -64,55 +63,71 @@ private:
 
             int i = 0, j = inorderArray.size() - 1;
             while (i < j) {
-                if (inorderArray[i] + inorderArray[j] == sum) return { inorderArray[i], inorderArray[j] };
-                else if (inorderArray[i] + inorderArray[j] < sum) i++;
-                else j--;
+                if (inorderArray[i] + inorderArray[j] == sum)
+                    return {inorderArray[i], inorderArray[j]};
+                else if (inorderArray[i] + inorderArray[j] < sum)
+                    i++;
+                else
+                    j--;
             }
 
-            return { -1, -1 };
+            return {-1, -1};
         }
 
         pair<int, int> findNodesWithGivenSumInBSTWithoutExtraSpace(int sum) {
             stack<Node*> leftSt, rightSt;
-            Node* left = root, * right = root;
+            Node *left = root, *right = root;
             bool moveLeft = true, moveRight = true;
 
             while (true) {
                 if (moveLeft) {
                     while (left) {
-                        leftSt.push(left); left = left->left;
+                        leftSt.push(left);
+                        left = left->left;
                     }
-                    if (!leftSt.empty()) { left = leftSt.top(); leftSt.pop(); }
+                    if (!leftSt.empty()) {
+                        left = leftSt.top();
+                        leftSt.pop();
+                    }
                 }
                 moveLeft = false;
 
                 if (moveRight) {
                     while (right) {
-                        rightSt.push(right); right = right->right;
+                        rightSt.push(right);
+                        right = right->right;
                     }
-                    if (!rightSt.empty()) { right = rightSt.top(); rightSt.pop(); }
+                    if (!rightSt.empty()) {
+                        right = rightSt.top();
+                        rightSt.pop();
+                    }
                 }
                 moveRight = false;
 
-                if (left == nullptr || right == nullptr || left == right) return { -1, -1 };
+                if (left == nullptr || right == nullptr || left == right) return {-1, -1};
 
-                if (left->key + right->key == sum) return { left->key, right->key };
+                if (left->key + right->key == sum)
+                    return {left->key, right->key};
                 else if (left->key + right->key < sum) {
-                    left = left->right; moveLeft = true;
-                }
-                else {
-                    right = right->left; moveRight = true;
+                    left = left->right;
+                    moveLeft = true;
+                } else {
+                    right = right->left;
+                    moveRight = true;
                 }
             }
 
-            return { -1, -1 };
+            return {-1, -1};
         }
-    private:
+
+       private:
         Node* insert(Node* root, int key, int val) {
             if (!root) return new Node(key, val);
 
-            if (key < root->key) root->left = insert(root->left, key, val);
-            else if (key > root->key) root->right = insert(root->right, key, val);
+            if (key < root->key)
+                root->left = insert(root->left, key, val);
+            else if (key > root->key)
+                root->right = insert(root->right, key, val);
 
             return root;
         }
@@ -120,11 +135,15 @@ private:
         Node* remove(Node* root, int key) {
             if (!root) return root;
 
-            if (key < root->key) root->left = remove(root->left, key);
-            else if (key > root->key) root->right = remove(root->right, key);
+            if (key < root->key)
+                root->left = remove(root->left, key);
+            else if (key > root->key)
+                root->right = remove(root->right, key);
             else {
-                if (!root->left) return root->right;
-                else if (!root->right) return root->left;
+                if (!root->left)
+                    return root->right;
+                else if (!root->right)
+                    return root->left;
                 else {
                     Node* successor = minValueNode(root->right);
                     root->key = successor->key;
@@ -140,9 +159,12 @@ private:
         int find(Node* root, int key) {
             if (!root) return INT_MAX;
 
-            if (key == root->key) return root->val;
-            else if (key < root->key) return find(root->left, key);
-            else return find(root->right, key);
+            if (key == root->key)
+                return root->val;
+            else if (key < root->key)
+                return find(root->left, key);
+            else
+                return find(root->right, key);
         }
 
         Node* findSuccessor(Node* root, int key) {
@@ -153,8 +175,8 @@ private:
                 succ = root;
                 auto maxOnLeft = findSuccessor(root->left, key);
                 if (maxOnLeft != nullptr) succ = maxOnLeft;
-            }
-            else if (key > root->key) succ = findSuccessor(root->right, key);
+            } else if (key > root->key)
+                succ = findSuccessor(root->right, key);
 
             return succ;
         }
@@ -203,8 +225,10 @@ private:
 
             convertToDLL(root->left, head);
 
-            if (!head) head = root;
-            else prev->right = root;
+            if (!head)
+                head = root;
+            else
+                prev->right = root;
             root->left = prev;
             prev = root;
 
@@ -216,8 +240,7 @@ private:
 
             if (key == root->key) {
                 if (root->right) return minValueNode(root->right);
-            }
-            else if (key < root->key) {
+            } else if (key < root->key) {
                 succ = root;
                 return successor(root->left, key, succ);
             }
@@ -227,13 +250,11 @@ private:
 
         void findNodesWithGivenSumInBST(Node* root, int sum, pair<int, int>& result) {
             if (!root) return;
-
-
         }
     };
-public:
-    static void test()
-    {
+
+   public:
+    static void test() {
         BinarySearchTree bst;
         bst.insert(2, 2);
         bst.insert(4, 4);
@@ -246,7 +267,7 @@ public:
         cout << "Successor of 0: " << bst.findSuccessor(0)->key << ":" << bst.findSuccessor(0)->val << endl;
         cout << "Successor of 2: " << bst.findSuccessor(2)->key << ":" << bst.findSuccessor(2)->val << endl;
         cout << "Successor of 3: " << bst.findSuccessor(3)->key << ":" << bst.findSuccessor(3)->val << endl;
-        //cout << bst.findSuccessor(10)->key << ":" << bst.findSuccessor(10)->val << endl;
+        // cout << bst.findSuccessor(10)->key << ":" << bst.findSuccessor(10)->val << endl;
 
         bst.remove(2);
         bst.remove(4);
@@ -254,7 +275,7 @@ public:
 
         bst.inorder();
 
-        //bst.convertToDLL();
+        // bst.convertToDLL();
 
         for (int i = 0; i < 20; i++) {
             cout << "Find pair sum for " << i << ", ";

@@ -72,11 +72,9 @@ class InorderSuccessorPredecessorOfBST {
 
         Node *suc = nullptr;
         if (root->right) {
-            // find the min element on right
             suc = root->right;
             while (suc->left) suc = suc->left;
         } else {
-            // walk-up using parent pointer until the current node is right node of its parent
             Node *parent = root->parent;
             while (parent && parent->right == root) {
                 root = root->parent;
@@ -93,11 +91,9 @@ class InorderSuccessorPredecessorOfBST {
 
         Node *pre = nullptr;
         if (root->left) {
-            // get the max of left
             pre = root->left;
             while (pre->right) pre = pre->right;
         } else {
-            // walk up to its parent till it is left node of its parent.
             Node *parent = root->parent;
             while (parent && parent->left == root) {
                 root = root->parent;
@@ -110,7 +106,6 @@ class InorderSuccessorPredecessorOfBST {
     }
 
    private:
-    // find inorder successor by walking down from its root.
     Node *inorderSuccesssor(Node *root, int val) {
         Node *suc = nullptr;
 
@@ -126,7 +121,6 @@ class InorderSuccessorPredecessorOfBST {
         return suc;
     }
 
-    // find preorder by walking down from root.
     Node *inorderPredecessor(Node *root, int val) {
         Node *pre = nullptr;
 
@@ -143,7 +137,6 @@ class InorderSuccessorPredecessorOfBST {
     }
 
    private:
-    // find both suc and pred by walking down from root
     void inorderSuccessorAndPredecessor(Node *root, Node *&pred, Node *&succ, int key) {
         if (!root) return;
 

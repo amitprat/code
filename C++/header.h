@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ctype.h>
 
 #include <algorithm>
@@ -30,12 +31,26 @@
 #include <unordered_set>
 #include <vector>
 
+#include "linkedlist/LinkedList.h"
+#include "tree/BinaryTree.h"
+#include "ds/Graph.h"
+
 using namespace std::views;
 using namespace std;
 
 /*----------------------Overload ostream << operators------------------------------------*/
 template <typename T>
 std::ostream &operator<<(std::ostream &out, const vector<T> &v) {
+    if (!v.empty()) {
+        out << '[';
+        std::ranges::copy(v, std::ostream_iterator<T>(out, ", "));
+        out << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
+    }
+    return out;
+}
+
+template <typename T>
+std::ostream &operator<<(std::ostream &out, vector<T> &v) {
     if (!v.empty()) {
         out << '[';
         std::ranges::copy(v, std::ostream_iterator<T>(out, ", "));
@@ -234,59 +249,6 @@ struct Interval {
         return out;
     }
 };
-
-struct TreeNode {
-    int val;
-    TreeNode *left, *right;
-    TreeNode(int val) : val(val), left(nullptr), right(nullptr) {}
-    string to_string() {
-        return std::to_string(val);
-    }
-};
-
-struct ListNode {
-    int val;
-    ListNode *prev, *next;
-    ListNode(int val) : val(val), prev(nullptr), next(nullptr) {}
-    string to_string() {
-        return std::to_string(val);
-    }
-
-    static ListNode *create(const vector<int> &arr) {
-        ListNode *head = new ListNode(-1);  // dummy
-        ListNode *tail = head;
-        for (auto &e : arr) {
-            tail->next = new ListNode(e);
-            tail = tail->next;
-        }
-
-        auto next = head->next;
-        delete head;
-
-        return next;
-    }
-
-    static int length(const ListNode *head) {
-        int sz = 0;
-        while (head) {
-            sz++;
-            head = head->next;
-        }
-
-        return sz;
-    }
-};
-
-ostream &operator<<(ostream &out, ListNode *head) {
-    out << "{";
-    while (head) {
-        out << head->to_string() << ", ";
-        head = head->next;
-    }
-    out << "}";
-
-    return out;
-}
 /*----------------------Common Data structures------------------------------------*/
 
 /*----------------------Common Assert operations start------------------------------------*/
@@ -307,23 +269,24 @@ bool areEqual(const vector<T> &arr1, const vector<T> &arr2) {
     return true;
 }
 
-bool areEqual(const ListNode* first, const ListNode* second) {
-    if(!first && !second) return true;
-    if(!first || !second) {
-        cerr << "One of specified list is null!"<<endl;
+template <typename T>
+bool areEqual(const typename LinkedList<T>::Node *first, const typename LinkedList<T>::Node *second) {
+    if (!first && !second) return true;
+    if (!first || !second) {
+        cerr << "One of specified list is null!" << endl;
         return false;
     }
-    if(ListNode::length(first) != ListNode::length(second)) {
-        cerr <<format("Length of first list {} != {} length of second list.", ListNode::length(first), ListNode::length(second))<<endl;
+    if (LinkedList<T>::length(first) != LinkedList<T>::length(second)) {
+        cerr << format("Length of first list {} != {} length of second list.", LinkedList<T>::length(first), LinkedList<T>::length(second)) << endl;
         return false;
     }
 
-    const ListNode *tmpFirstRoot = first;
-    const ListNode *tmpSecondRoot = second;
+    const typename LinkedList<T>::Node *tmpFirstRoot = first;
+    const typename LinkedList<T>::Node *tmpSecondRoot = second;
 
-    while(tmpFirstRoot) {
-        if(tmpFirstRoot->val != tmpSecondRoot->val) {
-            cerr<<format("(List node value from first list) {} != {} (node value from second list).", tmpFirstRoot->val, tmpSecondRoot->val)<<endl;
+    while (tmpFirstRoot) {
+        if (tmpFirstRoot->val != tmpSecondRoot->val) {
+            cerr << format("(List node value from first list) {} != {} (node value from second list).", tmpFirstRoot->val, tmpSecondRoot->val) << endl;
             return false;
         }
 

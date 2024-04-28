@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=5201559730257920
@@ -26,6 +26,7 @@ Thus the array A1A2�B1�B2 becomes A1B1A2B2. We are done.
 Time complexity analysis:
 T(n) = 2T(n/2) + \theta(n) = O(nlogn)
 */
+
 class SortArrayOfNegativeAndPositiveNumbers {
    public:
     static void test() {
@@ -35,8 +36,10 @@ class SortArrayOfNegativeAndPositiveNumbers {
             {-1, 2, 3, 4, 5, -6}};
 
         for (auto& arr : arrs) {
+            cout << "Input: " << arr << endl;
+
             sortWithoutExtraSpace(arr);
-            cout << to_string(arr) << endl;
+            cout << "Sorted array: " << arr << endl;
         }
     }
 

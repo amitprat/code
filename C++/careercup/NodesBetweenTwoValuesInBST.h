@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -6,7 +7,6 @@ https://careercup.com/question?id=5165570324430848
 Given a Binary Search tree of integers, you need to return the number of nodes having values between two given integers.
 You can assume that you already have some extra information at each node (number of children in left and right subtrees !!).
 
-Interesting, this was one of the questions of my second interview. This was my answer:
 - Suppose we know the size of the left subtree for each node.
 - We want the number of values in the interval [A, B]. This is the same as the number of values up to B minus the number of values less than A.
 - So we can reduce this question to finding the number of values up to X.
@@ -47,12 +47,17 @@ class NodesBetweenTwoValuesInBST {
 
    private:
     int nodesBetweenValues(Node *root, int val1, int val2) {
-        return nodesLessThan(root, val2) - nodesLessThan(root, val1);
+        return nodesLessThan(root, val2 + 1) - nodesLessThan(root, val1);
     }
 
     int nodesLessThan(Node *root, int val) {
         if (!root) return 0;
         if (val > root->val) 1 + size(root->left) + nodesLessThan(root->right, val);
         if (val <= root->val) return nodesLessThan(root->left, val);
+    }
+
+    int size(Node *root) {
+        if (!root) return 0;
+        return root->sz;
     }
 };

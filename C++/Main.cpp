@@ -1,8 +1,8 @@
-#include "tree/BinarySearchTreeToDoublyLinkedList.h"
+#include "careercup/WordBreak.h"
 using namespace std;
 
 int main() {
-    BinarySearchTreeToDoublyLinkedList::test();
+    WordBreak::test();
 
     return 0;
 }

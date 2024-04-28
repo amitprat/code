@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class SnakeLadder {
-public:
+   public:
     static void test() {
         int N = 30;
         unordered_map<int, int> snakeLadders;
@@ -21,24 +21,31 @@ public:
         cout << "Min Dice throws required is " << getMinDiceThrowsUsingDFS(snakeLadders, N) << endl;
     }
 
+   public:
     static int getMinDiceThrowsUsingBFS(unordered_map<int, int>& snakeLadders, int N) {
         unordered_set<int> visited;
         queue<pair<int, int>> q;
-        q.push({ 1,0 });
+        q.push({1, 0});
         visited.insert(1);
 
         while (!q.empty()) {
-            auto f = q.front(); q.pop();
+            auto f = q.front();
+            q.pop();
+
             if (f.first == N) return f.second;
 
             for (int c = 1; c <= 6; c++) {
                 int v = f.first + c;
+
+                // jump if there is a snake or ladder at this position.
                 if (snakeLadders.find(v) != snakeLadders.end()) {
                     v = snakeLadders[v];
                 }
+
+                // avoid going out of band and in loop.
                 if (v <= N && visited.count(v) == 0) {
                     visited.insert(v);
-                    q.push({ v,f.second + 1 });
+                    q.push({v, f.second + 1});
                 }
             }
         }
@@ -46,6 +53,7 @@ public:
         return INT_MAX;
     }
 
+   public:
     static int getMinDiceThrowsUsingDFS(unordered_map<int, int>& snakeLadders, int N) {
         int minJumps = INT_MAX;
         unordered_set<int> visited;
@@ -55,8 +63,9 @@ public:
         return minJumps;
     }
 
-    static void getMinDiceThrowsUsingDFS(int u, unordered_map<int, int>& snakeLadders, int N, int& minJumps, unordered_set<int> visited, int jumps)
-    {
+    static void getMinDiceThrowsUsingDFS(int u, unordered_map<int, int>& snakeLadders, int N, int& minJumps, unordered_set<int> visited, int jumps) {
+        visited.insert(u);
+
         if (u == N) {
             minJumps = min(minJumps, jumps);
             return;
@@ -64,11 +73,14 @@ public:
 
         for (int c = 6; c >= 1; c--) {
             int v = u + c;
+
+            // jump if there is a snake or ladder at this position.
             if (snakeLadders.find(v) != snakeLadders.end()) {
                 v = snakeLadders[v];
             }
+
+            // avoid going out of band and in loop.
             if (v <= N && visited.find(v) == visited.end()) {
-                visited.insert(v);
                 getMinDiceThrowsUsingDFS(v, snakeLadders, N, minJumps, visited, jumps + 1);
             }
         }

@@ -2,13 +2,13 @@
 #include "../header.h"
 
 class BellmanFord {
-private:
+   private:
     template <class T>
     class Edge {
-    public:
+       public:
         T src, dst;
         int wt;
-        Edge(T src, T dst, int wt) :src(src), dst(dst), wt(wt) {}
+        Edge(T src, T dst, int wt) : src(src), dst(dst), wt(wt) {}
         string to_string() {
             stringstream ss;
             ss << "{";
@@ -24,11 +24,11 @@ private:
 
     template <class T>
     class Graph {
-    public:
+       public:
         int V;
         vector<Edge<T>*> edges;
 
-        Graph(int v) :V(v) {}
+        Graph(int v) : V(v) {}
         void addEdge(T src, T dst, int wt) {
             edges.push_back(new Edge(src, dst, wt));
         }
@@ -40,7 +40,8 @@ private:
             return ss.str();
         }
     };
-public:
+
+   public:
     static void test() {
         Graph<int> graph(5);
         graph.addEdge(0, 1, -1);
@@ -78,7 +79,7 @@ public:
 
         for (auto edge : g.edges) {
             if (dist[edge->src] != INT_MAX && dist[edge->dst] > dist[edge->src] + edge->wt) {
-                throw exception("Graph contains negative cycle");
+                throw runtime_error("Graph contains negative cycle");
             }
         }
 

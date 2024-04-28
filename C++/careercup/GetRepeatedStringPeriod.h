@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 /*
 Find whether string S is periodic.
 Periodic indicates S = nP.

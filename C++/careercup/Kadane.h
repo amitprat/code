@@ -1,10 +1,12 @@
+#pragma once
 #include "../header.h"
 
 /*
+Maximum subarray sum
 https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
 Given an array arr[] of size N. The task is to find the sum of the contiguous subarray within a arr[] with the largest sum.
 */
-// Maximum subarray sum
+
 class Kadane {
    public:
     int max_subarray_sum(vector<int>& arr) {

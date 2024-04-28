@@ -1,9 +1,9 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class ChainOfStrings {
     class Graph {
-    public:
+       public:
         unordered_map<char, vector<char>> edges;
         unordered_set<char> vertices;
         unordered_map<char, int> inDegree;
@@ -16,10 +16,10 @@ class ChainOfStrings {
         }
     };
 
-public:
+   public:
     static void test() {
         {
-            vector<string> strs = { "for", "geek", "rig", "kaf" };
+            vector<string> strs = {"for", "geek", "rig", "kaf"};
 
             bool res = canBeChained(strs);
 
@@ -27,7 +27,7 @@ public:
         }
 
         {
-            vector<string> strs = { "abc", "bcd", "cdf" };
+            vector<string> strs = {"abc", "bcd", "cdf"};
 
             bool res = canBeChained(strs);
 

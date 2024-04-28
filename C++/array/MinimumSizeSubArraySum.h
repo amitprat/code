@@ -73,12 +73,10 @@ class MinimumSizeSubArraySum {
                     mnLen = end - start;
                 }
 
-                curSum += arr[start++];
+                curSum -= arr[start++];
             }
 
-            if (start > end) {
-                end++;
-            }
+            end++;
         }
 
         return mnLen;
@@ -91,12 +89,13 @@ class MinimumSizeSubArraySum {
 
         while (r < arr.size()) {
             curSum += arr[r];
-            while (l <= r && curSum - arr[l] > sum) {
-                curSum -= arr[l++];
-            }
 
-            if (curSum >= sum && (window.first == -1 || r - l < window.second - window.first)) {
-                window = {l, r};
+            while (l <= r && curSum - arr[l] > sum) {
+                if (window.first == -1 || r - l < window.second - window.first) {
+                    window = {l, r};
+                }
+
+                curSum -= arr[l++];
             }
 
             r++;

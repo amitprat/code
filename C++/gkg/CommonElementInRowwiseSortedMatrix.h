@@ -1,23 +1,24 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class CommonElementInRowwiseSortedMatrix {
     struct Node {
         int x, y, e;
-        Node(int x, int y, int e) :x(x), y(y), e(e) {}
+        Node(int x, int y, int e) : x(x), y(y), e(e) {}
     };
     struct compare {
-        bool operator ()(const Node& f, const Node& s) {
+        bool operator()(const Node& f, const Node& s) {
             return f.e > s.e;
         }
     };
-public:
+
+   public:
     static void test() {
         vector<vector<int>> mat = {
-        { 1, 2, 3, 4, 5 },
-        { 2, 4, 5, 8, 10 },
-        { 3, 5, 7, 9, 11 },
-        { 1, 3, 5, 7, 9 },
+            {1, 2, 3, 4, 5},
+            {2, 4, 5, 8, 10},
+            {3, 5, 7, 9, 11},
+            {1, 3, 5, 7, 9},
         };
         int result = findCommonUsingPQ(mat);
         if (result == -1)
@@ -30,12 +31,13 @@ public:
         unordered_map<int, int> elem;
         priority_queue<Node, vector<Node>, compare> pq;
         for (int i = 0; i < mat.size(); i++) {
-            pq.push({ i,0,mat[i][0] });
+            pq.push({i, 0, mat[i][0]});
             elem[mat[i][0]]++;
         }
 
         while (!pq.empty()) {
-            auto f = pq.top(); pq.pop();
+            auto f = pq.top();
+            pq.pop();
 
             if (elem.size() == 1 && elem[mat[f.x][f.y]] == mat.size())
                 return mat[f.x][f.y];
@@ -43,7 +45,7 @@ public:
             elem.erase(mat[f.x][f.y]);
 
             if (f.y + 1 < mat[f.x].size()) {
-                pq.push({ f.x,f.y + 1,mat[f.x][f.y + 1] });
+                pq.push({f.x, f.y + 1, mat[f.x][f.y + 1]});
                 elem[mat[f.x][f.y + 1]]++;
             }
         }

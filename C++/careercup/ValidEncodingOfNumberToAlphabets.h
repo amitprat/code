@@ -27,8 +27,7 @@ int numEncoding(string s){
         if(s.length()==1) return 1;
         int num = 0;
         num += numEncoding(s.substr(1));
-        if(isValid(s.substr(0,2)))
-                num += numEncoding(s.substr(2));
+        if(isValid(s.substr(0,2))) num += numEncoding(s.substr(2));
         return num;
 }
 */

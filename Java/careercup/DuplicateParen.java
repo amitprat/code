@@ -12,10 +12,10 @@ public class DuplicateParen {
     private static boolean hasDuplicateParen(String str) {
         Stack<Character> st = new Stack<>();
         for (char ch : str.toCharArray()) {
-            if (ch != ')') st.push(ch);
+            if (ch == '(') st.push(ch);
             else {
-                char cur = st.pop();
-                if (cur == '(') return true;
+                char top = st.pop();
+                if (top == '(') return true;
 
                 while (cur != '(') {
                     cur = st.pop();

@@ -1,5 +1,8 @@
+#pragma once
 #include "../header.h"
+
 /*
+https://www.careercup.com/question?id=11070934
 * Given an int array which might contain duplicates, find the largest subset of it which form a sequence.
 Eg. {1,6,10,4,7,9,5}
 then ans is 4,5,6,7
@@ -53,14 +56,18 @@ class LongestConsecutiveSeq {
         for (auto i : arr) {
             int beg, end;
             beg = end = i;
+
             if (map.find(i - 1) != map.end()) {
                 beg = map[i - 1];
             }
+
             if (map.find(i + 1) != map.end()) {
                 end = map[i + 1];
             }
+
             map[beg] = end;
             map[end] = beg;
+
             cout << beg << "->" << end << endl;
             cout << end << "->" << beg << endl;
 
@@ -68,8 +75,10 @@ class LongestConsecutiveSeq {
                 first = beg;
                 last = end;
             }
+
             cout << "[" << first << ", " << last << "]" << endl;
         }
+        
         return {first, last};
     }
 

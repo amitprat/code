@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class DijkastraMatrix {
    public:
@@ -22,6 +22,7 @@ class DijkastraMatrix {
         }
     }
 
+   public:
     vector<int> dijkstra(vector<vector<int>> graph, int s) {
         vector<int> dist(graph.size(), INT_MAX);
         dist[s] = 0;
@@ -214,5 +215,32 @@ class DijkastraAdjGraph {
         }
 
         return dist;
+    }
+
+   public:
+    void dijkastraUsingSTL(Graph g, int src) {
+        using P = pair<int, int>;
+        priority_queue<P, vector<P>, greater<P>> minHeap;
+        minHeap.push({0, src});
+        vector<int> dist(g.vertices.size(), INT_MAX);
+        unordered_set<int> visited;
+        visited.insert(src);
+
+        int i = 0;
+        while (i++ < g.vertices.size() - 1) {
+            auto cur = minHeap.top();
+            minHeap.pop();
+
+            dist[cur.second] = cur.first;
+
+            for (auto v : g.edges(cur.second)) {
+                if (visited.find(v.v) == visited.end() && dist[v.v] > dist[cur.second] + v.w) {
+                    minHeap.push({v.w, v.v});
+                    visited.insert(v.v);
+                }
+            }
+        }
+
+        cout << dist << endl;
     }
 };

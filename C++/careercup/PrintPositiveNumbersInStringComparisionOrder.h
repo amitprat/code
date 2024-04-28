@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -19,6 +20,7 @@ static void printRec(String str, int n){
         printRec(str+i,n);
 }
 */
+
 class PrintPositiveNumbersInStringComparisionOrder {
    public:
     static void test() {

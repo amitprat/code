@@ -35,18 +35,16 @@ class CoinChange {
 
             int numWays1 = obj.numWaysToMakeChangeRecursive(arr.first, arr.first.size(), arr.second);
             int numWays2 = obj.numWaysToMakeChangeRecursive2(arr.first, arr.first.size(), arr.second);
-            int numWays3 = obj.numWaysToMakeChangeRecursive3(arr.first, arr.first.size(), arr.second);
-            int numWays4 = obj.numWaysRecursive4WithMemoization(arr.first, arr.first.size(), arr.second);
-            int numWays5 = obj.numWaysToMakeChangeMemoization(arr.first, arr.first.size(), arr.second);
-            int numWays6 = obj.numWaysToMakeChangeDP1DTable(arr.first, arr.first.size(), arr.second);
-            int numWays7 = obj.numWaysToMakeChangeDP2DTable(arr.first, arr.first.size(), arr.second);
+            int numWays3 = obj.numWaysRecursive3WithMemoization(arr.first, arr.first.size(), arr.second);
+            int numWays4 = obj.numWaysToMakeChangeMemoization(arr.first, arr.first.size(), arr.second);
+            int numWays5 = obj.numWaysToMakeChangeDP1DTable(arr.first, arr.first.size(), arr.second);
+            int numWays6 = obj.numWaysToMakeChangeDP2DTable(arr.first, arr.first.size(), arr.second);
 
             assert(numWays1 == numWays2);
             assert(numWays1 == numWays3);
             assert(numWays1 == numWays4);
             assert(numWays1 == numWays5);
             assert(numWays1 == numWays6);
-            // assert(numWays1 == numWays7);
             cout << "Number of ways to make change = " << numWays1 << endl;
 
             cout << endl;
@@ -56,11 +54,10 @@ class CoinChange {
     // Minimum number of coins required to make change
    private:
     int minCoinChangeRecursive(vector<int> denom, int length, int amount) {
-        if (amount < 0) return INT_MAX;
         if (amount == 0) return 0;
-        if (length == 0) return INT_MAX;
+        if (amount < 0 || length <= 0) return INT_MAX;
 
-        int including = minCoinChangeRecursive(denom, length, amount - denom[length - 1]);
+        int including = minCoinChangeRecursive(denom, length, amount - denom[length - 1]);  // denom can be used multiple times.
         int excluding = minCoinChangeRecursive(denom, length - 1, amount);
         if (including != INT_MAX) including += 1;
 
@@ -96,8 +93,6 @@ class CoinChange {
                 }
             }
         }
-        // for (int i = 0; i <= amount; i++) cout << table[i] << " ";
-        // cout << endl;
 
         return table[amount];
     }
@@ -129,8 +124,9 @@ class CoinChange {
                 amount -= denom[i];
                 result_coins.push_back(denom[i]);
                 result++;
-            } else
+            } else {
                 i--;
+            }
         }
 
         // for (auto coin : result_coins) cout << coin << " ";
@@ -153,38 +149,29 @@ class CoinChange {
 
    private:
     int numWaysToMakeChangeRecursive2(vector<int> denom, int length, int amount) {
-        if (amount < 0) return 0;
-        if (amount == 0) return 1;
-        if (length == 0) return 0;
-
-        return numWaysToMakeChangeRecursive2(denom, length - 1, amount) + numWaysToMakeChangeRecursive2(denom, length, amount - denom[length - 1]);
+        return numWaysToMakeChangeRecursive2(denom, 0, length, amount);
     }
 
-   private:
-    int numWaysToMakeChangeRecursive3(vector<int> denom, int length, int amount) {
-        return numWaysToMakeChangeRecursive3(denom, 0, length, amount);
-    }
-
-    int numWaysToMakeChangeRecursive3(vector<int> denom, int pos, int length, int amount) {
+    int numWaysToMakeChangeRecursive2(vector<int> denom, int pos, int length, int amount) {
         if (amount == 0) return 1;
         if (pos == length) return 0;
 
         // try including coin at position 'pos' (from 0 - x times where x is such that x*coins[pos] <= amount)
         int ways = 0;
         for (int i = 0; i * denom[pos] <= amount; i++) {
-            ways += numWaysToMakeChangeRecursive3(denom, pos + 1, length, amount - i * denom[pos]);
+            ways += numWaysToMakeChangeRecursive2(denom, pos + 1, length, amount - i * denom[pos]);
         }
 
         return ways;
     }
 
    private:
-    int numWaysRecursive4WithMemoization(vector<int> denom, int length, int amount) {
+    int numWaysRecursive3WithMemoization(vector<int> denom, int length, int amount) {
         vector<vector<int>> memo(amount + 1, vector<int>(length, 0));
-        return numWaysRecursive4WithMemoization(denom, 0, length, amount, memo);
+        return numWaysRecursive3WithMemoization(denom, 0, length, amount, memo);
     }
 
-    int numWaysRecursive4WithMemoization(vector<int> denom, int pos, int length, int amount, vector<vector<int>>& memo) {
+    int numWaysRecursive3WithMemoization(vector<int> denom, int pos, int length, int amount, vector<vector<int>>& memo) {
         if (amount == 0) return 1;
         if (pos == length) return 0;
 
@@ -192,7 +179,7 @@ class CoinChange {
 
         int ways = 0;
         for (int i = 0; i * denom[pos] <= amount; i++) {
-            ways += numWaysRecursive4WithMemoization(denom, pos + 1, length, amount - i * denom[pos], memo);
+            ways += numWaysRecursive3WithMemoization(denom, pos + 1, length, amount - i * denom[pos], memo);
         }
 
         memo[amount][pos] = ways;
@@ -236,7 +223,7 @@ class CoinChange {
         vector<vector<int>> table(amount + 1, vector<int>(n + 1, 0));
 
         for (int i = 0; i <= amount; i++) table[i][0] = 0;  // if no coins, then 0 ways to make change
-        for (int j = 0; j < n; j++) table[0][j] = 1;        // if 0 amount, then always 1 way to make change
+        for (int j = 0; j <= n; j++) table[0][j] = 1;       // if 0 amount, then always 1 way to make change
 
         for (int am = 1; am <= amount; am++) {
             for (int i = 1; i <= n; i++) {

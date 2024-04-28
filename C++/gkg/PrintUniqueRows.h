@@ -6,13 +6,14 @@ class PrintUniqueRows {
         struct Node {
             int val;
             bool end = false;
-            Node* left, * right, * eq;
-            Node() :left(nullptr), right(nullptr), eq(nullptr) {}
-            Node(int val) :val(val), left(nullptr), right(nullptr), eq(nullptr) {}
+            Node *left, *right, *eq;
+            Node() : left(nullptr), right(nullptr), eq(nullptr) {}
+            Node(int val) : val(val), left(nullptr), right(nullptr), eq(nullptr) {}
         };
 
         Node* root = nullptr;
-    public:
+
+       public:
         void insert(vector<int> row) {
             root = insert(root, row, 0, row.size());
         }
@@ -22,7 +23,7 @@ class PrintUniqueRows {
             traverse(root, out);
         }
 
-    private:
+       private:
         Node* insert(Node* node, vector<int>& row, int cur, int sz) {
             if (!node) node = new Node(row[cur]);
             if (cur == sz - 1) {
@@ -30,9 +31,12 @@ class PrintUniqueRows {
                 return node;
             }
 
-            if (row[cur] == node->val) node->eq = insert(node->eq, row, cur + 1, sz);
-            else if (row[cur] < node->val) node->left = insert(node->left, row, cur, sz);
-            else node->right = insert(node->right, row, cur, sz);
+            if (row[cur] == node->val)
+                node->eq = insert(node->eq, row, cur + 1, sz);
+            else if (row[cur] < node->val)
+                node->left = insert(node->left, row, cur, sz);
+            else
+                node->right = insert(node->right, row, cur, sz);
 
             return node;
         }
@@ -53,13 +57,14 @@ class PrintUniqueRows {
             traverse(node->right, out);
         }
     };
-public:
+
+   public:
     static void test() {
         vector<vector<int>> arr = {
             {0, 1, 0, 0, 1},
             {1, 0, 1, 1, 0},
             {0, 1, 0, 0, 1},
-            {1, 1, 1, 0, 0} };
+            {1, 1, 1, 0, 0}};
 
         BST bst;
         for (auto e : arr) bst.insert(e);

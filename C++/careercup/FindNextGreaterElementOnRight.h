@@ -1,9 +1,11 @@
+#pragma once
 #include "../header.h"
 
 /*
 https://careercup.com/question?id=5726537143812096
 
-Write a program to replace each element of an array with a number present on the right side of the element such that the number is least greater than the element. If there is no greater number replace it with -1
+Write a program to replace each element of an array with a number present on the right side of the element such that
+the number is least greater than the element. If there is no greater number replace it with -1
 
 e.g : 8, 58, 71, 18, 31, 32, 63, 92, 43, 3, 91, 93, 25, 80, 28
 ans : 18, 63, 80, 25, 32, 43, 80, 93, 80, 25, 93, -1, 28, -1, -1
@@ -15,7 +17,8 @@ Here is an O(nlogn) [amortized] approach using a threaded BST where each node po
 2) Insert each element into a threaded BST.
 3) Output the inorder successor after each insertion.
 
-Perhaps we could reshape the threaded tree in between to make it balanced and increase performance but am not sure if we can modify a threaded tree.
+Perhaps we could reshape the threaded tree in between to make it balanced and increase performance but am not sure if we
+can modify a threaded tree.
 */
 class FindNextGreaterElementOnRight {
    private:
@@ -44,8 +47,7 @@ class FindNextGreaterElementOnRight {
         }
 
         while (!st.empty()) {
-            cout << st.top() << " --> "
-                 << "-1" << endl;
+            cout << st.top() << " --> " << "-1" << endl;
             st.pop();
         }
     }
@@ -57,12 +59,12 @@ class FindNextGreaterElementOnRight {
         int mx = arr[n - 1];
 
         for (int i = n - 2; i >= 0; i--) {
-            if (arr[i + 1] > arr[i])
+            if (arr[i + 1] > arr[i]) {
                 greater[i] = arr[i + 1];
-            else {
-                if (greater[i + 1] > greater[i])
+            } else {
+                if (greater[i + 1] > greater[i]) {
                     greater[i] = greater[i + 1];
-                else if (mx > arr[i]) {
+                } else if (mx > arr[i]) {
                     int k = i + 1;
                     while (arr[k] <= arr[i]) k++;
                     greater[i] = arr[k];

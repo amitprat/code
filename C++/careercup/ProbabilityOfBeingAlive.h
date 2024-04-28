@@ -1,12 +1,16 @@
 #pragma once
 #include "../header.h"
+
 /*
 https://careercup.com/question?id=15556758
 
 There is an island which is represented by square matrix NxN.
-A person on the island is standing at any given co-ordinates (x,y). He can move in any direction one step right, left, up, down on the island. If he steps outside the island, he dies.
+A person on the island is standing at any given co-ordinates (x,y).
+He can move in any direction one step right, left, up, down on the island. If he steps outside the island, he dies.
 
-Let island is represented as (0,0) to (N-1,N-1) (i.e NxN matrix) & person is standing at given co-ordinates (x,y). He is allowed to move n steps on the island (along the matrix). What is the probability that he is alive after he walks n steps on the island?
+Let island is represented as (0,0) to (N-1,N-1) (i.e NxN matrix) & person is standing at given co-ordinates (x,y).
+He is allowed to move n steps on the island (along the matrix). What is the probability that he is alive after
+he walks n steps on the island?
 
 Write a psuedocode & then full code for function
 " float probabilityofalive(int x,int y, int n) ".
@@ -17,6 +21,7 @@ Then P(x, y, n, step) = (P(x-1, y, n, step-1) + P(x+1, y, n, step-1) + P(x, y-1,
 The following code is my Java implementation with some simple tests.
 Dynamic Programming is also used.
 */
+
 class ProbabilityOfBeingAlive {
    public:
     static void test() {
@@ -33,8 +38,8 @@ class ProbabilityOfBeingAlive {
 
    private:
     double getProbabilityOfBeingAlive(Point startPos, int n, int steps, unordered_map<string, double>& visited) {
-        if (!isValid(startPos, n)) return 0.0; // If not valid, return 0
-        if (steps == 0) return 1.0; // if steps == 0, then point is already inside so return 1
+        if (!isValid(startPos, n)) return 0.0;  // If not valid, return 0
+        if (steps == 0) return 1.0;             // if steps == 0, then point is already inside so return 1
 
         // If this point is already cached, return the cached value.
         string key = to_string(startPos.x) + ":" + to_string(startPos.y) + ":" + to_string(steps);
@@ -60,13 +65,12 @@ class ProbabilityOfBeingAlive {
         if (steps == 0) return 1.0;
         if (steps < 0 || p.x < 0 || p.y < 0 || p.x >= n || p.y >= n) return 0;
 
-        auto neighbours = getNeighbours(p, n);
         double prob = 0.0;
-        
         string key = to_string(p.x) + ":" + to_string(p.y) + ":" + to_string(steps);
         if (map.find(key) != map.end()) {
             prob = map[key];
         } else {
+            auto neighbours = getNeighbours(p, n);
             for (auto neighbour : neighbours) {
                 prob += 0.25 * getProbabilityOfBeingAlive2(neighbour, n, steps - 1);
             }
@@ -78,6 +82,7 @@ class ProbabilityOfBeingAlive {
 
     vector<Point> getNeighbours(Point p, int N) {
         vector<Point> res;
+
         if (p.x - 1 >= 0) res.push_back({p.x - 1, p.y});
         if (p.y - 1 >= 0) res.push_back({p.x, p.y - 1});
         if (p.x + 1 < N) res.push_back({p.x + 1, p.y});
@@ -86,7 +91,7 @@ class ProbabilityOfBeingAlive {
         return res;
     }
 
-  private:
+   private:
     // For the case, when island is arbitary and don't always starts with (0,0) and rectangle.
     template <class T>
     class Island {
@@ -117,11 +122,11 @@ class ProbabilityOfBeingAlive {
 
         string k = key(pos, step);
         if (memo.find(k) != memo.end()) return memo[k];
-        
-        memo[k] = 0.25 * getProbabilityOfBeingAlive3(island, pos + Point{-1, 0}, step - 1, memo) 
-                  + 0.25 * getProbabilityOfBeingAlive3(island, pos + Point{1, 0}, step - 1, memo) 
-                  + 0.25 * getProbabilityOfBeingAlive3(island, pos + Point{0, 1}, step - 1, memo) 
-                  + 0.25 * getProbabilityOfBeingAlive3(island, pos + Point{0, -1}, step - 1, memo);
+
+        memo[k] = 0.25 * getProbabilityOfBeingAlive3(island, pos + Point{-1, 0}, step - 1, memo) +
+                  0.25 * getProbabilityOfBeingAlive3(island, pos + Point{1, 0}, step - 1, memo) +
+                  0.25 * getProbabilityOfBeingAlive3(island, pos + Point{0, 1}, step - 1, memo) +
+                  0.25 * getProbabilityOfBeingAlive3(island, pos + Point{0, -1}, step - 1, memo);
 
         return memo[k];
     }

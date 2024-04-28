@@ -1,6 +1,9 @@
+#pragma once
 #include "../header.h"
 
 /*
+https://www.careercup.com/question?id=5106425965576192
+
 You are given with an array of 1s and 0s. And you are given with an integer m, which signifies number of flips allowed.
 find the position of zeros which when flipped will produce maximum continuous series of 1s.
 
@@ -23,33 +26,6 @@ The main steps are:
 
 This solution assumes we can use m or less number of flips.
 Time complexity = O(n), space = O(1).
-
-Pseudo-code:
-
-wL = 0; wR = 0;
-nZero = 0;
-bestWindowWidth = -1;
-
-while (wR < A.length()) {
-    // expand to the right, update '0' count:
-    if (nZero <= m) {
-        wR++;
-        if (A[wR] == '0') nZero++;
-    };
-
-    // shrink from left, update '0' count:
-    if (nZero > m) {
-        if (A[wL] == '0') nZero--;
-        wL++;
-    };
-
-    // update best window:
-    if (wR - wL > bestWindowWidth) {
-        bestWindowWidth = wR - wL;
-        bestWR = wR;
-        bestWL = wL;
-    };
-};
 */
 
 class MaximumContinuousOnesWithFlippingMZeros {

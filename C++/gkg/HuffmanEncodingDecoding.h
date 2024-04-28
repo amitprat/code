@@ -3,17 +3,17 @@
 
 class HuffmanEncodingDecoding {
     class Node {
-    public:
+       public:
         char ch;
         int freq;
         Node* left = nullptr;
         Node* right = nullptr;
         Node() {}
-        Node(char ch, int freq) :ch(ch), freq(freq), left(nullptr), right(nullptr) {}
+        Node(char ch, int freq) : ch(ch), freq(freq), left(nullptr), right(nullptr) {}
     };
 
     class Minheap {
-    public:
+       public:
         vector<Node*> nodes;
 
         void insert(char ch, int freq) {
@@ -83,7 +83,8 @@ class HuffmanEncodingDecoding {
             return pos / 2;
         }
     };
-public:
+
+   public:
     static void test() {
         HuffmanEncodingDecoding obj;
         string str = "Huffman coding is a data compression algorithm.";
@@ -133,7 +134,7 @@ public:
     void traverse(Node* root, unordered_map<char, string>& codes, string cur) {
         if (!root) return;
         if (root->left == nullptr && root->right == nullptr) {
-            codes.insert({ root->ch, cur });
+            codes.insert({root->ch, cur});
             return;
         }
 

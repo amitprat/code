@@ -1,10 +1,10 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class StronglyConnected {
     template <class T>
     class Graph {
-    public:
+       public:
         unordered_map<T, vector<T>> edges;
         unordered_set<T> vertices;
         void add(T src, T dst) {
@@ -24,7 +24,8 @@ class StronglyConnected {
             return ss.str();
         }
     };
-public:
+
+   public:
     static void test() {
         StronglyConnected obj;
         Graph<int> g;
@@ -40,6 +41,34 @@ public:
         obj.printSCCs(g);
     }
 
+   public:
+    bool isStronglyConnected(Graph<int> g) {
+        unordered_set<int> visited;
+        dfs(g, 0, visited);
+
+        if (visited.size() < g.vertices.size()) return false;
+        visited.clear();
+
+        Graph gr = transpose(g);
+
+        dfs(gr, 0, visited);
+
+        if (visited.size() < g.vertices.size()) return false;
+
+        return true;
+    }
+
+    void dfs(Graph<int> g, int src, unordered_set<int>& visited) {
+        visited.insert(src);
+
+        for (auto v : g.edges[src]) {
+            if (visited.count(v) == 0) {
+                dfs(g, v, visited);
+            }
+        }
+    }
+
+   public:
     void printSCCs(Graph<int> g) {
         unordered_set<int> visited;
         stack<int> st;
@@ -52,7 +81,8 @@ public:
 
         visited.clear();
         while (!st.empty()) {
-            auto v = st.top(); st.pop();
+            auto v = st.top();
+            st.pop();
             if (visited.find(v) == visited.end()) {
                 vector<int> set;
                 dfs(gr, v, visited, set);
@@ -66,7 +96,7 @@ public:
         }
     }
 
-private:
+   private:
     void fillOrder(Graph<int> g, int u, unordered_set<int>& visited, stack<int>& st) {
         visited.insert(u);
         for (auto v : g.edges[u]) {
@@ -84,7 +114,8 @@ private:
     Graph<int> transpose(Graph<int> g) {
         Graph<int> gr;
         for (auto e : g.edges) {
-            for (auto ad : e.second) gr.add(ad, e.first);
+            auto u = e.first;
+            for (auto v : e.second) gr.add(v, u);
         }
         return gr;
     }

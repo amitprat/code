@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=23123665
@@ -16,6 +16,7 @@ using this bit vectors we can store data range from 1 - 20000 in 625 integers..
 after storing all data in bit vectors, check all bit positions of arr[0], arr[1]..... arr[625]... if any bit position is set to 1 then store back that data into array
 lets arr[10] bit position 15 is set to 1 then this is equivalent to data 10*32+15 = 335
 */
+
 class SortNumbersInRange1To20000 {
     class Bitset {
         int sz = 0;
@@ -35,7 +36,6 @@ class SortNumbersInRange1To20000 {
 
             set(pos, off);
         }
-
         void set(int pos, int off) {
             arr[pos] |= (1 << off);
         }

@@ -2,30 +2,27 @@
 #include "../header.h"
 using namespace std;
 
-class Node
-{
-public:
+class Node {
+   public:
     int d, w;
     Node() {}
-    Node(int d, int w) :d(d), w(w) {}
+    Node(int d, int w) : d(d), w(w) {}
     string to_string() {
         return "(" + std::to_string(d) + ", " + std::to_string(w) + ")";
     }
 };
-class Graph
-{
-public:
+class Graph {
+   public:
     int V;
     unordered_map<int, vector<Node>> adjList;
 
-public:
+   public:
     Graph(int v) : V(v) {}
     void addEdge(int s, int d, int w) {
         adjList[s].push_back(Node(d, w));
         adjList[d].push_back(Node(s, w));
     }
-    Graph(vector<tuple<int, int, int>> v)
-    {
+    Graph(vector<tuple<int, int, int>> v) {
         for (auto i : v) {
             adjList[get<0>(i)].push_back(Node(get<1>(i), get<2>(i)));
             adjList[get<1>(i)].push_back(Node(get<0>(i), get<2>(i)));
@@ -50,9 +47,8 @@ public:
 };
 
 template <class T>
-class Minheap
-{
-private:
+class Minheap {
+   private:
     vector<T> nodes;
     int sz = 0;
 
@@ -60,19 +56,16 @@ private:
     int left(int i) { return 2 * i + 1; }
     int right(int i) { return 2 * i + 2; }
 
-    void upHeapify(int c)
-    {
+    void upHeapify(int c) {
         int p = parent(c);
-        while (c != 0 && nodes[p].w > nodes[c].w)
-        {
+        while (c != 0 && nodes[p].w > nodes[c].w) {
             swap(nodes[p], nodes[c]);
             c = p;
             p = parent(c);
         }
     }
 
-    void downHeapify(int i)
-    {
+    void downHeapify(int i) {
         int smallest = i;
         int l = left(i);
         if (l < sz && nodes[l].w < nodes[smallest].w) smallest = l;
@@ -80,34 +73,29 @@ private:
         int r = right(i);
         if (r < sz && nodes[r].w < nodes[smallest].w) smallest = r;
 
-        if (smallest != i)
-        {
+        if (smallest != i) {
             swap(nodes[i], nodes[smallest]);
             downHeapify(smallest);
         }
     }
 
-public:
-    Minheap(int v)
-    {
+   public:
+    Minheap(int v) {
         sz = v;
         nodes.resize(sz);
     }
 
-    void add(int key, T val)
-    {
+    void add(int key, T val) {
         nodes[key] = val;
     }
 
-    void build()
-    {
+    void build() {
         for (int i = sz / 2 - 1; i >= 0; i--) {
             downHeapify(i);
         }
     }
 
-    T pop()
-    {
+    T pop() {
         T top = nodes.front();
         nodes[0] = nodes[sz - 1];
         sz--;
@@ -125,8 +113,7 @@ public:
             }
         }
     }
-    void decreaseKey(int k, int w)
-    {
+    void decreaseKey(int k, int w) {
         for (int i = 0; i < sz; i++) {
             if (nodes[i].d == k) {
                 nodes[i].w = w;
@@ -137,16 +124,13 @@ public:
     }
 };
 
-class PrimsAdj
-{
-public:
-    static void test()
-    {
+class PrimsAdj {
+   public:
+    static void test() {
         PrimsAdj obj;
         vector<Graph> graphs = {
-            Graph({{0,1,2},{1,2,4},{2,0,1}}),
-            Graph({{0,1,4}, {0,7,8},{1,2,8},{1,7,11},{2,3,7},{2,8,2},{2,5,4},{3,4,9},{3,5,14},{4,5,10},{5,6,2},{6,7,1},{6,8,6},{7,8,7}})
-        };
+            Graph({{0, 1, 2}, {1, 2, 4}, {2, 0, 1}}),
+            Graph({{0, 1, 4}, {0, 7, 8}, {1, 2, 8}, {1, 7, 11}, {2, 3, 7}, {2, 8, 2}, {2, 5, 4}, {3, 4, 9}, {3, 5, 14}, {4, 5, 10}, {5, 6, 2}, {6, 7, 1}, {6, 8, 6}, {7, 8, 7}})};
 
         for (auto graph : graphs) {
             cout << "Current Grpah: " << endl;
@@ -157,8 +141,39 @@ public:
         }
     }
 
-    void findMst(Graph g)
-    {
+   public:
+    void findMSTSTL(Graph g) {
+        using P = pair<int, int>;
+        priority_queue<P, vector<P>, greater<P>> pq;
+        int src = 0;
+        pq.push({0, src});
+
+        vector<int> dist(g.V, INT_MAX);
+        dist[src] = 0;
+
+        vector<int> parent(g.V, INT_MAX);
+        parent[src] = -1;
+
+        unordered_set<int> visited;
+
+        int cnt = 0;
+        while (cnt++ < g.V - 1) {
+            auto cur = pq.top();
+            pq.pop();
+
+            auto u = cur.second;
+            for (auto edge : g.adjList[u]) {
+                if (visited.find(edge.d) == visited.end() && dist[edge.d] > edge.w) {
+                    dist[edge.d] = edge.w;
+                    parent[edge.d] = u;
+                    visited.insert(edge.d);
+                }
+            }
+        }
+    }
+
+   public:
+    void findMst(Graph g) {
         Minheap<Node> heap(g.V);
         int src = 0;
         bool* visited = new bool[g.V];
@@ -172,8 +187,7 @@ public:
         }
         heap.build();
 
-        while (!heap.empty())
-        {
+        while (!heap.empty()) {
             auto minWtVertex = heap.pop();
             visited[minWtVertex.d] = true;
             cout << parent[minWtVertex.d] << "->" << minWtVertex.d << endl;
@@ -191,8 +205,7 @@ public:
         printMst(parent, g);
     }
 
-    void printMst(int parent[], Graph g)
-    {
+    void printMst(int parent[], Graph g) {
         cout << "MST = ";
         cout << "{";
         for (int i = 1; i < g.V; i++) {

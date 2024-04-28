@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 /*
 https://www.careercup.com/question?id=22809662
@@ -54,7 +55,7 @@ class FindTreeHeightFromParentArray {
         if (height[parent] != -1) return height[parent];
 
         if (nodes[parent] == -1) {
-            height[parent] = 1;
+            height[parent] = 0;
         } else {
             height[parent] = 1 + countDepth(nodes[parent], nodes, height);
         }

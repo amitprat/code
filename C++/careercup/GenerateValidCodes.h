@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -33,10 +34,10 @@ class GenerateValidCodes {
 
     void generateCodes(string &input, int i, int n, string cur, vector<string> &result) {
         if (i >= n) {
-            if (!cur.empty())
-                result.push_back(cur);
+            if (!cur.empty()) result.push_back(cur);
             return;
         }
+
         if (input[i] == '0') {
             generateCodes(input, i + 1, n, cur, result);
         }

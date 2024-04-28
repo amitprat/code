@@ -1,25 +1,26 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class TopSellingProducts {
-private:
+   private:
     using Deque = deque<pair<int, unordered_map<string, int>>>;
     using Node = pair<string, int>;
-    class Compare
-    {
-    public:
-        bool operator() (Node a, Node b)
-        {
+    class Compare {
+       public:
+        bool operator()(Node a, Node b) {
             return a.second < b.second;
         }
     };
     using PriorityQue = priority_queue<Node, vector<Node>, Compare>;
+
     Deque dq;
     PriorityQue pq;
+
     int window = 20;
-public:
+
+   public:
     static void test() {
-        vector<string> products = { "a","b","c","d","e","f" };
+        vector<string> products = {"a", "b", "c", "d", "e", "f"};
         srand(time(nullptr));
         TopSellingProducts obj;
 
@@ -27,12 +28,12 @@ public:
             for (int i = 0; i < 30; i++) {
                 unordered_map<string, int> updatedSet;
                 for (auto prod : products) {
-                    if (rand() % 2 == 0) updatedSet.insert({ prod,rand() % 10 });
+                    if (rand() % 2 == 0) updatedSet.insert({prod, rand() % 10});
                 }
                 obj.push(i, updatedSet);
                 this_thread::sleep_for(1s);
             }
-            });
+        });
         auto sub = thread([&obj]() {
             for (int i = 0; i < 30; i++) {
                 auto res = obj.poll(i);
@@ -41,7 +42,7 @@ public:
                 }
                 this_thread::sleep_for(1s);
             }
-            });
+        });
 
         pub.join();
         sub.join();
@@ -53,7 +54,7 @@ public:
             decreaseKeys(cur);
             dq.pop_front();
         }
-        dq.push_back({ timePoint,set });
+        dq.push_back({timePoint, set});
         increaseKeys(set);
     }
 
@@ -68,6 +69,5 @@ public:
     }
 
     void decreaseKeys(unordered_map<string, int> set) {
-
     }
 };

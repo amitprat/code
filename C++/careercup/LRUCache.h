@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 namespace lrucache1 {
 class LRUCache {
@@ -38,8 +38,8 @@ class LRUCache {
 
     int get(int key) {
         if (map.find(key) != map.end()) {
-            cout << "[CacheHit]"
-                 << "Key " << key << " already exists in cache, moving it to front" << endl;
+            cout << "[CacheHit]" << "Key " << key << " already exists in cache, moving it to front" << endl;
+
             moveToFront(key);
 
             return map[key]->value;
@@ -119,7 +119,7 @@ class LRUCache {
    private:
     int capacity;
     list<E> dq;
-    unordered_map<K, list<pair<int, int>>::iterator> map;
+    unordered_map<K, list<E>::iterator> map;
     ofstream out;
     ifstream in;
     string file;
@@ -399,8 +399,8 @@ class LRUCache {
         if (size == capacity) {
             cout << format("[CachePut] Cache full. Removing key {}, val={}", list.back()->key, list.back()->val) << endl;
 
-            list.pop_back();
             map.erase(list.back()->key);
+            list.pop_back();
 
             size--;
         }

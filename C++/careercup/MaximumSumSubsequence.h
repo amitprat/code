@@ -39,4 +39,20 @@ class MaximumSumSubsequence {
         return max(maxSumSubsequenceRecursive(nums, idx + 1, sz, cur),
                    nums[idx] + maxSumSubsequenceRecursive(nums, idx + 2, sz, cur));
     }
+
+   private:
+    int maxSum(vector<int> v) {
+        int mx = INT_MIN;
+        maxSum(v, v.size(), 0, mx);
+        return mx;
+    }
+
+    void maxSum(vector<int> v, int n, int cur, int& mx) {
+        if (n == 0) {
+            mx = max(mx, cur);
+            return;
+        }
+        maxSum(v, n - 1, cur, mx);
+        maxSum(v, n - 1, cur + v[n - 1], mx);
+    }
 };

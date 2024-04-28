@@ -26,6 +26,7 @@ class CountNumberOfIslands {
         assert((res1 == res2) == (res2 == res3));
     }
 
+public:
     int countIslandsUsingDFS(vector<vector<int>> board, int n, int m) {
         int marker = -1;
         int count = 0;
@@ -37,6 +38,7 @@ class CountNumberOfIslands {
                 }
             }
         }
+
         // restore
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -46,26 +48,53 @@ class CountNumberOfIslands {
 
         return count;
     }
+
+    void dfs(vector<vector<int>>& board, int i, int j, int marker) {
+        board[i][j] = marker;
+        for (auto& neighbour : getNeighbours(board, i, j)) {
+            dfs(board, neighbour.first, neighbour.second, marker);
+        }
+    }
+
+    vector<pair<int, int>> getNeighbours(vector<vector<int>>& board, int i, int j) {
+        vector<pair<int, int>> result;
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                if (abs(x) != abs(y)) {
+                    int dx = i + x;
+                    int dy = j + y;
+                    if (isValid(dx, dy, board) && board[dx][dy] == 1) result.push_back({dx, dy});
+                }
+            }
+        }
+        return result;
+    }
+
+    bool isValid(int x, int y, vector<vector<int>>& board) {
+        return x >= 0 && y >= 0 && x < board.size() && y < board[x].size();
+    }
+
+public:
     int countIslandsDisjointSet1(vector<vector<int>> board, int n, int m) {
-        UnionFind* uf;
-        uf = new UnionFind(n * m);
+        UnionFind uf(n * m);
         int count = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 int k = i * n + j;
                 if (board[i][j] == 1) {
                     count++;
+
                     if (j - 1 >= 0 && board[i][j - 1] == 1) {
-                        if (uf->Union(k, i * n + j - 1)) count--;
+                        if (uf.Union(k, i * n + j - 1)) count--;
                     }
                     if (i - 1 >= 0 && board[i - 1][j] == 1) {
-                        if (uf->Union(k, (i - 1) * n + j)) count--;
+                        if (uf.Union(k, (i - 1) * n + j)) count--;
                     }
                     if (i - 1 >= 0 && j - 1 >= 0 && board[i - 1][j - 1] == 1) {
-                        if (uf->Union(k, (i - 1) * n + j - 1)) count--;
+                        if (uf.Union(k, (i - 1) * n + j - 1)) count--;
                     }
                     if (i - 1 >= 0 && j + 1 < m && board[i - 1][j + 1] == 1) {
-                        if (uf->Union(k, (i - 1) * n + j + 1)) count--;
+                        if (uf.Union(k, (i - 1) * n + j + 1)) count--;
                     }
                 }
             }
@@ -131,30 +160,7 @@ class CountNumberOfIslands {
         cout << "Islands = " << res << endl;
     }
 
-    void dfs(vector<vector<int>>& board, int i, int j, int marker) {
-        board[i][j] = marker;
-        for (auto& neighbour : getNeighbours(board, i, j)) {
-            dfs(board, neighbour.first, neighbour.second, marker);
-        }
-    }
 
-    vector<pair<int, int>> getNeighbours(vector<vector<int>>& board, int i, int j) {
-        vector<pair<int, int>> result;
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                if (x != y) {
-                    int dx = i + x;
-                    int dy = j + y;
-                    if (isValid(dx, dy, board) && board[dx][dy] == 1) result.push_back({dx, dy});
-                }
-            }
-        }
-        return result;
-    }
-
-    bool isValid(int x, int y, vector<vector<int>>& board) {
-        return x >= 0 && y >= 0 && x < board.size() && y < board[x].size();
-    }
 
     int countIslands(ifstream& in, UnionFind* uf) {
         string line;

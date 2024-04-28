@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 /*
 Given an array of integers (positive or negative) find the lowest positive integer NOT present in that array.
 Step 1: Disregard all negatives (put all the positives in the front of the array)

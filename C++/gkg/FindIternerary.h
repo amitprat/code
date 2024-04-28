@@ -1,11 +1,12 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class FindIternerary {
     class Graph {
         unordered_map<string, vector<string>> edges;
         unordered_set<string> vertices;
-    public:
+
+       public:
         void add(string src, string dst) {
             edges[src].push_back(dst);
             vertices.insert(src);
@@ -41,7 +42,8 @@ class FindIternerary {
             st.push(u);
         }
     };
-public:
+
+   public:
     static void test() {
         unordered_map<string, string> dataSet;
         dataSet["Chennai"] = "Banglore";
@@ -63,7 +65,7 @@ public:
 
     static void printItinerary(unordered_map<string, string> dataset) {
         unordered_map<string, string> revMap;
-        for (auto e : dataset) revMap.insert({ e.second,e.first });
+        for (auto e : dataset) revMap.insert({e.second, e.first});
 
         string start;
         for (auto e : dataset) {

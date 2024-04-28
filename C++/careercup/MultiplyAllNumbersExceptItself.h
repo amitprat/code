@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -13,7 +14,7 @@ Restrictions:
 1. no use of division
 2. complexity in O(n)
 */
-// Self excluding product.
+
 class MultiplyAllNumbersExceptItself {
    public:
     static void test() {

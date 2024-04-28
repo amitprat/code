@@ -1,9 +1,11 @@
 #pragma once
 #include "../header.h"
+
 /*
 https://careercup.com/question?id=5706911210012672
 Evaluate infix expression: 2 + 3 * 5
 */
+
 class InfixToPostfix {
    public:
     static void test() {
@@ -17,6 +19,7 @@ class InfixToPostfix {
             "((a+b)*(z+x))",
             "((a+t)*((b+(a+c))^(c+d)))",
             "a+b*(c*d-e)-i"};
+
         for (const auto& expression : expressions) {
             auto postfix1 = obj.infixtoPostfix(expression);
 
@@ -28,18 +31,6 @@ class InfixToPostfix {
             assert(postfix1 == postfix2);
 
             cout << format("Postfix of infix='{}' is '{}'", expression, postfix1) << endl;
-        }
-
-        expressions = {
-            "3 * 4 + 12 + 23 * 2 / 23",
-            "3 * 4 + 12",
-            "3 + 4 * 12",
-            "3 + 4 * 12 /2",
-            "1^2+3^(4-5)*6",
-            "2^(2+3^(4-5)*6)"};
-        for (const auto& expression : expressions) {
-            double value = obj.evaluateExpression(expression);
-            cout << format("Value of infix='{}' is '{}'", expression, value) << endl;
         }
     }
 
@@ -135,73 +126,6 @@ class InfixToPostfix {
         }
 
         return postfix;
-    }
-
-   private:
-    double evaluateExpression(string infix) {
-        double val = 0;
-        stack<double> operands;
-        stack<char> operators;
-
-        string cur;
-        for (auto ch : infix) {
-            if (isspace(ch)) continue;
-
-            if (isalnum(ch)) {  // if is operand
-                cur += ch;
-            } else {  // operator
-                if (ch != '(' && cur.empty()) throw runtime_error("Invalid expression.");
-
-                if (!cur.empty()) {
-                    operands.push(stoi(cur));
-                    cur.clear();
-                }
-
-                if (ch == '(') {
-                    operators.push(ch);
-                } else if (ch == ')') {
-                    while (ch != '(') {
-                        auto second = operands.top();
-                        operands.pop();
-                        auto first = operands.top();
-                        operands.pop();
-                        auto op = operators.top();
-                        operators.pop();
-
-                        operands.push(apply(first, second, op));
-                    }
-
-                    operators.pop();  // pop '('
-                } else {
-                    while (!operators.empty() && prec(operators.top()) >= prec(ch)) {
-                        auto second = operands.top();
-                        operands.pop();
-                        auto first = operands.top();
-                        operands.pop();
-                        auto op = operators.top();
-                        operators.pop();
-
-                        operands.push(apply(first, second, op));
-                    }
-
-                    operators.push(ch);
-                }
-            }
-        }
-        if (!cur.empty()) operands.push(stoi(cur));
-
-        while (!operators.empty()) {
-            auto second = operands.top();
-            operands.pop();
-            auto first = operands.top();
-            operands.pop();
-            auto op = operators.top();
-            operators.pop();
-
-            operands.push(apply(first, second, op));
-        }
-
-        return operands.top();
     }
 
    private:

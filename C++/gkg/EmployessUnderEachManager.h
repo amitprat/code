@@ -2,16 +2,15 @@
 #include "../Header.h"
 
 class EmployessUnderEachManager {
-public:
+   public:
     static void test() {
         unordered_map<string, string> emps = {
-            { "A", "C" },
-            { "B", "C" },
-            { "C", "F" },
-            { "D", "E" },
-            { "E", "F" },
-            { "F", "F" }
-        };
+            {"A", "C"},
+            {"B", "C"},
+            {"C", "F"},
+            {"D", "E"},
+            {"E", "F"},
+            {"F", "F"}};
 
         printEmployeesUnderManager2(emps);
     }
@@ -38,6 +37,7 @@ public:
     static void print2(unordered_map<string, vector<string>>& empMap, string e, unordered_set<string>& visited) {
         if (visited.find(e) != visited.end()) return;
         visited.insert(e);
+
         if (empMap.count(e) == 0) {
             empMap[e] = {};
             return;

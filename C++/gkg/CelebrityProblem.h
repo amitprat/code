@@ -1,19 +1,14 @@
 #include "../header.h"
 
 /*
-Ok heres the solution. SantiagoYMG is pretty close.
-The solution is O(n) in time complexity.
+https://www.careercup.com/question?id=15503949
 
-Make all of them stand in a row.
-Lets say the people are a,b,c,d,e,f,g,h,i,j,.......n
+Given a function KNOWS(A,B), which returns 1 if A knows B (and not necessarily the other way around) and 0 if A does not know B.
 
-Compare a and b.
-if a knows b => a is certainly not the celebrity. Probable celebrity = b
-if a doesnt know b => b is certainly not the celebrity. Probable celebrity = a
+A Celebrity is one who does not know anyone,
+and one who is known by everybody.
 
-In either case compare the probable celebrity to the next person in line ie 'c' and repeat the process. Each comparison should eliminate 1 person and have another as the probable celebrity. At the end, the probable celebrity who survives is the certain celebrity.
-
-Complexity = O(n)
+For a list of N people, find all celebrities in linear time.
 */
 
 class CelebrityProblem {

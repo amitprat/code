@@ -48,8 +48,7 @@ class SortStack {
 
    private:
     void sortUsingRecursion(stack<int> &st) {
-        if (st.empty())
-            return;
+        if (st.empty()) return;
 
         auto cur = st.top();
         st.pop();
@@ -60,7 +59,7 @@ class SortStack {
     }
 
     void insertAtCorrectPlace(stack<int> &st, int cur) {
-        if (st.empty() || cur < st.top()) {
+        if (st.empty() || cur <= st.top()) {
             st.push(cur);
             return;
         }
@@ -69,6 +68,7 @@ class SortStack {
         st.pop();
 
         insertAtCorrectPlace(st, cur);
+
         st.push(val);
     }
 

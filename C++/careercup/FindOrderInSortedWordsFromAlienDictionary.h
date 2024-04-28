@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 /*
 https://www.careercup.com/question?id=13394663
 Given a dictionary of strings [ strings are in sorted order] you have to find the precedence of characters according to the dictionary..

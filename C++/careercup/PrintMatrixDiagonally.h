@@ -17,6 +17,7 @@ print:
 6 8
 9
 */
+
 class PrintMatrixDiagonally {
    public:
     static void test() {
@@ -35,7 +36,7 @@ class PrintMatrixDiagonally {
             obj.printDiags1(input);
             cout << endl;
 
-            cout << "printDiags1:" << endl;
+            cout << "printDiags2:" << endl;
             obj.printDiags2(input);
             cout << endl;
         }
@@ -54,6 +55,7 @@ class PrintMatrixDiagonally {
         }
     }
 
+   private:
     void printDiags2(const vector<vector<int>>& arr) {
         int n = arr.size();
         Point start = {0, 0};

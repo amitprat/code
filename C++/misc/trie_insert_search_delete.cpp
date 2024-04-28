@@ -34,8 +34,8 @@ trie *insertiter(char *word,trie *root)
         root = newnode();
     trie *temp = root;
     for(int i=0;i<strlen(word);i++) {
-        if(!(root->child[ word[i] - 'a']))
-            root->child[ word[i] - 'a'] = newnode();
+        if(!(root->child[word[i] - 'a']))
+            root->child[word[i] - 'a'] = newnode();
         root = root->child[word[i] - 'a'];
     }
     root->isend = true;

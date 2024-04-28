@@ -1,20 +1,21 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class CountIslands {
-public:
+   public:
     static void test() {
         CountIslands obj;
         vector<vector<bool>> v = {
-            {0,1,0,1,0},
-            {1,0,1,0,1},
-            {0,1,0,0,1},
-            {1,1,1,0,1}
-        };
+            {0, 1, 0, 1, 0},
+            {1, 0, 1, 0, 1},
+            {0, 1, 0, 0, 1},
+            {1, 1, 1, 0, 1}};
+
         cout << obj.countIslands(v) << endl;
         cout << obj.countIslandsDP(v) << endl;
     }
 
+public:
     int countIslandsDP(vector<vector<bool>> v) {
         int count = 0;
         for (int i = 0; i < v.size(); i++) {
@@ -30,13 +31,14 @@ public:
         return count;
     }
 
+public:
     int countIslands(vector<vector<bool>> v) {
         int count = 0;
         for (int i = 0; i < v.size(); i++) {
             for (int j = 0; j < v[i].size(); j++) {
                 if (v[i][j]) {
                     count++;
-                    visit(v, i, j);
+                    dfs(v, i, j);
                 }
             }
         }
@@ -44,9 +46,9 @@ public:
         return count;
     }
 
-    void visit(vector<vector<bool>>& v, int row, int col) {
+    void dfs(vector<vector<bool>>& v, int row, int col) {
         v[row][col] = 0;
-        if (col + 1 < v[row].size() && v[row][col + 1]) visit(v, row, col + 1);
-        if (row + 1 < v.size() && v[row + 1][col]) visit(v, row + 1, col);
+        if (col + 1 < v[row].size() && v[row][col + 1]) dfs(v, row, col + 1);
+        if (row + 1 < v.size() && v[row + 1][col]) dfs(v, row + 1, col);
     }
 };

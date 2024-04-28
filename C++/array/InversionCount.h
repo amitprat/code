@@ -28,7 +28,7 @@ class InversionCount {
 
             assert(ans1 == ans2);
 
-            cout << "Number of inversions are " << ans1;
+            cout << "Number of inversions are: " << ans1 << endl;
         }
     }
 
@@ -52,8 +52,8 @@ class InversionCount {
 
     int merge(vector<int>& arr, int l, int m, int r, vector<int>& tmp) {
         int inv = 0;
-        int i = l, j = m + 1, k = l;
 
+        int i = l, j = m + 1, k = l;
         for (; i <= m && j <= r; k++) {
             if (arr[i] <= arr[j]) {
                 tmp[k] = arr[i++];

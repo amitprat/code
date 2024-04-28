@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class LongestCommonSubstringAndSubsequence {
    public:

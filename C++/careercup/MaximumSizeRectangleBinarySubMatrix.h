@@ -12,7 +12,7 @@ class MaximumSizeRectangleBinarySubMatrix {
             {1, 1, 0, 0},
         };
 
-        cout << "Area of maximum rectangle is "
+        cout << "Area of maximum rectangle is: "
              << obj.maxRectangle(mat);
     }
 
