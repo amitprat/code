@@ -30,10 +30,11 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <list>
 
+#include "ds/Graph.h"
 #include "linkedlist/LinkedList.h"
 #include "tree/BinaryTree.h"
-#include "ds/Graph.h"
 
 using namespace std::views;
 using namespace std;

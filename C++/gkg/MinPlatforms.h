@@ -40,7 +40,7 @@ class MinPlatforms {
             }
         }
         platforms = max(platforms, cur);
-        cout << to_string(pairs) << endl;
+        cout << pairs << endl;
 
         return platforms;
     }

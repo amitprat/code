@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -11,6 +12,7 @@ Example:
 2 , 4 = 0.5(0)
 22, 7 = 3.(142857)
 */
+
 class PrintDecimalDivision {
    public:
     static void test() {

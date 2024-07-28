@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -25,6 +26,7 @@ input:
 output:
 5
 */
+
 class LargestPlusSignInMatrix {
    public:
     static void test() {

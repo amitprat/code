@@ -1,12 +1,15 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=4901629824335872
+
+Write atof in Java, which converts a string representation of a float (like "342.18E-10") to an actual float without
+using any built-in parsing functions.
 */
-class AToF
-{
-public:
+
+class AToF {
+   public:
     static void test() {
         {
             string str = "342.18E-4";
@@ -58,6 +61,7 @@ public:
         }
     }
 
+   public:
     static double local_atof(string str) {
         size_t exp = str.find("E");
         if (exp == string::npos) exp = str.find("e");
@@ -76,6 +80,7 @@ public:
         return result;
     }
 
+   public:
     static double convertToFloat(string str) {
         if (str.empty()) return 0;
 
@@ -85,24 +90,22 @@ public:
         bool isNeg = false;
         for (auto ch : str) {
             if (ch == '+' || ch == '-') {
-                if (signSeen) throw exception("Invalid double string");
+                if (signSeen) throw runtime_error("Invalid double string");
                 signSeen = true;
                 isNeg = ch == '-';
-            }
-            else if (ch == '.') {
-                if (decSeen) throw exception("Invalid double string");
+            } else if (ch == '.') {
+                if (decSeen) throw runtime_error("Invalid double string");
                 decSeen = true;
-            }
-            else if (ch >= '0' && ch <= '9') {
+            } else if (ch >= '0' && ch <= '9') {
                 double num = ch - '0';
-                if (!decSeen) result1 = result1 * 10 + num;
+                if (!decSeen)
+                    result1 = result1 * 10 + num;
                 else {
                     result2 = result2 + num / decDiv;
                     decDiv *= 10;
                 }
-            }
-            else {
-                throw exception("Invalid double string");
+            } else {
+                throw runtime_error("Invalid double string");
             }
         }
 

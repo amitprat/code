@@ -2,7 +2,7 @@
 
 /*
 https://careercup.com/question?id=4798365246160896
-
+https://www.careercup.com/question?id=5159094715416576
 
 Question was on Arithmetic progression
 
@@ -53,13 +53,16 @@ class FindMissingElementInAP {
         cout << "Missing element is " << res << endl;
     }
 
+   public:
     int findMissing(vector<int> arr) {
         int d = min(arr[2] - arr[1], arr[1] - arr[0]);
         return findMissing(arr, 0, arr.size() - 1, d);
     }
-    int findMissing(vector<int> arr, int l, int r, int d) {
+
+    int findMissing(vector<int>& arr, int l, int r, int d) {
         if (l == r) return INT_MIN;
         if (r - l == 1) return arr[l] + d;
+
         int m = (l + r) / 2;
         if (arr[m] - arr[l] > (m - l) * d) {
             return findMissing(arr, l, m, d);

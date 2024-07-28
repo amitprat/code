@@ -66,6 +66,10 @@ public class IsomorphicString {
         int i = 0;
         for (var ch : str.toCharArray()) {
             i++;
+
+            // encode array such that if this char is not seen, then keep its value as
+            // current index.
+            // if seen, the use the previous seen index.
             arr[ch] = (arr[ch] == 0 ? i : arr[ch]);
             if (arr[ch] != 0)
                 sb.append(arr[ch]);

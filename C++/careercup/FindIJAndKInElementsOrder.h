@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 /*
 * https://www.careercup.com/question?id=14960662
 * Given a array of integers , find 3 indexes i,j,k such that, i<j<k and a[i] < a[j] < a[k]. Best possible is a O(n) algorithm.

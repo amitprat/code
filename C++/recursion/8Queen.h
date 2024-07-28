@@ -20,6 +20,7 @@ class EightQueen {
         }
     }
 
+   public:
     int getNumWays() {
         vector<int> columns(N, -1);
         vector<vector<int>> result;
@@ -35,6 +36,7 @@ class EightQueen {
             result.push_back(columns);
             return true;
         }
+
         for (int col = 0; col < N; col++) {
             if (isValid(row, col)) {
                 columns[row] = col;
@@ -42,6 +44,7 @@ class EightQueen {
                 columns[row] = -1;
             }
         }
+
         return false;
     }
 
@@ -50,6 +53,7 @@ class EightQueen {
         for (int i = 0; i < row; i++) {
             if (board[i][col] != -1) return false;
         }
+
         // check left upper diagonal
         for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
             if (board[i][j] != -1) return false;

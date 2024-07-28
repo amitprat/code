@@ -50,6 +50,7 @@ class LongestConsecutiveSeq {
         cout << endl;
     }
 
+   private:
     pair<int, int> findLongestSeq(vector<int> arr) {
         unordered_map<int, int> map;
         int first = 0, last = 0;
@@ -78,7 +79,7 @@ class LongestConsecutiveSeq {
 
             cout << "[" << first << ", " << last << "]" << endl;
         }
-        
+
         return {first, last};
     }
 

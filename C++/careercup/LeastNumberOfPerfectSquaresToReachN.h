@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=5725584103571456
@@ -10,6 +10,7 @@ Example:
 n=12, return 3 (4 + 4 + 4) = (2^2 + 2^2 + 2^2) NOT (3^2 + 1 + 1 + 1)
 n = 6, return 3 (4 + 1 + 1) = (2^2 + 1^2 + 1^2)
 */
+
 class LeastNumberOfPerfectSquaresToReachN {
     struct PerfectSquare {
         int cnt = 0;

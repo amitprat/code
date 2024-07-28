@@ -1,31 +1,33 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
-class FlattenTree {
-public:
+class FlattenBinaryTreeToLinkedList {
+    using Node = BinaryTree<int>::Node;
+
+   public:
     static void test() {
-        FlattenTree obj;
-        ITNode* root = new ITNode(1);
-        root->left = new ITNode(2);
-        root->right = new ITNode(5);
-        root->left->left = new ITNode(3);
-        root->left->right = new ITNode(4);
-        root->right->right = new ITNode(6);
+        FlattenBinaryTreeToLinkedList obj;
 
-        cout << to_string(root) << endl;
+        Node *root = new Node(1);
+        root->left = new Node(2);
+        root->right = new Node(5);
+        root->left->left = new Node(3);
+        root->left->right = new Node(4);
+        root->right->right = new Node(6);
 
-        //root = obj.flattenRecurse(root);
-        obj.flattenUsingIterativePreorderTraversal(root);
-
+        obj.flatten(root);
         obj.traverse(root);
     }
 
-    void flattenUsingIterativePreorderTraversal(ITNode* root) {
-        stack<ITNode*> st;
+   public:
+    void flattenUsingIterativePreorderTraversal(Node *root) {
+        stack<Node *> st;
         st.push(root);
 
         while (!st.empty()) {
-            auto cur = st.top(); st.pop();
+            auto cur = st.top();
+            st.pop();
+
             auto left = cur->left;
             auto right = cur->right;
 
@@ -34,8 +36,10 @@ public:
                 cur->left->right = cur->right;
                 cur->left->left = nullptr;
             }
-            if (cur->left) cur->right = cur->left;
-            else cur->right = cur->right;
+            if (cur->left)
+                cur->right = cur->left;
+            else
+                cur->right = cur->right;
             cur->left = nullptr;
 
             if (right) st.push(right);
@@ -43,46 +47,161 @@ public:
         }
     }
 
-    ITNode* flattenRecurse(ITNode* root) {
-        if (!root) return root;
-        ITNode* right = flattenRecurse(root->right);
-        ITNode* left = flattenRecurse(root->left);
-
-        if (right) right->left = nullptr;
-        ITNode* tmp = left;
-        while (tmp && tmp->right) tmp = tmp->right;
-        if (tmp) {
-            tmp->right = right;
-            tmp->left = nullptr;
-        }
-        if (left) root->right = left;
-        else root->right = right;
-        root->left = nullptr;
-
-        return root;
-    }
-
-    void flatten(ITNode* root) {
-        stack<ITNode*> st;
+   private:
+    void flatten(Node *root) {
+        stack<Node *> st;
         preOrder(root, st);
 
-        ITNode* last = nullptr;
+        Node *last = nullptr;
         while (!st.empty()) {
-            auto cur = st.top(); st.pop();
+            auto cur = st.top();
+            st.pop();
             cur->right = last;
             cur->left = nullptr;
             last = cur;
         }
     }
 
-    void preOrder(ITNode* root, stack<ITNode*>& st) {
+    void preOrder(Node *root, stack<Node *> &st) {
         if (!root) return;
         st.push(root);
         preOrder(root->left, st);
         preOrder(root->right, st);
     }
 
-    void traverse(ITNode* head) {
+   private:
+    void flatten1(Node *root) {
+        while (root) {
+            if (root->left) {
+                auto right = root->right;
+                root->right = root->left;
+                root->left = nullptr;
+
+                Node *next = root->right;
+                while (next && next->right) {
+                    next = next->right;
+                }
+
+                next->right = right;
+            }
+
+            root = root->right;
+        }
+    }
+
+   private:
+    void flatten3(Node *root) {
+        if (!root) return;
+        if (root->left) {
+            // flatten the lef tree first
+            flatten3(root->left);
+
+            // connect the root->left as root->right and set left pointer as null
+            auto right = root->right;
+            root->right = root->left;
+            root->left = nullptr;
+
+            // find rightmost node in left tree and connect the original right node to its end
+            auto *tmp = root->right;
+            while (tmp && tmp->right) tmp = tmp->right;
+            tmp->right = right;
+        }
+
+        // flatten the right node.
+        flatten3(root->right);
+    }
+
+   private:
+    Node *flattenRecursiveLeftToRight(Node *node) {
+        if (!node) return node;
+
+        Node *left = flattenRecursiveLeftToRight(node->left);
+        Node *right = flattenRecursiveLeftToRight(node->right);
+
+        node->left = nullptr;
+        node->right = left;
+        getRightMostNode(node)->right = right;
+
+        return node;
+    }
+
+    Node *getRightMostNode(Node *node) {
+        while (node->right) {
+            node = node->right;
+        }
+        return node;
+    }
+
+   private:
+    Node *flattenRecursiveRightToLeft(Node *node) {
+        if (!node) return node;
+
+        Node *left = flattenRecursiveRightToLeft(node->right);
+        Node *right = flattenRecursiveRightToLeft(node->left);
+
+        if (left) {
+            getLeaf(left)->right = right;
+            node->right = left;
+        } else {
+            node->right = right;
+        }
+        node->left = nullptr;
+
+        return node;
+    }
+
+    Node *getLeaf(Node *node) {
+        while (node && node->right) {
+            node = node->right;
+        }
+        return node;
+    }
+
+   private:
+    void flattenRecursive(Node *root) {
+        Node *prev = nullptr;
+        flattenRecursive(root, prev);
+    }
+
+    void flattenRecursive(Node *root, Node *&prev) {
+        if (root == nullptr) return;
+
+        flattenRecursive(root->right, prev);
+        flattenRecursive(root->left, prev);
+
+        root->right = prev;
+        root->left = nullptr;
+        prev = root;
+    }
+
+   private:
+    void flattenIterativeUsingStack(Node *root) {
+        if (root == nullptr) return;
+
+        stack<Node *> st;
+        st.push(root);
+
+        while (!st.empty()) {
+            Node *current = st.top();
+            st.pop();
+
+            if (current->right) {
+                st.push(current->right);
+            }
+            if (current->left) {
+                st.push(current->left);
+            }
+
+            if (!st.empty()) {
+                current->right = st.top();
+            }
+
+            current->left = nullptr;
+        }
+    }
+
+   private:
+    void traverse(Node *head) {
         while (head) {
             cout << head->to_string() << " ";
             head = head->right;

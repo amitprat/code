@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -108,11 +109,13 @@ class RegexAndWildCardMatch {
     bool isRegexMatch1(char *t, char *p) {
         if (!*p) return (*t == '\0');
 
-        if (*(p + 1) != '*')
+        if (*(p + 1) != '*') {
             return (*p == *t || (*p == '.' && *t != '\0')) && isRegexMatch1(t + 1, p + 1);
-        if (*p == *t || (*p == '.' && *t != '\0'))
+        } else if (*p == *t || (*p == '.' && *t != '\0')) {
             return isRegexMatch1(t, p + 2) || isRegexMatch1(t + 1, p);
-        return isRegexMatch1(t, p + 2);
+        } else {
+            return isRegexMatch1(t, p + 2);
+        }
     }
 
    private:
@@ -163,8 +166,8 @@ class RegexAndWildCardMatch {
         if (!*t && !*p) return true;
         if (!*t && *p == '*' && *(p + 1) != '\0') return false;
         if (*p == *t || *p == '?') return wildCardMatch1(t + 1, p + 1);
-        if (*p == '*')
-            return wildCardMatch1(t, p + 1) || wildCardMatch1(t + 1, p);
+        if (*p == '*') return wildCardMatch1(t, p + 1) || wildCardMatch1(t + 1, p);
+
         return false;
     }
 
@@ -175,6 +178,7 @@ class RegexAndWildCardMatch {
     bool wildCardMatch2(string txt, string pat, int n, int m) {
         if (m == 0) return n == 0;
         if (n == 0) return pat[m - 1] == '*' && wildCardMatch2(txt, pat, n, m - 1);
+
         if (txt[n - 1] == pat[m - 1] || pat[m - 1] == '?')
             return wildCardMatch2(txt, pat, n - 1, m - 1);
         else if (pat[m - 1] == '*')

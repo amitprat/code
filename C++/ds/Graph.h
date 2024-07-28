@@ -1,5 +1,10 @@
 #pragma once
-#include "../header.h"
+#include <exception>
+#include <sstream>
+#include <string>
+#include <unordered_set>
+#include <vector>
+using namespace std;
 
 class Graph {
     unordered_set<int> vertices;
@@ -14,8 +19,8 @@ class Graph {
     }
 
     void addEdge(int src, int dst) {
-        if (vertices.find(src) == vertices.end()) throw exception("src vertex not found.");
-        if (vertices.find(dst) == vertices.end()) throw exception("dst vertex not found.");
+        if (vertices.find(src) == vertices.end()) throw runtime_error("src vertex not found.");
+        if (vertices.find(dst) == vertices.end()) throw runtime_error("dst vertex not found.");
 
         adjMap[src].insert(dst);
         if (!isDirected) adjMap[dst].insert(src);
@@ -39,11 +44,12 @@ class Graph {
 
     string to_string() {
         stringstream ss;
-        for (auto &edge : adjMap) {
-            ss << edge.first << ":-> ";
-            ss << ::to_string(edge.second);
-
-            ss << endl;
+        for (auto& edge : adjMap) {
+            stringstream second;
+            second << "{";
+            for (auto& e : edge.second) second << e << " ";
+            second << "}";
+            ss << edge.first << ":-> " << second.str() << endl;
         }
 
         return ss.str();

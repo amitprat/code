@@ -27,6 +27,7 @@ class MultiplyAllNumbersExceptItself {
         cout << res2 << endl;
     }
 
+   public:
     vector<int> multiply(vector<int> &input) {
         int l = 1, r = 1;
         vector<int> result(input.size());
@@ -43,6 +44,7 @@ class MultiplyAllNumbersExceptItself {
         return result;
     }
 
+   public:
     vector<int> multiply1(vector<int> &input) {
         int n = input.size();
         vector<int> front(n);

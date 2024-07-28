@@ -1,4 +1,7 @@
+#pragma once
 #include "../header.h"
+
+// Function to find the maximum sum of a subsequence where no two elements are adjacent
 
 class MaximumSumSubsequence {
    public:

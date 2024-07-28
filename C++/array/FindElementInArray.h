@@ -2,6 +2,8 @@
 #include "../header.h"
 
 /*
+https://www.careercup.com/question?id=18813688
+
 An array consist of elements whose difference is positive or negative 1. I have to find the given elements without using linear search.
 Say arr[]={1,2,3,4,3,4,5,6,7}
 To find : 6

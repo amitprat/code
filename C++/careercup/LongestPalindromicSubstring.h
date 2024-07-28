@@ -67,7 +67,7 @@ class LongestPalindromicSubstring {
                 if (l == 2 && str[i] == str[j])
                     table[i][j] = true;
                 else if (str[i] == str[j])
-                    table[i][j] = table[i - 1][j + 1];
+                    table[i][j] = table[i + 1][j - 1];
 
                 if (table[i][j] && l > longest.length()) {
                     longest = str.substr(i, l);
@@ -104,6 +104,19 @@ class LongestPalindromicSubstring {
     }
 
    private:
+    string lps(string s) {
+        string str = "";
+        for (int i = 0; i < s.length() - 1; i++) {
+            string l = expand(s, i, i);
+            str = l.length() > str.length() ? l : str;
+
+            string r = expand(s, i, i + 1);
+            str = r.length() > str.length() ? r : str;
+        }
+
+        return str;
+    }
+
     string expand(string s, int l, int r) {
         while (l >= 0 && r < s.length() && s[l] == s[r]) {
             l--;
@@ -111,16 +124,8 @@ class LongestPalindromicSubstring {
         }
         return s.substr(l + 1, r - l - 1);
     }
-    string lps(string s) {
-        string str = "";
-        for (int i = 0; i < s.length() - 1; i++) {
-            string l = expand(s, i, i);
-            str = l.length() > str.length() ? l : str;
-            string r = expand(s, i, i + 1);
-            str = r.length() > str.length() ? r : str;
-        }
-        return str;
-    }
+
+   private:
     int lpsDP(string s) {
         int l = s.length();
         int max = 1;

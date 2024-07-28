@@ -2,6 +2,7 @@
 #include "../header.h"
 /*
 https://www.careercup.com/question?id=5145759489982464
+https://www.careercup.com/question?id=5681702473039872
 
 Given an array of integers, sort the array into a wave like array, namely
 a1 >= a2 <= a3 >= a4 <= a5.....

@@ -79,7 +79,7 @@ class MedianOfTwoSortedArraysOfSameSize {
         return res1;
     }
 
-public:
+   public:
     double median1(int arr1[], int arr2[], int n) {
         int p1 = 0, p2 = 0;
         int i = 0, j = 0;
@@ -99,16 +99,19 @@ public:
         return (double)(p1 + p2) / 2.0;
     }
 
-public:
+   public:
     double median2(int arr1[], int arr2[], int n) {
         if (n == 1) return (double)(arr1[0] + arr2[0]) / 2.0;
 
         double m1 = median(arr1, n);
         double m2 = median(arr2, n);
 
-        if (m1 == m2) return m1;
-        else if (m1 <= m2) return median2(arr1 + n / 2, arr2, n - n / 2);
-        else return median2(arr1, arr2 + n / 2, n - n / 2);
+        if (m1 == m2)
+            return m1;
+        else if (m1 <= m2)
+            return median2(arr1 + n / 2, arr2, n - n / 2);
+        else
+            return median2(arr1, arr2 + n / 2, n - n / 2);
     }
 
     double median(int arr[], int n) {
@@ -116,9 +119,9 @@ public:
         return (double)(arr[n / 2 - 1] + arr[n / 2]) / 2.0;
     }
 
-public:
-	// combine both arrays, sort them and find median
-	// because both arrays are of same size, so combined size must be even
+   public:
+    // combine both arrays, sort them and find median
+    // because both arrays are of same size, so combined size must be even
     double medianBruteForce(int arr1[], int arr2[], int n) {
         int* arr3 = new int[2 * n];
         for (int i = 0, k = 0; i < n; i++) {

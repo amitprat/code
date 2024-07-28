@@ -31,9 +31,11 @@ class FindFirstMissingPositive {
             else if (arr[i] <= 0 || arr[i] >= arr.size())  // ignore numbers out of range
                 i++;
             else {
-                int pos = arr[i] - 1;          // get element index position
-                if (pos + 1 == arr[pos]) i++;  // if the element is already in correct position, then continue (duplicates)
-                swap(arr[i], arr[pos]);        // else move the element to correct position without moving
+                int pos = arr[i] - 1;  // get element index position
+                if (pos + 1 == arr[pos])
+                    i++;  // if the element is already in correct position, then continue (duplicates)
+                else
+                    swap(arr[i], arr[pos]);  // else move the element to correct position without moving
             }
         }
 

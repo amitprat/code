@@ -44,4 +44,53 @@ public String findMin (String s, HashSet<Character> set){
 }
 */
 class SmallestSubstringContaintingAllCharactersOfSet {
+   public:
+    static void test() {
+        SmallestSubstringContaintingAllCharactersOfSet obj;
+
+        vector<char> set = {'a', 'b', 'c'};
+        string str = "abbcbcba";
+
+        auto res = obj.smallestStr(set, str);
+        cout << "Result: " << res << endl;
+    }
+
+   public:
+    string smallestStr(vector<char>& set, string& str) {
+        string smallest;
+
+        unordered_map<char, int> patCount;
+        for (auto ch : set) patCount[ch]++;
+
+        int curCount = 0;
+        unordered_map<char, int> txtCnt;
+        int s = 0;
+        for (int e = 0; e <= str.size();) {
+            if (e < str.size()) {
+                char ch = str[e];
+                txtCnt[ch]++;
+                if (txtCnt[ch] <= patCount[ch]) curCount++;
+                e++;
+            }
+
+            if (curCount == set.size()) {
+                while (txtCnt[str[s]] > patCount[str[s]]) {
+                    txtCnt[str[s]]--;
+                    s++;
+                }
+
+                if (smallest.empty() || e - s < smallest.length()) {
+                    smallest = str.substr(s, e - s);
+                }
+
+                curCount--;
+                txtCnt[str[s]]--;
+                s++;
+            }
+
+            if (e == str.size() && curCount < set.size()) break;
+        }
+
+        return smallest;
+    }
 };

@@ -4,9 +4,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
+/*
+ * https://www.careercup.com/question?id=4825417139617792
+ 
+    Given stock price of Amazon for some consecutive days. Need to find the maximum span of each day’s stock price. 
+    Span is the amount of days before the given day where the stock price is less than that of given day
+
+    E.g i/p = {2,4,6,9,5,1}
+    o/p= { -1,1,2,3,2,-1}
+ */
+
 public class StockSpan {
     public static void test() {
-        int[] price = {10, 4, 5, 90, 120, 80};
+        int[] price = { 10, 4, 5, 90, 120, 80 };
         stockSpan(price);
         stockSpan1(price);
     }
@@ -27,7 +37,7 @@ public class StockSpan {
         int[] span = new int[price.length];
         for (int i = 0; i < price.length; i++) {
             int j = i - 1;
-            for (; j >= 0 && price[j] <= price[i]; j--) ;
+            for (; j >= 0 && price[j] <= price[i]; j--);
 
             span[i] = (j == -1) ? i + 1 : (i - j);
         }

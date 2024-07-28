@@ -1,6 +1,7 @@
 #pragma once
 #include "../header.h"
 /*
+https://www.careercup.com/question?id=5729312817807360
 https://www.careercup.com/question?id=5638939143045120
 
 Given many coins of 3 different face values, print the combination sums of the coins up to 1000. Must be printed in order.

@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 class SqrtOfNumber {
@@ -40,6 +41,7 @@ class SqrtOfNumber {
         return x;
     }
 
+   private:
     // using binary search method
     int sqrt2(int num) {
         int s = 1, e = num;
@@ -64,7 +66,7 @@ class SqrtOfNumber {
         unsigned int y = 1;
 
         while (x > y) {
-            x = (y + y) / 2;
+            x = (x + y) / 2;
             y = n / x;
         }
 

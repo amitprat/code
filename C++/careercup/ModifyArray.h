@@ -1,9 +1,10 @@
+#pragma once
 #include "../header.h"
 
 /*
 https://careercup.com/question?id=4909367207919616
 
-WAP to modify the array such that arr[I] = arr[arr[I]].
+WAP to modify the array such that arr[i] = arr[arr[i]].
 Do this in place i.e. with out using additional memory.
 
 example : if a = {2,3,1,0}

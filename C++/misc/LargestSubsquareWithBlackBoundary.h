@@ -1,4 +1,9 @@
+#pragma once
+#include "../header.h"
+
 /* Cracking the coding interview
+https://www.careercup.com/question?id=2445
+
 20.11 Imagine you have a square matrix, where each cell is filled with either black or white. Design an algorithm to find the maximum subsquare such that all four borders are filled with black pixels.
 Assumption: Square is of size NxN.
 This algorithm does the following:
@@ -9,8 +14,6 @@ This algorithm does the following:
 Time complexity: O(N^2).
 */
 
-#include "../header.h"
-
 class LargestSubsquareWithBlackBoundary {
    public:
     static void test() {
@@ -19,6 +22,7 @@ class LargestSubsquareWithBlackBoundary {
             {1, 1, 1, 1},
             {0, 1, 1, 1},
             {1, 0, 1, 1}};
+
         LargestSubsquareWithBlackBoundary obj;
         auto result = obj.findLargestSubsqaure(matrix);
         cout << format("Largest subsquare is of size={}, starting at row={}, col={}", get<2>(result), get<0>(result), get<1>(result)) << endl;

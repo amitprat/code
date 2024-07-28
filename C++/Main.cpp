@@ -1,8 +1,8 @@
-#include "careercup/WordBreak.h"
+#include "gkg/FlattenBinaryTreeToLinkedList.h"
 using namespace std;
 
 int main() {
-    WordBreak::test();
+    FlattenBinaryTreeToLinkedList::test();
 
     return 0;
 }

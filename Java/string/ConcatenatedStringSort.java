@@ -3,6 +3,7 @@ package programs.string;
 import java.util.Arrays;
 
 /*
+https://www.careercup.com/question?id=5723915160649728
 Given an integer array, sort the integer array such that the concatenated integer of the result array is max. e.g. [4, 94, 9, 14, 1] will be sorted to [9,94,4,14,1] where the result integer is 9944141
 
 quick sort the input BUT
@@ -18,7 +19,7 @@ public class ConcatenatedStringSort {
 
     private static void test1() {
         ConcatenatedStringSort obj = new ConcatenatedStringSort();
-        Integer[] arr = {4, 94, 9, 14, 1};
+        Integer[] arr = { 4, 94, 9, 14, 1 };
 
         System.out.println(Arrays.toString(arr));
         obj.sort(arr);

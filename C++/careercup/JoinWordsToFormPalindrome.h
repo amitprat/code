@@ -1,14 +1,15 @@
+#pragma once
 #include "../header.h"
 
 /*
 https://www.careercup.com/question?id=4879869638868992
-
-You are given a list of word. Find if two words can be joined to-gather to form a palindrome. eg Consider a list {bat, tab, cat} Then bat and tab can be joined to gather to form a palindrome.
+You are given a list of word. Find if two words can be joined to-gather to form a palindrome. eg Consider a list
+{bat, tab, cat} Then bat and tab can be joined to gather to form a palindrome.
 
 Expecting a O(nk) solution where n = number of works and k is length
-
-There can be multiple pairs
+There can be multiple pairs.
 */
+
 class JoinWordsToFormPalindrome {
     class Trie {
        public:
@@ -78,6 +79,7 @@ class JoinWordsToFormPalindrome {
             {"hellol", "leh", "hellow", "wol"},
             {"loh", "hello", "lleh"},
             {"helloword", "hellolle", "h"}};
+
         for (auto& input : inputs) {
             auto res = obj.findWords(input);
             cout << res << endl;
@@ -92,7 +94,7 @@ class JoinWordsToFormPalindrome {
 
         for (auto word : input) {
             string rev = word;
-            reverse(rev.begin(), rev.end());
+            std::reverse(rev.begin(), rev.end());
 
             if (forwardTrie.find(rev)) return {word, rev};
             if (reverseTrie.find(word)) return {rev, word};

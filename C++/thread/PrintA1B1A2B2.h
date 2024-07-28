@@ -1,6 +1,11 @@
 #pragma once
 #include <atomic>
 
+/*
+Given four resources A1, A2, B1 , B2. Such that Thread T1 and Thread T2 operates on A1, A2 and B1, B2 respectively.
+How will you ensure the order of execution is A1-B1-A2-B2 ?
+*/
+
 #include "../header.h"
 
 class PrintA1B1A2B2 {

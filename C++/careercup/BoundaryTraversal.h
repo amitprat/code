@@ -254,20 +254,19 @@ class BoundaryTraversal {
 
         map<int, pair<int, int>> bottomView;
         this->bottomViewRecursive(root, 0, 0, bottomView);
-        for (auto &e : bottomView)
-            result.push_back(e.second.first);
+        for (auto &e : bottomView) result.push_back(e.second.first);
         result.pop_back();
 
         maxLevel = 0;
         vector<int> rightView;
-        if (root->right)
-            this->rightMostNodesRecursive(root->right, 0, maxLevel, rightView);
+        this->rightMostNodesRecursive(root, 0, maxLevel, rightView);
         result.insert(result.end(), rightView.rbegin(), rightView.rend());
         result.pop_back();
 
         cout << "Boundary View: " << result << endl;
     }
 
+   private:
     void boundaryViewIterative(Node *root) {
         queue<pair<Node *, int>> q;
         q.push({root, 0});
@@ -299,8 +298,7 @@ class BoundaryTraversal {
         vector<int> result;
         result.insert(result.end(), leftView.begin(), leftView.end());
         result.pop_back();
-        for (auto &e : bottomView)
-            result.push_back(e.second);
+        for (auto &e : bottomView) result.push_back(e.second);
         result.pop_back();
         result.insert(result.end(), rightView.rbegin(), rightView.rend());
         result.pop_back();

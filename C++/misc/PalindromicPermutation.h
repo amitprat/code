@@ -1,14 +1,12 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 using namespace std;
 
-class PalindromicPermutation
-{
-public:
-    static void test()
-    {
+class PalindromicPermutation {
+   public:
+    static void test() {
         PalindromicPermutation obj;
-        vector<string> strs = { "abcbcac", "","a", "ab", "aba", "abac", "abdcab" };
+        vector<string> strs = {"abcbcac", "", "a", "ab", "aba", "abac", "abdcab"};
         for (auto& str : strs) {
             auto res1 = obj.IsPalinPerm(str);
             auto res2 = obj.IsPalinPermOptimized(str);
@@ -18,28 +16,31 @@ public:
         }
     }
 
-    bool IsPalinPerm(string str)
-    {
-        int table[26] = { 0 };
+   private:
+    bool IsPalinPerm(string str) {
+        int table[26] = {0};
         int oddCount = 0;
         for (auto ch : str) {
             table[ch - 'a']++;
-            if (table[ch - 'a'] & 1) oddCount++;
-            else oddCount--;
+            if (table[ch - 'a'] & 1)
+                oddCount++;
+            else
+                oddCount--;
         }
 
         return oddCount <= 1;
     }
 
-    bool IsPalinPermOptimized(string str)
-    {
+   private:
+    bool IsPalinPermOptimized(string str) {
         int oddCount = 0;
         bitset<26> bitset;
         for (auto ch : str) {
             bitset.flip(ch - 'a');
-            //bitset.set(ch - 'a', !bitset[ch - 'a']);
-            if (bitset[ch - 'a']) oddCount++;
-            else oddCount--;
+            if (bitset[ch - 'a'])
+                oddCount++;
+            else
+                oddCount--;
         }
 
         return oddCount <= 1;

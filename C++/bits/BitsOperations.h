@@ -2,15 +2,16 @@
 #include "../header.h"
 
 class BitsOperations {
-    public:
+   public:
     static void test() {
         BitsOperations obj;
 
-        vector<int> nums = {0,1,2,3,4};
-        for(auto& num : nums) {
-            cout<<format("Num={}, position={} is set {}", num, 0, obj.isset(num , 0));
+        vector<int> nums = {0, 1, 2, 3, 4};
+        for (auto& num : nums) {
+            cout << format("Num={}, position={} is set {}", num, 0, obj.isset(num, 0));
         }
     }
+
    public:
     bool isset(int a, int index) {
         return a & (1 << index);
@@ -57,11 +58,11 @@ class BitsOperations {
     }
 
     bool isPowerOf2(int n) {
-        return n && !(n & (n-1));
+        return n && !(n & (n - 1));
     }
 
     bool isPowerOf2_1(int n) {
-        return (n & ~(n-1)) == n;
+        return (n & ~(n - 1)) == n;
     }
 
     bool isPowerOf4(int n) {

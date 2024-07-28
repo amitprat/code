@@ -1,5 +1,12 @@
 #include "../header.h"
 
+/*
+https://www.careercup.com/question?id=62018
+
+A person can take one or two steps at a time to reach a particular floor( say in a building).
+How many different ways can a person reach the nth floor?
+*/
+
 class NumberOfWaysToReachNthStair {
    public:
     static void test() {

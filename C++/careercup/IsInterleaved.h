@@ -1,6 +1,12 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
+/*
+https://www.careercup.com/question?id=14539805
+
+Three strings say A,B,C are given to you. Check weather 3rd string is interleaved from string A and B.
+Ex: A="abcd" B="xyz" C="axybczd". answer is yes. o(n)
+*/
 class CheckIfStringIsInterleaved {
    public:
     static void test() {
