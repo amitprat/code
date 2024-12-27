@@ -34,6 +34,7 @@ class CheckIfWordsAreSortedByOrdering {
     void sortWordsWithGivenOrder(vector<string>& strs, vector<char>& order) {
         unordered_map<char, int> map;
         for (int i = 0; i < order.size(); i++) map[order[i]] = i;
+
         sort(strs.begin(), strs.end(), [&](auto& word1, auto& word2) {
             int i = 0, j = 0;
             for (; i < word1.size() && j < word2.size(); i++, j++) {

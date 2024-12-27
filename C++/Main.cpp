@@ -1,8 +1,8 @@
-#include "gkg/FlattenBinaryTreeToLinkedList.h"
+#include "careercup/StringWithConcatOfOtherWords.h"
 using namespace std;
 
 int main() {
-    FlattenBinaryTreeToLinkedList::test();
+    StringWithConcatOfOtherWords::test();
 
     return 0;
 }

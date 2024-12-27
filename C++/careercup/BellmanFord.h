@@ -16,6 +16,7 @@ class BellmanFord {
    public:
     static void test() {
         BellmanFord obj;
+
         Graph g(5);
         g.add({0, 1, -1});
         g.add({0, 2, 4});

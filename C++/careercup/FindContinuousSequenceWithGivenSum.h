@@ -65,6 +65,7 @@ class FindContinuousSequenceWithGivenSum {
         int curSum = 0;
         for (int s = 0, e = 0; e <= arr.size();) {
             if (e < arr.size() && curSum < sum) curSum += arr[e++];
+
             if (curSum == sum) return true;
             if (e == arr.size() && curSum < sum) return false;
 

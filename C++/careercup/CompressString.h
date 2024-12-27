@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class CompressString {
-public:
+   public:
     static void test() {
         string str = "abb";
         cout << compress(str) << endl;
@@ -20,7 +20,7 @@ public:
                 }
                 prev = ch;
                 cnt = 0;
-            } 
+            }
             cnt++;
         }
         if (cnt > 0) {

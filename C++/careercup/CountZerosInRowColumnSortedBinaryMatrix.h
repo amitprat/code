@@ -45,18 +45,19 @@ private int countNumZeroes(int[][] matrix) {
     return numZeroes;
   }
 */
+
 class CountZerosInRowColumnSortedBinaryMatrix {
    private:
     int count(vector<vector<int>>& mat) {
         int n = mat.size();
         int row = n - 1;
         int col = 0;
-        Point lefBottom(row, col);
 
         int count = 0;
         while (row >= 0 && col < n) {
             while (mat[row][col]) row--;
             count += row + 1;
+
             col += 1;
         }
 

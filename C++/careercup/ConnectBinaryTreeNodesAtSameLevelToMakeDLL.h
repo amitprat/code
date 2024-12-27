@@ -70,10 +70,8 @@ class ConnectBinaryTreeNodesAtSameLevelToMakeDLL {
 
                 out << front->val << " ";
 
-                if (front->left)
-                    q.push(front->left);
-                if (front->right)
-                    q.push(front->right);
+                if (front->left) q.push(front->left);
+                if (front->right) q.push(front->right);
             }
             out << '\n';
         }
@@ -104,10 +102,8 @@ class ConnectBinaryTreeNodesAtSameLevelToMakeDLL {
                     prev = front;
                 }
 
-                if (front->left)
-                    q.push(front->left);
-                if (front->right)
-                    q.push(front->right);
+                if (front->left) q.push(front->left);
+                if (front->right) q.push(front->right);
             }
         }
 
@@ -188,19 +184,10 @@ class ConnectBinaryTreeNodesAtSameLevelToMakeDLL {
    private:
     // This only connects nodes at same level
     void connectNodesUsingRecursionForCompleteBinaryTree(Node *root) {
-        if (!root)
-            return;
+        if (!root) return;
 
-        if (root->left) {
-            root->left->next = root->right;
-            if (root->right)
-                root->right->prev = root->left;
-        }
-        if (root->right) {
-            root->right->next = root->next ? root->next->left : nullptr;
-            if (root->right->next)
-                root->right->next->prev = root->right;
-        }
+        if (root->left) root->left->nextRight = root->right;
+        if (root->right) root->right->nextRight = root->nextRight ? root->nextRight->left : nullptr;
 
         connectNodesUsingRecursionForCompleteBinaryTree(root->left);
         connectNodesUsingRecursionForCompleteBinaryTree(root->right);

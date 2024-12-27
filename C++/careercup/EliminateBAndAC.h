@@ -4,8 +4,8 @@
 /*
 https://www.careercup.com/question?id=18460667
 
-Eliminate all ‘b’ and ‘ac’ in an array of characters, you have to replace them in-place, and you are only allowed to iterate over
-the char array once.
+Eliminate all ‘b’ and ‘ac’ in an array of characters, you have to replace them in-place, and you are only allowed
+to iterate over the char array once.
 
 Examples:
 abc -> ac

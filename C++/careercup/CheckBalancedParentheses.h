@@ -27,6 +27,7 @@ class CheckBalancedParentheses {
    public:
     bool isValid(string str) {
         stack<char> st;
+
         for (auto ch : str) {
             if (isOpen(ch)) {
                 st.push(ch);

@@ -2,8 +2,8 @@
 
 /*
 https://careercup.com/question?id=6324318653382656
-
-Given a length n, count the number of strings of length n that can be made using ‘a’, ‘b’ and ‘c’ with at-most one ‘b’ and two ‘c’s allowed.
+Given a length n, count the number of strings of length n that can be made using ‘a’, ‘b’ and ‘c’ with at-most one ‘b’ and
+two ‘c’s allowed.
 
 def count_abc(n, nb, nc):
     if n == 1:
@@ -18,7 +18,6 @@ def count_abc(n, nb, nc):
         ret += c3
     return ret
 
-
 if __name__ == '__main__':
     print(count_abc(1, 1, 2))
     print(count_abc(2, 1, 2))
@@ -29,6 +28,7 @@ if __name__ == '__main__':
     print(count_abc(7, 1, 2))
     print(count_abc(100, 1, 2))
 */
+
 class CountNumberOfStringMadeOfABC {
    public:
     static void test() {
@@ -51,7 +51,8 @@ class CountNumberOfStringMadeOfABC {
         return count_abc(n - 1, nb, nc) + count_abc(n - 1, nb - 1, nc) + count_abc(n - 1, nb, nc - 1);
     }
 
-    privatE : int countMemo(int n, int nb, int nc) {
+   private:
+    int countMemo(int n, int nb, int nc) {
         vector<vector<vector<int>>> table(n + 1, vector<vector<int>>(nb + 1, vector<int>(nc + 1, -1)));
 
         return countMemo(n, nb, nc, table);
@@ -60,6 +61,7 @@ class CountNumberOfStringMadeOfABC {
     int countMemo(int n, int nb, int nc, vector<vector<vector<int>>>& table) {
         if (n < 0 || nb < 0 || nc < 0) return 0;
         if (n == 0) return 1;
+
         if (table[n][nb][nc] != -1) return table[n][nb][nc];
 
         table[n][nb][nc] = countMemo(n - 1, nb, nc, table) + countMemo(n - 1, nb - 1, nc, table) + countMemo(n - 1, nb, nc - 1, table);

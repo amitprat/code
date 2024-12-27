@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class Facebook_XsOs {
-public:
+   public:
     static void test() {
         int tests = 0;
         cin >> tests;
@@ -22,14 +22,15 @@ public:
                     if (str[k] == 'O') {
                         hasO = true;
                         cols[k] = -1;
-                    }
-                    else if (str[k] == 'X') {
+                    } else if (str[k] == 'X') {
                         if (cols[k] != -1) cols[k]++;
                         xs++;
                     }
                 }
-                if (hasO) rows.erase(j);
-                else rows[j] = n - xs;
+                if (hasO)
+                    rows.erase(j);
+                else
+                    rows[j] = n - xs;
             }
 
             int mnX = INT_MAX;
@@ -39,8 +40,7 @@ public:
                 if (e.second < mnX) {
                     mnX = e.second;
                     ways = 1;
-                }
-                else if (e.second == mnX) {
+                } else if (e.second == mnX) {
                     ways++;
                 }
             }
@@ -50,8 +50,7 @@ public:
                 if (n - e.second < mnX) {
                     mnX = n - e.second;
                     ways = 1;
-                }
-                else if (n - e.second == mnX) {
+                } else if (n - e.second == mnX) {
                     ways++;
                 }
             }

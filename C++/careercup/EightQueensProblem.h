@@ -1,10 +1,12 @@
 #include "../header.h"
 
 class EightQueensProblem {
+   private:
+    static const int QUEEN = 1;
+    static const int EMPTY = 0;
+
    public:
     using Board = vector<vector<int>>;
-#define QUEEN 1
-#define EMPTY 0
 
     static void test() {
         int n = 8;
@@ -43,8 +45,9 @@ class EightQueensProblem {
 
     bool canPlace(Board& board, int row, int col, int n) {
         // in same row on left side
-        for (int i = 0; i < col; i++)
+        for (int i = 0; i < col; i++) {
             if (board[row][i] == QUEEN) return false;
+        }
 
         // in top left diag
         for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {

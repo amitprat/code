@@ -15,6 +15,7 @@ should output something like:
 
 This should be done in less than O(n).
 */
+
 class CountOccurancesOfNumberInSortedArr {
    public:
     static void test() {

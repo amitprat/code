@@ -1,16 +1,15 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class ArrangeNumbersByTheirValue {
-public:
+   public:
     static void test() {
         for (int i = 1; i <= 10; i++) {
             vector<int> result;
             bool res = canBePlaced(i, result);
             if (res) {
                 cout << i << " : " << to_string(result) << endl;
-            }
-            else {
+            } else {
                 cout << i << " : " << "can't be placed" << endl;
             }
         }
@@ -48,12 +47,23 @@ public:
         return false;
     }
 
+    /// @brief Given num and an array/vector of size [0..end], try placing number.
+    /// @param num
+    /// @param end
+    /// @param result
+    /// @return
     static bool canBePlaced(int num, int end, vector<int>& result) {
         if (num > end) return true;
+
+        // Try placing current num in [i, num+i+1] position if available.
+        // Check for all the available position.
         for (int i = 0; i < result.size() - num - 1; i++) {
             if (result[i] == 0 && result[num + i + 1] == 0) {
+                // place the current number.
                 result[i] = result[num + i + 1] = num;
+                // try placing next number.
                 if (canBePlaced(num + 1, end, result)) return true;
+                // reset if we can't place number.
                 result[i] = result[num + i + 1] = 0;
             }
         }

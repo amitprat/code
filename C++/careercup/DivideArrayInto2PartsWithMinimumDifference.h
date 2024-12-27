@@ -4,15 +4,15 @@
 /*
 https://www.careercup.com/question?id=295694
 
-Given an array of integers(both positive and negative) divide the array into two parts(sub-arrays) such that the difference between the sum of elements in each array is minimum????
+Given an array of integers(both positive and negative) divide the array into two parts(sub-arrays) such that the
+difference between the sum of elements in each array is minimum????
 */
-class DivideArrayInto2PartsWithMinimumDifference
-{
-public:
+class DivideArrayInto2PartsWithMinimumDifference {
+   public:
     static void test() {
-        vector<int> arr = { 1, -2, 3, 4,5,6 };
+        vector<int> arr = {1, -2, 3, 4, 5, 6};
         int sum = accumulate(arr.begin(), arr.end(), 0);
-        
+
         vector<int> secondArrIndex;
         int diff = INT_MAX;
         balancedPartitionRecursion(arr, 0, arr.size(), 0, sum, {}, secondArrIndex, diff);
@@ -27,10 +27,9 @@ public:
         cout << "Min diff: " << findMinSumDiffRecursion(arr, 0, arr.size(), 0, sum) << endl;
     }
 
-    static void balancedPartitionRecursion(vector<int>& arr, int index, int n, int curSum, int totalSum, vector<int> curResult, vector<int>& result, int& diff)
-    {
+    static void balancedPartitionRecursion(vector<int>& arr, int index, int n, int curSum, int totalSum, vector<int> curResult, vector<int>& result, int& diff) {
         if (index == n) {
-            int curDiff = totalSum - 2*curSum;
+            int curDiff = totalSum - 2 * curSum;
             if (abs(curDiff) < diff) {
                 diff = abs(curDiff);
                 result = curResult;
@@ -46,28 +45,29 @@ public:
         curResult.pop_back();
     }
 
-    static int findMinSumDiffRecursion(vector<int>& arr, int index, int n, int curSum, int totalSum)
-    {
-        if (index == n) return abs(totalSum - 2*curSum);
+    static int findMinSumDiffRecursion(vector<int>& arr, int index, int n, int curSum, int totalSum) {
+        if (index == n) return abs(totalSum - 2 * curSum);
         if (index >= n) return INT_MAX;
 
         return min(findMinSumDiffRecursion(arr, index + 1, n, curSum, totalSum),
                    findMinSumDiffRecursion(arr, index + 1, n, curSum + arr[index], totalSum));
     }
 
-    static int balancedPartitionDP(vector<int>& arr, int sum)
-    {
+    static int balancedPartitionDP(vector<int>& arr, int sum) {
         int n = arr.size();
         int mxSum = sum;
 
         // calculate mxsum for negative values
-        for (auto u : arr) if (u < 0) mxSum = max(mxSum, sum - u);
+        for (auto u : arr)
+            if (u < 0) mxSum = max(mxSum, sum - u);
         vector<vector<bool>> memo(mxSum + 1, vector<bool>(n + 1, false));
 
         for (int s = 0; s <= sum; s++) {
             for (int i = 0; i <= n; i++) {
-                if (s == 0) memo[s][i] = true;
-                else if (i == 0) memo[s][i] = false;
+                if (s == 0)
+                    memo[s][i] = true;
+                else if (i == 0)
+                    memo[s][i] = false;
                 else {
                     memo[s][i] = memo[s][i - 1];
                     if (arr[i - 1] <= s) memo[s][i] = memo[s][i] || memo[s - arr[i - 1]][i - 1];

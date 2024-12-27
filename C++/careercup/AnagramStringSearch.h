@@ -1,12 +1,12 @@
 #include "../header.h"
 
 /*
-bool anaStrStr (string needle, string haystack)
-{
-}
-Write a function that takes 2 strings , search returns true if any anagram of string1(needle) is present in string2(haystack)
+Write a function that takes 2 strings , search returns true if any anagram of string1(needle) is present in
+string2(haystack)
 
-Use the first 26 prime numbers to calculate a hash value for each string window, anagrams of the needle will have the same hash value. E.g., a - 3, b - 5, c - 7, abc has hash value 3*5*7. because the products of prime numbers equal only when have the same prime numbers.
+Use the first 26 prime numbers to calculate a hash value for each string window, anagrams of the needle will have
+the same hash value. E.g., a - 3, b - 5, c - 7, abc has hash value 3*5*7. because the products of prime numbers
+equal only when have the same prime numbers.
 */
 
 class AnagramStringSearch {
@@ -31,13 +31,11 @@ class AnagramStringSearch {
         unsigned long long needleHash = primeProduct(needle, primes);
         unsigned long long hasystackHash = primeProduct(haystack.substr(0, m), primes);
 
-        if (needleHash == hasystackHash)
-            result.insert(haystack.substr(0, m));
+        if (needleHash == hasystackHash) result.insert(haystack.substr(0, m));
 
         for (int i = m; i <= n - m + 1; i++) {
             hasystackHash = updatePrimeProduct(hasystackHash, haystack[i], haystack[i - m], primes);
-            if (needleHash == hasystackHash)
-                result.insert(haystack.substr(i - m + 1, m));
+            if (needleHash == hasystackHash) result.insert(haystack.substr(i - m + 1, m));
         }
     }
 

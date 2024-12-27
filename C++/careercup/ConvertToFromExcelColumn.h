@@ -23,6 +23,7 @@ def toNum(v):
 >>> toStr(toNum('AZCZS'));
 AZCZS
 */
+
 class ConvertToFromExcelColumn {
     int toNum(string str) {
         int num = 0;

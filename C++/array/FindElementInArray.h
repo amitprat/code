@@ -18,15 +18,20 @@ The key is to figure out at each position how far the goal value is from that po
 class FindElementInArray {
    public:
     static void test() {
-        vector<int> arr = {1, 2, 3, 4, 3, 4, 5, 6, 7};
+        vector<vector<int>> arrs = {
+            {1, 2, 3, 4, 3, 4, 5, 6, 7},
+            {1, 2, 3, 4, 3, 4, 3, 2, 1, 0, 1, 2}};
 
-        searchElement(arr, 4);
-        searchElement(arr, 5);
-        searchElement(arr, 6);
-        searchElement(arr, 7);
+        for (auto& arr : arrs) {
+            cout << std::format("Search in array: {}", to_string(arr)) << endl;
+            searchElement(arr, 4);
+            searchElement(arr, 5);
+            searchElement(arr, 6);
+            searchElement(arr, 7);
 
-        for (int i = 0; i < 10; i++) {
-            cout << format("Element={} found at index={}", i, searchElement2(arr, i)) << endl;
+            for (int i = 0; i < 10; i++) {
+                cout << format("Element={} found at index={}", i, searchElement3(arr, i)) << endl;
+            }
         }
     }
 
@@ -56,5 +61,13 @@ class FindElementInArray {
         }
 
         return -1;
+    }
+
+   private:
+    static int searchElement3(vector<int>& arr, int x) {
+        int i = 0;
+        for (; i < arr.size() && arr[i] != x; i += abs(x - arr[i]));
+
+        return arr[i] == x ? i : -1;
     }
 };

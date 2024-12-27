@@ -69,6 +69,7 @@ class BinarySearchTree {
                 auto *cur = q.front();
                 q.pop();
                 cout << cur->to_string() << " ";
+
                 if (cur->left) q.push(cur->left);
                 if (cur->right) q.push(cur->right);
             }

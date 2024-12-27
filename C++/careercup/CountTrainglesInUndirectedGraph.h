@@ -44,6 +44,7 @@ class CountTrainglesInUndirectedGraph {
    private:
     int countTraingles(Graph g) {
         unordered_set<string> traingles;
+
         int count = 0;
         for (auto &u : g.getVertices()) {                                                // go over all the vertices of graph
             for (auto &v : g.adjVertices(u)) {                                           // go over all the adjacent vertices to u (i.e. there is an edge u -> v)

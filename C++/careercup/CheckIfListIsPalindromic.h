@@ -179,8 +179,7 @@ class CheckIfListIsPalindromic {
     }
 
     bool IsPalindromicUsingRecursion(Node *&root1, Node *root2) {
-        if (!root2)
-            return true;
+        if (!root2) return true;
 
         bool res = IsPalindromicUsingRecursion(root1, root2->next);
         if (!res || root1->val != root2->val)

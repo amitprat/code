@@ -26,8 +26,7 @@ class FindConsecutiveSegments {
 
         for (auto& input : inputs) {
             auto res = obj.findConsecutiveSequence(input);
-
-            cout << format("Consecutive sequence={}", to_string(res)) << endl;
+            println("Consecutive sequence={0}", res);
         }
     }
 

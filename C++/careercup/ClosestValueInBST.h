@@ -1,15 +1,16 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
+#include "../tree/BinaryTree.h"
 
 /*
 https://www.careercup.com/question?id=12697664
-
 Given (i) a non-empty binary search tree with double values (e.g. 3.5) in each node and (ii) a key value K
-
 Write a method to find the closest value to K.
 */
 class ClosestValueInBST {
-public:
+    using ITNode = BinaryTree<int>::Node;
+
+   public:
     static void test() {
         ITNode* root = new ITNode(5);
         root->left = new ITNode(3);
@@ -23,26 +24,11 @@ public:
         inorder(root, res);
         cout << to_string(res) << endl;
 
-        double val = kClosest(root, 3.5);
-        cout << val << endl;
-
-        val = kClosest(root, 4.5);
-        cout << val << endl;
-
-        val = kClosest(root, 5.5);
-        cout << val << endl;
-
-        val = kClosest(root, 2.5);
-        cout << val << endl;
-
-        val = kClosest(root, 8);
-        cout << val << endl;
-
-        val = kClosest(root, 0.5);
-        cout << val << endl;
-
-        val = kClosest(root, 10.5);
-        cout << val << endl;
+        vector<double> values = {3, 5, 4, 5, 5.5, 2.5, 8, 0.5, 10.5};
+        for (auto& val : values) {
+            double res = kClosest(root, 3.5);
+            println("Closest value to val={0} is res={1}.", val, res);
+        }
     }
 
     static void inorder(ITNode* node, vector<int>& result) {
@@ -63,8 +49,11 @@ public:
         auto rightDiff = abs(val - right);
         auto curDiff = abs(val - node->val);
 
-        if (curDiff <= leftDiff && curDiff <= rightDiff) return node->val;
-        else if (leftDiff <= curDiff && leftDiff <= rightDiff) return left;
-        else return right;
+        if (curDiff <= leftDiff && curDiff <= rightDiff)
+            return node->val;
+        else if (leftDiff <= curDiff && leftDiff <= rightDiff)
+            return left;
+        else
+            return right;
     }
 };

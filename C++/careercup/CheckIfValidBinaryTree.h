@@ -74,8 +74,9 @@ class CheckifValidBinaryTree {
                 if (hasCycle(g, v, u, visited)) return true;
 
                 return false;
-            } else if (v != p)
+            } else if (v != p) {
                 return true;
+            }
         }
 
         return false;

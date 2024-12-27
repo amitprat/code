@@ -1,8 +1,11 @@
 #pragma once
 #include "../header.h"
+#include "BinarySearchTree.h"
 
 template <class T>
 class BinarySearchTreeIterator {
+    using TreeNode = BinarySearchTree<T>::Node;
+
    private:
     TreeNode *root = nullptr;
 

@@ -1,23 +1,19 @@
-#include "../Header.h"
+#include "../header.h"
 
-int divide(int p, int q)
-{
+int divide(int p, int q) {
     int tmp = 1;
-    while (q <= p)
-    {
+    while (q <= p) {
         tmp <<= 1;
         q <<= 1;
     }
 
     int result = 0;
 
-    while (tmp > 1)
-    {
+    while (tmp > 1) {
         tmp >>= 1;
         q >>= 1;
 
-        if (p >= q)
-        {
+        if (p >= q) {
             p -= q;
             result += tmp;
         }

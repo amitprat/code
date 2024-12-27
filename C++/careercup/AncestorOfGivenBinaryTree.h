@@ -1,6 +1,19 @@
 #pragma once
 #include "../header.h"
 
+/*
+Given a Binary Tree and a key, write a function that prints all the ancestors of the key in the given binary tree.
+
+For example, if the given tree is following Binary Tree and the key is 7, then your function should print 4, 2, and 1.
+              1
+            /   \
+          2      3
+        /  \
+      4     5
+     /
+    7
+*/
+
 class AncestorOfGivenBinaryTree {
     using Node = BinaryTree<int>::Node;
 
@@ -24,17 +37,11 @@ class AncestorOfGivenBinaryTree {
    public:
     bool printAncestors(Node *root, int key) {
         if (!root) return false;
-
         if (root->val == key) return true;
 
-        auto left = printAncestors(root->left, key);
-        if (left) {
+        if (printAncestors(root->left, key) || printAncestors(root->right, key)) {
             cout << root->val << " ";
-        }
-
-        auto right = printAncestors(root->right, key);
-        if (right) {
-            cout << root->val << " ";
+            return true;
         }
 
         return left || right;

@@ -106,7 +106,7 @@ class AnimalShelter {
 
     AnimalInfo top() {
         if (isEmpty())
-            throw exception("No animals are available.");
+            throw runtime_error("No animals are available.");
 
         auto dog = dogsInfo.top();
         auto cat = catsInfo.top();
@@ -119,7 +119,7 @@ class AnimalShelter {
 
     AnimalInfo pop(AnimalType type) {
         if (isEmpty())
-            throw exception("No animals are available.");
+            throw runtime_error("No animals are available.");
 
         if (type == AnimalType::DOG)
             return popDog();
@@ -147,7 +147,7 @@ class AnimalShelter {
 
     AnimalInfo top(AnimalType type) {
         if (isEmpty())
-            throw exception("No animals are available.");
+            throw runtime_error("No animals are available.");
 
         if (type == AnimalType::DOG)
             return topDog();
@@ -157,14 +157,14 @@ class AnimalShelter {
 
     AnimalInfo topDog() {
         if (dogsInfo.empty())
-            throw exception("No dogs available.");
+            throw runtime_error("No dogs available.");
 
         return dogsInfo.top();
     }
 
     AnimalInfo topCat() {
         if (catsInfo.empty())
-            throw exception("No cats available.");
+            throw runtime_error("No cats available.");
 
         return catsInfo.top();
     }

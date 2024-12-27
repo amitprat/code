@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class CountStringMadeFromABC {
-public:
+   public:
     static void test() {
         int b = 1, c = 2, n = 3;
         int res = count(b, c, n);
@@ -22,8 +22,9 @@ public:
         for (int i = 0; i <= n; i++) {
             for (int j = 0; j <= b; j++) {
                 for (int k = 0; k <= c; k++) {
-                    if (i == 0) dp[i][j][k] = 1;
-                    else {
+                    if (i == 0) {
+                        dp[i][j][k] = 1;
+                    } else {
                         dp[i][j][k] += dp[i - 1][j][k];
                         if (j > 0) dp[i][j][k] += dp[i - 1][j - 1][k];
                         if (k > 0) dp[i][j][k] += dp[i - 1][j][k - 1];

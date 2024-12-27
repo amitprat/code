@@ -11,52 +11,9 @@ using any built-in parsing functions.
 class AToF {
    public:
     static void test() {
-        {
-            string str = "342.18E-4";
-
-            double res = local_atof(str);
-            cout << res << endl;
-        }
-
-        {
-            string str = "10";
-
-            double res = local_atof(str);
-            cout << res << endl;
-        }
-
-        {
-            string str = "-10.0";
-
-            double res = local_atof(str);
-            cout << res << endl;
-        }
-
-        {
-            string str = "10.124";
-
-            double res = local_atof(str);
-            cout << res << endl;
-        }
-
-        {
-            string str = "-10.10E-4";
-
-            double res = local_atof(str);
-            cout << res << endl;
-        }
-
-        {
-            string str = "+10.10E+4";
-
-            double res = local_atof(str);
-            cout << res << endl;
-        }
-
-        {
-            string str = "+10.10E+4.0";
-
-            double res = local_atof(str);
+        vector<string> inputs = {"342.18E-4", "10", "-10.0", "10.124", "-10.10E-4", "+10.10E+4", "+10.10E+4.0"};
+        for (auto& input : inputs) {
+            double res = local_atof(input);
             cout << res << endl;
         }
     }
@@ -67,14 +24,13 @@ class AToF {
         if (exp == string::npos) exp = str.find("e");
 
         string first = str.substr(0, exp);
-
         double result = convertToFloat(first);
+
         if (exp != string::npos) {
             string second = str.substr(exp + 1);
             double part = convertToFloat(second);
-            part = pow(10, part);
 
-            result += part;
+            result *= pow(10, part);
         }
 
         return result;

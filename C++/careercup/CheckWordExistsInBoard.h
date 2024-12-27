@@ -11,9 +11,8 @@ class CheckWordExistsInBoard {
                 {'A', 'D', 'E', 'E'}};
 
             string word = "ABCCED";
-
-            auto res = obj.isExists(board, word);
-            cout << "word exists: " << res << endl;
+            auto exists = obj.isExistsOptimized(board, word);
+            println("Is word={0} exists in board={1}.", word, exists);
         }
         {
             vector<vector<char>> board = {
@@ -24,8 +23,8 @@ class CheckWordExistsInBoard {
 
             vector<string> words = {"STAR", "TONE", "NOTE", "SAND"};
             for (auto& word : words) {
-                auto res = obj.isExists(board, word);
-                cout << "word exists: " << res << endl;
+                auto exists = obj.isExistsOptimized(board, word);
+                println("Is word={0} exists in board={1}.", word, exists);
             }
         }
     }
@@ -83,13 +82,27 @@ class CheckWordExistsInBoard {
         if (word.empty()) return true;
         if (board.empty()) return false;
 
-        unordered_map<char, vector<Point>> map = preprocess(board, word);
+        unordered_map<char, vector<Point>> map = preprocess(board);
         auto startPositions = map[word[0]];
         for (auto startPos : startPositions) {
             if (searchWord(board, startPos, map, word, 0)) return true;
         }
 
         return false;
+    }
+
+    unordered_map<char, vector<Point>> preprocess(vector<vector<char>>& board) {
+        unordered_map<char, vector<Point>> map;
+
+        int n = board.size();
+        int m = board[0].size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                map[board[i][j]].push_back({i, j});
+            }
+        }
+
+        return map;
     }
 
     bool searchWord(vector<vector<char>>& board, Point startPos, unordered_map<char, vector<Point>>& map, string& word, int pos) {
@@ -100,9 +113,9 @@ class CheckWordExistsInBoard {
         board[startPos.x][startPos.y] = '#';
 
         bool found = false;
-        auto neighbours = getNeighbours(board, startPos, map[word[pos + 1]]);
-        for (auto& n : neighbours) {
-            found = searchWord(baord, n, map, word, pos + 1);
+        auto neighbours = getNeighbours(board, startPos, word[pos + 1], map);
+        for (auto& target : neighbours) {
+            found = searchWord(board, target, map, word, pos + 1);
             if (found) break;
         }
 
@@ -111,14 +124,17 @@ class CheckWordExistsInBoard {
         return found;
     }
 
-    unordered_map<char, vector<Point>> preprocess(vector<vector<char>>& board) {
-        unordered_map<char, vector<Point>> map;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                map[board[i][j]].push_back({i, j});
-            }
+    vector<Point> getNeighbours(vector<vector<char>>& board, Point startPos, char ch, unordered_map<char, vector<Point>>& map) {
+        if (map.find(ch) == map.end()) return {};
+
+        vector<Point> neighbours;
+        auto positions = map[ch];
+        for (auto& targetPos : positions) {
+            if (targetPos.x > startPos.x + 1 || targetPos.x < startPos.x - 1 || targetPos.y > startPos.y + 1 || targetPos.y < startPos.y - 1) continue;
+
+            neighbours.push_back(targetPos);
         }
 
-        return map;
+        return neighbours;
     }
 };

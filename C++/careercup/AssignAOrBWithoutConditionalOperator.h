@@ -10,6 +10,7 @@ If 'x' is zero assign value 'a' to the variable 'y', if 'x' is one assign value 
 You are not allowed to use any conditional operator (including ternary operator).
 Follow up: Solve the problem without utilizing arithmetic operators '+ - * /'.
 */
+
 class AssignAOrBWithoutConditionalOperator {
    public:
     static void test() {

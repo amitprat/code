@@ -21,4 +21,19 @@ Now by looking in the SumArray we can see that:
 2) if there is a matching (two the same elements, like 6, 6 in our case) then we know that from [i+1,j], where i is the first and j is the second matching, the overall change was equall to zero, so we have a "zero sequence" again.
 */
 class FindContinuousSubsequncesWithSumToZero {
+    public:
+    vector<vector<int>> getConsecutiveSequences(vector<int>& arr) {
+        vector<vector<int>> result;
+
+        int i=0, j=0, sum = 0;
+        while(j <= arr.size()) {
+            if(j < arr.size()) sum+= arr[j];
+            if(sum == 0) {
+                vector<int> cur;
+                for(int k=i;k<=j;k++) cur.push_back(arr[k]);
+                result.push_back(cur);
+            }
+            if(sum < 0)
+        }
+    }
 };

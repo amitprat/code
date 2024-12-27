@@ -1,11 +1,12 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
+#include "../tree/BinaryTree.h"
 
 /*
 https://www.careercup.com/question?id=4863668900593664
-
-Given a binary search tree (BST), write a mehtod that will convert this BST into a doubly linked list that is sorted (ascending or descending order) and returns the first element in this list. You may assume you are given following Node class:
-
+Given a binary search tree (BST), write a mehtod that will convert this BST into a doubly linked list that is
+sorted (ascending or descending order) and returns the first element in this list. You may assume you are given
+following Node class:
 
 public class Node {
     public Node left, right;
@@ -20,9 +21,11 @@ A = G = T
 
 Do it in place! Hnce the memory complexity of your algorithm shoul be O(1).
 */
-class ConvertBSTToSortedList
-{
-public:
+
+class ConvertBSTToSortedList {
+    using ITNode = BinaryTree<int>::Node;
+
+   public:
     static void test() {
         ITNode* root = new ITNode(5);
         root->left = new ITNode(3);
@@ -36,7 +39,8 @@ public:
 
         ITNode* l = convertToSortedList(root);
         while (l) {
-            cout << l->val << ", "; l = l->right;
+            cout << l->val << ", ";
+            l = l->right;
         }
         cout << endl;
     }

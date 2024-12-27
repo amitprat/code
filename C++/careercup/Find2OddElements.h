@@ -1,9 +1,11 @@
+#pragma once
 #include "../header.h"
 
 class Find2OddElements {
    public:
     static void test() {
         vector<int> arr = {4, 2, 4, 5, 2, 3, 3, 1};
+
         Find2OddElements obj;
         auto res = obj.find2OffElements(arr);
         cout << "Two odd elements: " << res << endl;

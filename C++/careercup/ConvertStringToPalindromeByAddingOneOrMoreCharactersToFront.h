@@ -13,18 +13,15 @@ The thing is, the time complexity gets reduced by simply finding palindrome that
 
 This is largest palindrome that starts with beginning. So you need to add [original string length] - [found polyndrome] characters in the front
 */
-class ConvertStringToPalindromeByAddingOneOrMoreCharactersToFront
-{
-public:
-    static void test()
-    {
+class ConvertStringToPalindromeByAddingOneOrMoreCharactersToFront {
+   public:
+    static void test() {
         string s = "BABABAA";
 
         int res = calculate(s);
     }
 
-    static int calculate(string s)
-    {
+    static int calculate(string s) {
         int cnt = 0;
         for (int j = s.length() - 1; j >= 1; j--) {
             if (isPalin(s, 0, j)) return cnt;
@@ -43,10 +40,9 @@ public:
         return true;
     }
 
-    int getMinCharToAddedToMakeStringPalin(string str)
-    {
+    int getMinCharToAddedToMakeStringPalin(string str) {
         string rev = str;
-        reverse(rev.begin(), rev.end());
+        std::reverse(rev.begin(), rev.end());
 
         string concat = str + "$" + rev;
         vector<int> lps = getLps(concat);
@@ -54,8 +50,7 @@ public:
         return str.length() - lps.back();
     }
 
-    vector<int> getLps(string str)
-    {
+    vector<int> getLps(string str) {
         vector<int> lps(str.length(), 0);
         int len = 0;
         lps[0] = len;
@@ -65,12 +60,10 @@ public:
             if (str[i] == str[len]) {
                 len++;
                 lps[i++] = len;
-            }
-            else {
+            } else {
                 if (len != 0) {
                     len = lps[len - 1];
-                }
-                else {
+                } else {
                     lps[i++] = 0;
                 }
             }

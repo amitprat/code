@@ -1,5 +1,8 @@
 #include "../header.h"
 
+/*
+Check if graph is bipartite, i.e. the graph can be colored using 2 colors so that no 2 colorss
+*/
 class CheckBiPartitite {
     class Graph {
        public:
@@ -30,12 +33,7 @@ class CheckBiPartitite {
 
         CheckBiPartitite obj;
         bool result = obj.isBipartite(g);
-
-        if (result) {
-            cout << "Grpah is bipartite." << endl;
-        } else {
-            cout << "Graph isn't bipartite." << endl;
-        }
+        println("Is graph bipartite?: {0}", result);
     }
 
    private:
@@ -46,8 +44,7 @@ class CheckBiPartitite {
         for (auto &u : g.vertices) {
             if (!visited[u]) {
                 bool result = this->dfs(g, u, visited, colors, 0);
-                if (!result)
-                    return false;
+                if (!result) return false;
             }
         }
 
@@ -60,8 +57,7 @@ class CheckBiPartitite {
 
         for (auto &v : g.adjMap[u]) {
             if (!visited[v]) {
-                if (!dfs(g, v, visited, colors, !curColor))
-                    return false;
+                if (!dfs(g, v, visited, colors, !curColor)) return false;
             } else if (colors[v] == colors[u]) {
                 return false;
             }

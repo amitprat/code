@@ -1,5 +1,6 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
+#include "../linkedlist/LinkedList.h"
 
 /*
 https://www.careercup.com/question?id=14467673
@@ -20,15 +21,16 @@ Return 4.
 
 How efficient you can do it?
 */
-class DeleteEveryKthNode
-{
-public:
+class DeleteEveryKthNode {
+    using Node = LinkedList<int>::Node;
+
+   public:
     static void test() {
-        LinkedListNode<int>* root = new LinkedListNode<int>(1);
-        root->next = new LinkedListNode<int>(2);
-        root->next->next = new LinkedListNode<int>(3);
-        root->next->next->next = new LinkedListNode<int>(4);
-        root->next->next->next->next = new LinkedListNode<int>(5);
+        Node* root = new Node(1);
+        root->next = new Node(2);
+        root->next->next = new Node(3);
+        root->next->next->next = new Node(4);
+        root->next->next->next->next = new Node(5);
         root->next->next->next->next->next = root;
 
         root = deleteEveryKthNode(root, 3);
@@ -36,15 +38,15 @@ public:
         cout << root->val << endl;
     }
 
-    static LinkedListNode<int>* deleteEveryKthNode(LinkedListNode<int>* root, int k) {
-        LinkedListNode<int>* prev = root;
+    static Node* deleteEveryKthNode(Node* root, int k) {
+        Node* prev = root;
 
         while (true) {
             int curSz = 0;
             for (int i = 1; i < k - 1; i++) {
                 root = root->next;
                 curSz++;
-                if (root == prev && curSz == 1) return root;;
+                if (root == prev && curSz == 1) return root;
             }
             auto next = root->next->next;
             delete root->next;

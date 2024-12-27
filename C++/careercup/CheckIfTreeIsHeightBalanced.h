@@ -24,7 +24,7 @@ class CheckIfTreeIsHeightBalanced {
     }
 
    public:
-    bool isHeightBalanced(Node *root) {
+    bool isHeightBalancedBruteForce(Node *root) {
         if (!root) return true;
 
         int lh = this->height(root->left);

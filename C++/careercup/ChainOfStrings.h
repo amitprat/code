@@ -18,20 +18,12 @@ class ChainOfStrings {
 
    public:
     static void test() {
-        {
-            vector<string> strs = {"for", "geek", "rig", "kaf"};
-
-            bool res = canBeChained(strs);
-
-            cout << "Can be chained? " << res << endl;
-        }
-
-        {
-            vector<string> strs = {"abc", "bcd", "cdf"};
-
-            bool res = canBeChained(strs);
-
-            cout << "Can be chained? " << res << endl;
+        vector<vector<string>> inputs = {
+            {"for", "geek", "rig", "kaf"},
+            {"abc", "bcd", "cdf"}};
+        for (auto& input : inputs) {
+            bool res = canBeChained(input);
+            println("Can strings {0} be joined together to form circle? {1}", input, res);
         }
     }
 

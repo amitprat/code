@@ -1,9 +1,11 @@
 #pragma once
 #include "../header.h"
+
 /*
 https://careercup.com/question?id=19638671
 
-Write a program to find whether a given number is a perfect square or not. You can only use addition and subtraction operation to find a solution with min. complexity.
+Write a program to find whether a given number is a perfect square or not.
+You can only use addition and subtraction operation to find a solution with min. complexity.
 
 i/p : 25
 o/p : True
@@ -11,6 +13,7 @@ o/p : True
 i/p : 44
 o/p: False
 */
+
 class CheckIfNumberIsPerfectSquare {
    public:
     static void test() {
@@ -30,6 +33,22 @@ class CheckIfNumberIsPerfectSquare {
         }
 
         if (num == 0) return true;
+
+        return false;
+    }
+
+    bool IsPerfectSquareUsingBinarySearch(int num) {
+        int l = 1, r = num;
+        while (l <= r) {
+            int m = (l + r) / 2;
+
+            if (m * m == num)
+                return true;
+            else if (m * m < num)
+                l = m + 1;
+            else
+                r = m - 1;
+        }
 
         return false;
     }

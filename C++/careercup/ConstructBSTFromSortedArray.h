@@ -4,6 +4,7 @@ class ConstructBSTFromSortedArray {
     struct Node {
         int val;
         Node *left, *right;
+
         Node(int val) : val(val), left(nullptr), right(nullptr) {}
     };
 
@@ -23,10 +24,11 @@ class ConstructBSTFromSortedArray {
     }
 
     Node *constructBST(vector<int> &arr, int l, int r) {
-        if (l > r)
-            return nullptr;
+        if (l > r) return nullptr;
+
         int m = (l + r) / 2;
         Node *root = new Node(arr[m]);
+
         root->left = constructBST(arr, l, m - 1);
         root->right = constructBST(arr, m + 1, r);
 
@@ -34,8 +36,7 @@ class ConstructBSTFromSortedArray {
     }
 
     void inorder(Node *root, vector<int> &result) {
-        if (!root)
-            return;
+        if (!root) return;
 
         inorder(root->left, result);
         result.push_back(root->val);
@@ -50,8 +51,7 @@ class ConstructBSTFromSortedArray {
     4 2 1 3 6 5 7
     */
     void preorder(Node *root, vector<int> &result) {
-        if (!root)
-            return;
+        if (!root) return;
 
         result.push_back(root->val);
         preorder(root->left, result);

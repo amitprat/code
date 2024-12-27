@@ -8,7 +8,7 @@ class CheckIfTreeIsRedBlackHeightBalanced {
     bool isRedBlackHeightBalanced(Node *root) {
         if (!root) return true;
 
-        int mnHeight = 0, mnHeight = 0;
+        int mnHeight = 0, mxHeight = 0;
         return this->isRedBlackHeightBalanced(root, mnHeight, mxHeight);
     }
 

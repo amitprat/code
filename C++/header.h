@@ -17,6 +17,7 @@
 #include <future>
 #include <iomanip>
 #include <iostream>
+#include <list>
 #include <map>
 #include <mutex>
 #include <numeric>
@@ -30,7 +31,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <list>
 
 #include "ds/Graph.h"
 #include "linkedlist/LinkedList.h"

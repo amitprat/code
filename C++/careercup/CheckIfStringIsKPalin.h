@@ -18,13 +18,17 @@ Input - abdxa 1
 Output - No
 
 The question asks if we can transform the given string S into its reverse deleting at most K letters.
-We could modify the traditional Edit-Distance algorithm, considering only deletions, and check if this edit distance is <= K. There is a problem though. S can have length = 20,000 and the Edit-Distance algorithm takes O(N^2). Which is too slow.
+We could modify the traditional Edit-Distance algorithm, considering only deletions, and check if this edit distance is <= K.
+There is a problem though. S can have length = 20,000 and the Edit-Distance algorithm takes O(N^2). Which is too slow.
 
 (From here on, I'll assume you're familiar with the Edit-Distance algorithm and its DP matrix)
 
-However, we can take advantage of K. We are only interested *if* manage to delete K letters. This means that any position more than K positions away from the main diagonal is useless because its edit distance must exceed those K deletions.
+However, we can take advantage of K. We are only interested *if* manage to delete K letters.
+This means that any position more than K positions away from the main diagonal is useless because its edit distance
+must exceed those K deletions.
 
-Since we are comparing the string with its reverse, we will do at most K deletions and K insertions (to make them equal). Thus, we need to check if the ModifiedEditDistance is <= 2*K
+Since we are comparing the string with its reverse, we will do at most K deletions and K insertions (to make them equal).
+Thus, we need to check if the ModifiedEditDistance is <= 2*K
 Here's the code:
 
 int ModifiedEditDistance(const string &a, const string &b, int k)
@@ -56,6 +60,7 @@ cout << ModifiedEditDistance("abxa", "axba", 1) << endl;           // 2 <= 2*1 -
 cout << ModifiedEditDistance("abdxa", "axdba", 1) << endl;         // 4 > 2*1 - NO
 cout << ModifiedEditDistance("abaxbabax", "xababxaba", 2) << endl; // 4 <= 2*2 - YES
 */
+
 class CheckIfStringIsKPalin {
    public:
     static void test() {
@@ -124,11 +129,12 @@ class CheckIfStringIsKPalin {
         int n = str.length();
         vector<vector<int>> table(n + 1, vector<int>(n + 1, INT_MAX));
         string revstr = str;
-        reverse(revstr.begin(), revstr.end());
+        std::reverse(revstr.begin(), revstr.end());
 
         for (int i = 0; i <= n; i++) {
             int from = max(0, i - k);
             int to = min(n, i + k);
+
             for (int j = from; j <= to; j++) {
                 if (i == 0 && j == 0)
                     table[i][j] = 0;

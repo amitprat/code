@@ -3,11 +3,11 @@
 class CountPalindromicSubstrings {
     static void test() {
         CountPalindromicSubstrings obj;
+
         std::string inputString = "ababa";
         int result = obj.countSubstringPalindromes(inputString);
-        std::cout << "Total number of substring palindromes: " << result << std::endl;
 
-        return 0;
+        std::cout << "Total number of substring palindromes: " << result << std::endl;
     }
 
    private:

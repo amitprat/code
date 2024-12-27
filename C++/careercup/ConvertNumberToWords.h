@@ -12,16 +12,9 @@ write a function that has an int as input and return the equivalent String as an
 
 class ConvertNumberToWords {
     map<unsigned long long, string> numMap = {
-        {1, "one" },{2, "two" },{3, "three" },{4, "four" },{5, "five" },{6, "six" },{7, "seven" },{8, "eight" },{9, "nine" },
-        {10, "ten" },{11, "eleven" },{12, "twelve" },{13, "thirteen" },{14, "fourteen" },{15, "fifteen" },{16, "sixteen" },{17, "seventeen" },{18, "eighteen" },{19, "ninteen" },
-        {20, "twenty" },{30, "thirty" },{40, "forty" },{50, "fifty" },{60, "sixty" },{70, "seventy" },{80, "eighty" },{90, "ninty" },
-        {100, "hundrend" },
-        {1000, "thousand" },
-        {1000000, "million" },
-        {1000000000, "billion" }
-    };
+        {1, "one"}, {2, "two"}, {3, "three"}, {4, "four"}, {5, "five"}, {6, "six"}, {7, "seven"}, {8, "eight"}, {9, "nine"}, {10, "ten"}, {11, "eleven"}, {12, "twelve"}, {13, "thirteen"}, {14, "fourteen"}, {15, "fifteen"}, {16, "sixteen"}, {17, "seventeen"}, {18, "eighteen"}, {19, "ninteen"}, {20, "twenty"}, {30, "thirty"}, {40, "forty"}, {50, "fifty"}, {60, "sixty"}, {70, "seventy"}, {80, "eighty"}, {90, "ninty"}, {100, "hundrend"}, {1000, "thousand"}, {1000000, "million"}, {1000000000, "billion"}};
 
-public:
+   public:
     static void test() {
         unsigned long long num = 7654567643;
 
@@ -54,8 +47,7 @@ public:
                 if (num < 100) {
                     result += it->second + " ";
                     num -= it->first;
-                }
-                else {
+                } else {
                     unsigned long long div = num / it->first;
                     num = num - (div * it->first);
                     result += convertToWords(div) + " " + it->second + " ";
