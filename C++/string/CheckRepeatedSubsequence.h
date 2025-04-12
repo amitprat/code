@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class CheckRepeatedSubsequence {
-public:
+   public:
     static void test() {
         string str = "abba";
         auto res = isRepeatedSubsequence(str);
@@ -21,8 +21,10 @@ public:
             for (int j = 0; j <= n; j++) {
                 table[i][j] = 0;
                 if (i != 0 && j != 0) {
-                    if (i != j && str[i - 1] == str[j - 1]) table[i][j] = 1 + table[i - 1][j - 1];
-                    else table[i][j] = max(table[i - 1][j], table[i][j - 1]);
+                    if (i != j && str[i - 1] == str[j - 1])
+                        table[i][j] = 1 + table[i - 1][j - 1];
+                    else
+                        table[i][j] = max(table[i - 1][j], table[i][j - 1]);
                 }
             }
         }

@@ -2,7 +2,7 @@
 #include "../Header.h"
 
 class PrintExtremeNodes {
-public:
+   public:
     static void test() {
         PrintExtremeNodes obj;
         ITNode* root = new ITNode(10);
@@ -29,8 +29,7 @@ public:
             cout << "printLeft" << endl;
             printExtremeNodes(root->right, level + 1, map, !printLeft);
             printExtremeNodes(root->left, level + 1, map, !printLeft);
-        }
-        else {
+        } else {
             cout << "printRight" << endl;
             printExtremeNodes(root->left, level + 1, map, !printLeft);
             printExtremeNodes(root->right, level + 1, map, !printLeft);

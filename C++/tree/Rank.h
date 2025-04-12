@@ -2,18 +2,19 @@
 #include "../header.h"
 
 class BstNode {
-public:
+   public:
     int val;
     int size;
-    BstNode* left, * right;
+    BstNode *left, *right;
 
     BstNode(int val) : val(val), size(1), left(nullptr), right(nullptr) {}
 };
 
 class Bst {
-private:
+   private:
     BstNode* root = nullptr;
-public:
+
+   public:
     void insert(int val) {
         root = insertInternal(root, val);
     }
@@ -32,13 +33,15 @@ public:
         return res;
     }
 
-private:
+   private:
     BstNode* insertInternal(BstNode* cur, int val) {
         if (cur == nullptr) return new BstNode(val);
 
         cur->size++;
-        if (val <= cur->val) cur->left = insertInternal(cur->left, val);
-        else cur->right = insertInternal(cur->right, val);
+        if (val <= cur->val)
+            cur->left = insertInternal(cur->left, val);
+        else
+            cur->right = insertInternal(cur->right, val);
 
         return cur;
     }
@@ -46,7 +49,8 @@ private:
     int rank(BstNode* cur, int elem) {
         if (cur == nullptr) return -1;
         if (cur->val == elem) return size(cur->left);
-        if (elem < cur->val) return rank(cur->left, elem);
+        if (elem < cur->val)
+            return rank(cur->left, elem);
         else {
             int right = rank(cur->right, elem);
             if (right == -1) return right;
@@ -57,8 +61,10 @@ private:
     int rank_missingelement(BstNode* cur, int elem) {
         if (cur == nullptr) return 0;
         if (cur->val == elem) return size(cur->left);
-        if (elem < cur->val) return rank_missingelement(cur->left, elem);
-        else return 1 + size(cur->left) + rank_missingelement(cur->right, elem);
+        if (elem < cur->val)
+            return rank_missingelement(cur->left, elem);
+        else
+            return 1 + size(cur->left) + rank_missingelement(cur->right, elem);
     }
 
     int size(BstNode* cur) {
@@ -76,7 +82,7 @@ private:
 };
 
 class Rank {
-public:
+   public:
     static void test() {
         Bst tree;
         tree.insert(9);

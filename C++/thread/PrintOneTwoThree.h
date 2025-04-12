@@ -6,7 +6,8 @@ class PrintOneTwoThree {
     mutex m;
     condition_variable cv1, cv2, cv3;
     int count = 1;
-public:
+
+   public:
     PrintOneTwoThree(int limit) : limit(limit) {}
     static void test() {
         PrintOneTwoThree obj(100);
@@ -14,9 +15,9 @@ public:
     }
 
     void print() {
-        thread t1([this]() {this->printOne(); });
-        thread t2([this]() {this->printTwo(); });
-        thread t3([this]() {this->printThree(); });
+        thread t1([this]() { this->printOne(); });
+        thread t2([this]() { this->printTwo(); });
+        thread t3([this]() { this->printThree(); });
 
         t1.join();
         t2.join();

@@ -1,65 +1,77 @@
 #pragma once
 #include "../header.h"
-#include "TreeNode.h"
+#include "BinaryTree.h"
 
 class PrintAllPathsWithGivenSum {
-public:
+    using Node = BinaryTree<int>::Node;
+
+   public:
     static void test() {
         PrintAllPathsWithGivenSum obj;
-        TreeNode<int>* root = new TreeNode<int>(1);
-        root->left = new TreeNode<int>(3);
-        root->right = new TreeNode<int>(-1);
-        root->left->left = new TreeNode<int>(2);
-        root->left->right = new TreeNode<int>(1);
-        root->left->right->left = new TreeNode<int>(1);
-        root->right->left = new TreeNode<int>(4);
-        root->right->left->left = new TreeNode<int>(1);
-        root->right->left->right = new TreeNode<int>(2);
-        root->right->right = new TreeNode<int>(5);
-        root->right->right->right = new TreeNode<int>(6);
+        Node* root = new Node(1);
+        root->left = new Node(3);
+        root->right = new Node(-1);
+        root->left->left = new Node(2);
+        root->left->right = new Node(1);
+        root->left->right->left = new Node(1);
+        root->right->left = new Node(4);
+        root->right->left->left = new Node(1);
+        root->right->left->right = new Node(2);
+        root->right->right = new Node(5);
+        root->right->right->right = new Node(6);
 
         printLevelOrder(root);
 
         int sum = 5;
         cout << "Number of paths with sum = " << sum << ":" << obj.countPathsWithSum(root, sum) << endl;
 
-        vector<vector<TreeNode<int>*>> res = obj.getPathWithGivenSum(root, sum);
+        vector<vector<Node*>> res = obj.getPathWithGivenSum(root, sum);
     }
 
-    int countPathsWithSum(TreeNode<int>* root, int sum) {
+   public:
+    int countPathsWithSum(Node* root, int sum) {
         unordered_map<int, int> map;
-        int result = 0;
-        countPaths(root, sum, 0, map, result);
+
+        map[0] = 1;  // for the 0 sum case
+        return countPaths(root, sum, 0, map);
+    }
+
+    int countPaths(Node* root, int total, int curSum, unordered_map<int, int>& map) {
+        if (!root) return 0;
+
+        curSum += root->val;
+
+        int result = map[total - (curSum + root->val)];  // find existing paths with given sum
+        map[curSum + root->val]++;                       // count this as prefix path with this sum
+
+        result += countPaths(root->left, total, curSum + root->val, map);
+        result += countPaths(root->right, total, curSum + root->val, map);
+
+        // backtrack
+        map[curSum + root->val]--;
+
         return result;
     }
 
-    vector<vector<TreeNode<int>*>> getPathWithGivenSum(TreeNode<int>* root, int sum)
-    {
-        vector<vector<TreeNode<int>*>> res;
-        unordered_map<int, vector<vector<TreeNode<int>*>>> map;
+   public:
+    vector<vector<Node*>> getPathWithGivenSum(Node* root, int sum) {
+        vector<vector<Node*>> res;
+        unordered_map<int, vector<vector<Node*>>> map;
 
-        getPathWithGivenSum(root, sum, map, {}, 0);
+        getPathWithGivenSum(root, sum, 0, map, {});
 
         return map[sum];
     }
-private:
-    void countPaths(TreeNode<int>* root, int sum, int cur, unordered_map<int, int>& map, int& result) {
-        if (!root) return;
-        if (cur + root->val == sum) result++;
-        result += map[sum - (cur + root->val)];
-        map[cur + root->val]++;
-        countPaths(root->left, sum, cur + root->val, map, result);
-        countPaths(root->right, sum, cur + root->val, map, result);
-        map[cur + root->val]--;
-    }
 
-    void getPathWithGivenSum(TreeNode<int>* root, int sum, unordered_map<int, vector<vector<TreeNode<int>*>>> map, vector<TreeNode<int>*> cur, int curSum) {
+    // TODO
+    void getPathWithGivenSum(
+        Node* root, int total, int curSum,
+        unordered_map<int, vector<vector<Node*>>> map,
+        vector<Node*> prefixPath) {
         if (!root) return;
-        if (curSum + root->val == sum) {
-            map[sum].push_back(cur);
-        }
-        if (map.find(sum - (curSum + root->val)) != map.end()) {
-            map[sum]
+
+        if (map.find(total - (curSum + root->val)) != map.end()) {
+            // map[total - (curSum + root->val)]
         }
     }
 };

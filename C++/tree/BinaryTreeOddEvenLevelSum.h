@@ -11,17 +11,20 @@ Call the function with the root of the tree
 The root is at height 0.
 
 double sum(Node root){
- if(root == null){
-  return 0;
- }
+    if(root == null){
+        return 0;
+    }
 
- return -(root.value + sum(root.left) + sum(root.right));
+    return -(root.value + sum(root.left) + sum(root.right));
 }
+
       1
     2   3
 4           6
 */
 class BinaryTreeOddEvenLevelSum {
+    using TreeNode = BinaryTree<int>::Node;
+
    public:
     static void test() {
         BinaryTreeOddEvenLevelSum obj;

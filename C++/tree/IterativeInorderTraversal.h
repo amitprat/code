@@ -2,19 +2,11 @@
 #include "../header.h"
 using namespace std;
 
-class Node
-{
-public:
-    int val;
-    Node* left, * right;
-    Node(int val, Node* left = nullptr, Node* right = nullptr) : val(val), left(left), right(right) {}
-};
+class IterativeInorderTraversal {
+    using Node = BinaryTree<int>::Node;
 
-class IterativeInorderTraversal
-{
-public:
-    static void test()
-    {
+   public:
+    static void test() {
         IterativeInorderTraversal obj;
 
         Node* node1 = new Node(10);
@@ -50,39 +42,40 @@ public:
         obj.mergeTrees(node1, node2);
     }
 
-    void recursiveInorder(Node* root)
-    {
-        if (root)
-        {
-            recursiveInorder(root->left);
-            cout << root->val << " ";
-            recursiveInorder(root->right);
-        }
+    void recursiveInorder(Node* root) {
+        if (!root) return;
+
+        recursiveInorder(root->left);
+        cout << root->val << " ";
+        recursiveInorder(root->right);
     }
 
-    void iterativeInorder(Node* root)
-    {
+    void iterativeInorder(Node* root) {
         stack<Node*> st;
-        while (true)
-        {
+        while (true) {
             while (root) {
                 st.push(root);
                 root = root->left;
             }
             if (st.empty()) break;
-            root = st.top(); st.pop();
+
+            root = st.top();
+            st.pop();
+
             cout << root->val << " ";
             root = root->right;
         }
     }
 
-    void mergeTrees(Node* node1, Node* node2)
-    {
-        vector<int> merged;
+    vector<int> mergeTrees(Node* node1, Node* node2) {
         stack<Node*> st1;
         stack<Node*> st2;
-        while (true)
-        {
+
+        vector<int> merged;
+
+        bool moveLeft = true, moveRight = true;
+
+        while (true) {
             while (node1) {
                 st1.push(node1);
                 node1 = node1->left;
@@ -94,10 +87,24 @@ public:
             }
 
             if (st1.empty() && st2.empty()) break;
-            if (st1.empty()) {
-                node2 = st2.top(); st2.pop();
-                merged
+
+            if (moveLeft) {
+                node1 = st1.top();
+                st1.pop();
+            }
+
+            if (moveRight) {
+                node2 = st2.top();
+                st2.pop();
+            }
+
+            if (node1->val <= node2->val) {
+                merged.push_back(node1->val);
+            } else {
+                merged.push_back(node2->val);
             }
         }
+
+        return merged;
     }
 };

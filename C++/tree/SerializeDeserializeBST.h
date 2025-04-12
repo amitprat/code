@@ -1,32 +1,31 @@
 #pragma once
 #include "../header.h"
-#include "Tree.h"
+#include "BinaryTree.h"
 
 class SerializeDeserializeBST {
+    using Node = BinaryTree<int>::Node;
+
    public:
     static void test() {
         SerializeDeserializeBST obj;
 
-        Tree<int>* tree = new Tree<int>();
-        tree->root = new Tree<int>::Node(3);
-        tree->root->left = new Tree<int>::Node(1);
-        tree->root->right = new Tree<int>::Node(5);
-        tree->root->left->right = new Tree<int>::Node(2);
-        tree->root->right->left = new Tree<int>::Node(4);
+        Node* root = new Node(3);
+        root->left = new Node(1);
+        root->right = new Node(5);
+        root->left->right = new Node(2);
+        root->right->left = new Node(4);
 
-        cout << "Original: " << tree->inorder() << endl;
+        cout << "Original: " << (new BinaryTree<int>(root))->inorder() << endl;
 
-        string serialized = obj.serialize(tree->root);
+        string serialized = obj.serialize(root);
         cout << "Serialized :" << serialized << endl;
 
-        Tree<int>::Node* deserialized = obj.deserialize(serialized);
-        Tree<int> deserializeTree;
-        deserializeTree.root = deserialized;
-        cout << "Deserialized:" << deserializeTree.inorder() << endl;
+        Node* deserialized = obj.deserialize(serialized);
+        cout << "Deserialized:" << (new BinaryTree<int>(deserialized))->inorder() << endl;
     }
 
    public:
-    string serialize(Tree<int>::Node* node) {
+    string serialize(Node* node) {
         if (!node) return "";
 
         string result;
@@ -41,18 +40,20 @@ class SerializeDeserializeBST {
         return result;
     }
 
-    Tree<int>::Node* deserialize(string serilized) {
+    Node* deserialize(string serilized) {
         vector<int> items = split(serilized);
-        return deserialize(items, 0, INT_MIN, INT_MAX);
+
+        int index = 0;
+        return deserialize(items, index, INT_MIN, INT_MAX);
     }
 
-    Tree<int>::Node* deserialize(vector<int> items, int index, int mn, int mx) {
+    Node* deserialize(vector<int> items, int& index, int mn, int mx) {
         if (index >= items.size()) return nullptr;
         if (items[index] <= mn || items[index] >= mx) return nullptr;
 
-        Tree<int>::Node* root = new Tree<int>::Node(items[index]);
-        root->left = deserialize(items, index + 1, mn, items[index]);
-        root->right = deserialize(items, index + 1, items[index], mx);
+        Node* root = new Node(items[index++]);
+        root->left = deserialize(items, index, mn, items[index]);
+        root->right = deserialize(items, index, items[index], mx);
 
         return root;
     }

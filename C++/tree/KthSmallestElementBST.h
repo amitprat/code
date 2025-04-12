@@ -11,6 +11,7 @@ class KthSmallestElementBST {
             T val;
             Node *left, *right;
             int sz = 0;
+
             Node(T val) : val(val), left(nullptr), right(nullptr), sz(1) {}
         };
 
@@ -18,27 +19,29 @@ class KthSmallestElementBST {
         Node* root = nullptr;
 
        public:
-        void insert(T item) {
-            if (root == nullptr)
-                root = new Node(item);
-            else
-                root = insert(root, item);
-        }
         Node* getRoot() {
             return root;
+        }
+
+       public:
+        void insert(T item) {
+            root = insert(root, item);
         }
 
        private:
         Node* insert(Node* cur, T item) {
             if (cur == nullptr) return new Node(item);
+
             if (item < cur->val) {
                 cur->sz++;
                 cur->left = insert(cur->left, item);
             } else if (item > cur->val) {
                 cur->sz++;
                 cur->right = insert(cur->right, item);
-            } else
+            } else {
                 cur->val = item;
+            }
+
             return cur;
         }
     };

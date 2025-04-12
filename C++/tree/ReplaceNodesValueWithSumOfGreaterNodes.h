@@ -28,6 +28,8 @@ In a BST, I want to replace all nodes with value which is the sum of all the nod
 */
 
 class ReplaceNodesValueWithSumOfGivenNodes {
+    using TreeNode = BinaryTree<int>::Node;
+
    public:
     void replace_node_values(TreeNode* root) {
         int sum = 0;

@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class CountPalindromes {
-public:
+   public:
     static void test() {
         string str = "abba";
 

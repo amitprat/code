@@ -1,32 +1,17 @@
 #pragma once
 #include "../header.h"
+#include "BinaryTree.h"
 
 template <class T>
-class BinarySearchTree {
-   public:
-    class Node {
-       public:
-        T val;
-        Node *left, *right;
-
-        Node(T val) : val(val), left(nullptr), right(nullptr) {}
-
-        string to_string() {
-            return std::to_string(val);
-        }
-    };
-
-   public:
-    Node *root = nullptr;
-
+class BinarySearchTree : public BinaryTree<T> {
    public:
     void insert(T val) {
-        root = insert(root, val);
+        this->root = insert(this->root, val);
     }
 
    private:
-    Node *insert(Node *root, T val) {
-        if (!root) return new Node(val);
+    BinaryTree<T>::Node *insert(BinaryTree<T>::Node *root, T val) {
+        if (!root) return new BinaryTree<T>::Node(val);
 
         if (val < root->val) {
             root->left = insert(root->left, val);
@@ -40,40 +25,16 @@ class BinarySearchTree {
     }
 
    public:
-    string inorder() {
-        stringstream ss;
-        inorder(root, ss);
+    static void test() {
+        BinarySearchTree<int> bst;
+        bst.insert(3);
+        bst.insert(1);
+        bst.insert(4);
+        bst.insert(2);
 
-        return ss.str();
-    }
-
-   private:
-    void inorder(Node *root, stringstream &ss) {
-        if (!root) return;
-
-        inorder(root->left, ss);
-        ss << root->val << " ";
-        inorder(root->right, ss);
-    }
-
-   public:
-    void printLevelOrder() {
-        queue<Node *> q;
-
-        if (root) q.push(root);
-        int level = 0;
-        while (!q.empty()) {
-            int sz = q.size();
-            cout << "Level " << level++ << " : ";
-            while (sz--) {
-                auto *cur = q.front();
-                q.pop();
-                cout << cur->to_string() << " ";
-
-                if (cur->left) q.push(cur->left);
-                if (cur->right) q.push(cur->right);
-            }
-            cout << endl;
-        }
+        cout << "Inorder: " << bst.inorder() << endl;
+        cout << "Preorder: " << bst.preorder() << endl;
+        cout << "Postorder: " << bst.postorder() << endl;
+        cout << "LevelOrder: " << bst.levelOrder() << endl;
     }
 };

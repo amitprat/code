@@ -56,9 +56,7 @@ class MakeBalancedBSTFromDLL {
 
             root->left = prev;
             if (!dllRoot) dllRoot = root;
-            if (prev) {
-                prev->right = root;
-            }
+            if (prev) prev->right = root;
             prev = root;
 
             makeDLL(root->right, dllRoot);

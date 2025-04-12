@@ -1,34 +1,15 @@
 #pragma once
+#include "../header.h"
 
-#include <time.h>
-#include <stdlib.h>
-#include <thread>
-#include <vector>
-#include <iostream>
-#include <set>
-#include <algorithm>
-#include <time.h>
-#include <stack>
-#include <tuple>
-#include <queue>
-#include <mutex>
-#include <cassert>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-using namespace std;
-
-class ValidTree
-{
-public:
+class ValidTree {
+   public:
     struct Node {
         int val;
-        Node* left, * right;
+        Node *left, *right;
         Node() {}
         Node(int val, Node* left = nullptr, Node* right = nullptr) : val(val), left(left), right(right) {}
     };
-    static void test()
-    {
+    static void test() {
         ValidTree obj;
         {
             cout << "Validate empty list, Should be valid" << endl;
@@ -40,8 +21,7 @@ public:
             cout << "Validate root node list, Should be valid" << endl;
             Node* root = new Node(1);
             vector<Node*> list = {
-                root
-            };
+                root};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -50,8 +30,7 @@ public:
             Node* root = new Node(1);
             root->left = new Node(2);
             vector<Node*> list = {
-                root->left
-            };
+                root->left};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -60,8 +39,7 @@ public:
             Node* root = new Node(1);
             root->left = new Node(2);
             vector<Node*> list = {
-                root->left,root
-            };
+                root->left, root};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -71,8 +49,7 @@ public:
             root->left = new Node(2);
             root->right = new Node(3);
             vector<Node*> list = {
-                root->right, root->left, root
-            };
+                root->right, root->left, root};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -83,8 +60,7 @@ public:
             root->right = new Node(3);
             root->right->right = new Node(4);
             vector<Node*> list = {
-                root->right, root->left, root, root->right->right
-            };
+                root->right, root->left, root, root->right->right};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -95,8 +71,7 @@ public:
             root->right = new Node(3);
             root->right->right = new Node(4);
             vector<Node*> list = {
-                root->right, root->left, root
-            };
+                root->right, root->left, root};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -107,8 +82,7 @@ public:
             root->right = new Node(3);
             root->left->right = root->right;
             root->right->right = new Node(4);
-            vector<Node*> list = { root
-            };
+            vector<Node*> list = {root};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -119,8 +93,7 @@ public:
             root->right = new Node(3);
             root->left->right = root->right;
             root->right->right = new Node(4);
-            vector<Node*> list = { root, root->right->right, root->right, root->left->right
-            };
+            vector<Node*> list = {root, root->right->right, root->right, root->left->right};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
 
@@ -132,8 +105,7 @@ public:
             root->right->right = new Node(4);
 
             Node* tmp = new Node(5);
-            vector<Node*> list = { root, root->right->right, root->right,tmp
-            };
+            vector<Node*> list = {root, root->right->right, root->right, tmp};
             cout << "Tree is Valid? :" << obj.isValidTree(list) << endl;
         }
     }

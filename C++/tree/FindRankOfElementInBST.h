@@ -19,6 +19,19 @@ class FindRankOfElementInBST {
             root = insertInternal(root, val);
         }
 
+        Node* insertInternal(Node* cur, int val) {
+            if (cur == nullptr) return new Node(val);
+
+            cur->size++;
+            if (val <= cur->val)
+                cur->left = insertInternal(cur->left, val);
+            else
+                cur->right = insertInternal(cur->right, val);
+
+            return cur;
+        }
+
+       public:
         int rank(int elem) {
             return rank(root, elem);
         }
@@ -39,31 +52,19 @@ class FindRankOfElementInBST {
             return cur->size;
         }
 
+       public:
         string to_string() {
             string res;
             inorder(root, res);
             return res;
         }
 
-       private:
-        Node* insertInternal(Node* cur, int val) {
-            if (cur == nullptr) return new Node(val);
-
-            cur->size++;
-            if (val <= cur->val)
-                cur->left = insertInternal(cur->left, val);
-            else
-                cur->right = insertInternal(cur->right, val);
-
-            return cur;
-        }
-
         void inorder(Node* cur, string& res) {
-            if (cur) {
-                inorder(cur->left, res);
-                res += std::to_string(cur->val) + " ";
-                inorder(cur->right, res);
-            }
+            if (!cur) return;
+
+            inorder(cur->left, res);
+            res += std::to_string(cur->val) + " ";
+            inorder(cur->right, res);
         }
     };
 

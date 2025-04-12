@@ -1,8 +1,10 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class NearestLeafNode {
-public:
+    using ITNode = BinaryTree<int>::Node;
+
+   public:
     static void test() {
         NearestLeafNode obj;
         ITNode* root = new ITNode(1);
@@ -40,8 +42,7 @@ public:
         cout << "val = " << val << endl;
     }
 
-    int findNearestLeaf(ITNode* root, int val)
-    {
+    int findNearestLeaf(ITNode* root, int val) {
         int mnDistance = INT_MAX;
         nearestLeafNode(root, val, mnDistance);
 
@@ -49,7 +50,7 @@ public:
     }
 
     pair<int, int> nearestLeafNode(ITNode* root, int val, int& mnDistance) {
-        if (!root) return { -1,INT_MAX };
+        if (!root) return {-1, INT_MAX};
 
         auto left = nearestLeafNode(root->left, val, mnDistance);
         auto right = nearestLeafNode(root->right, val, mnDistance);
@@ -58,8 +59,7 @@ public:
         int valNodeDist = INT_MAX;
         if (root->val == val) {
             valNodeDist = 0;
-        }
-        else {
+        } else {
             if (left.second != INT_MAX) {
                 valNodeDist = left.second + 1;
             }
@@ -70,9 +70,9 @@ public:
         }
         mnDistance = min(mnDistance, valNodeDist == INT_MAX ? valNodeDist : mnLeafNodeDist + valNodeDist);
 
-        //cout << "At node " << root->val << ", mnDistance = " << mnDistance << endl;
-        //cout << "Return value from node " << root->val << " = " << mnLeafNodeDist << ", " << valNodeDist << endl;
+        // cout << "At node " << root->val << ", mnDistance = " << mnDistance << endl;
+        // cout << "Return value from node " << root->val << " = " << mnLeafNodeDist << ", " << valNodeDist << endl;
 
-        return { mnLeafNodeDist,valNodeDist };
+        return {mnLeafNodeDist, valNodeDist};
     }
 };

@@ -1,26 +1,9 @@
 #pragma once
+#include "../header.h"
 
-#include <time.h>
-#include <stdlib.h>
-#include <thread>
-#include <vector>
-#include <iostream>
-#include <atomic>
-#include <algorithm>
-#include <time.h>
-#include <stack>
-#include <tuple>
-#include <queue>
-#include <unordered_map>
-#include <string>
-#include <unordered_set>
-using namespace std;
-
-class FindAnagrams
-{
-public:
-    static void test(vector<string> strs)
-    {
+class FindAnagrams {
+   public:
+    static void test(vector<string> strs) {
         FindAnagrams obj;
         auto res = obj.calculate(strs);
         for (auto r : res) {
@@ -32,9 +15,8 @@ public:
         }
     }
 
-    vector <pair<unsigned long long, vector<string>>> calculate(vector<string> str)
-    {
-        vector <pair<unsigned long long, vector<string>>> res;
+    vector<pair<unsigned long long, vector<string>>> calculate(vector<string> str) {
+        vector<pair<unsigned long long, vector<string>>> res;
         for (auto s : str) {
             unsigned long long h = hash(s);
             bool exist = false;
@@ -44,7 +26,7 @@ public:
                     exist = true;
                 }
             }
-            if (!exist) res.push_back({ h, {s} });
+            if (!exist) res.push_back({h, {s}});
         }
 
         return res;
@@ -60,5 +42,12 @@ public:
         }
 
         return res;
+    }
+
+    size_t calculateHash(const string& input) {
+        std::hash<std::string> hash_fn;
+        size_t hash_value = hash_fn(input);
+
+        println("Hash of string:{0} is {1}", input, hash_value);
     }
 };

@@ -3,6 +3,7 @@
 #include <ctype.h>
 
 #include <algorithm>
+#include <any>
 #include <array>
 #include <bitset>
 #include <cassert>
@@ -19,10 +20,12 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <numeric>
 #include <queue>
 #include <ranges>
+#include <semaphore>
 #include <set>
 #include <shared_mutex>
 #include <sstream>

@@ -1,8 +1,8 @@
-#include "careercup/StringWithConcatOfOtherWords.h"
+#include "string/CountPalindromes.h"
 using namespace std;
 
 int main() {
-    StringWithConcatOfOtherWords::test();
+    CountPalindromes::test();
 
     return 0;
 }
