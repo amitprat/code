@@ -18,7 +18,10 @@ class PaintFill {
         PaintFill obj;
         cout << "Old screen:" << endl;
         cout << screen << endl;
+
+        cout << "Do painting:" << endl;
         obj.paint(screen, p, oldColor, newColor);
+
         cout << "New screen:" << endl;
         cout << screen << endl;
     }

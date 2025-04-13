@@ -1,4 +1,4 @@
-#include "../Header.h"
+#include "../header.h"
 
 /*
 Given an array having positive integers, find a continous subarray which adds to a given number.
@@ -12,7 +12,7 @@ number we add the next element and check and continue the same process.
 
 class SubarrayWithGivenSum {
    public:
-    vector<int> subarraySum(vector<int> arr, int n, long long s) {
+    vector<int> subarraySum(vector<int>& arr, int n, long long s) {
         vector<int> positions = {-1};
 
         int i = 0, j = 0;

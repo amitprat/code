@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 * https://www.careercup.com/question?id=6282171643854848
@@ -42,6 +42,7 @@ class ScheduleTaksOnGivenServers {
         }
     }
 
+   public:
     bool canBeArrangedRecursive(vector<int> servers, vector<int> needs) {
         int s = 0;
         return canBeArrangedRecursive(servers, needs, s);
@@ -61,6 +62,7 @@ class ScheduleTaksOnGivenServers {
         return false;
     }
 
+   public:
     bool canArrangeRecursiveUsingMemo(vector<int> servers, vector<int> tasks) {
         vector<bool> used(tasks.size());
         return canArrangeRecursiveUsingMemo(servers, tasks, used);
@@ -74,6 +76,7 @@ class ScheduleTaksOnGivenServers {
         if (allUsed) {
             return true;
         }
+
         for (int i = 0; i < tasks.size(); i++) {
             if (!used[i]) {
                 used[i] = true;

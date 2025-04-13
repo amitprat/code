@@ -1,8 +1,8 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class GenerateCombinations {
-public:
+   public:
     static void test() {
         int n = 4;
         vector<int> res;

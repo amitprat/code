@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://careercup.com/question?id=5094709806497792
@@ -27,6 +27,14 @@ class ValuesGreaterThanN {
         for (const auto& input : inputs) {
             auto res1 = valuesGreaterThanN(input);
             cout << format("Input={}, Output={}", to_string(input), res1) << endl;
+
+            // Optional assert validation:
+            int validate = 0;
+            for (int i = 1; i <= input.size(); ++i) {
+                int count = count_if(input.begin(), input.end(), [i](int x) { return x >= i; });
+                if (count >= i) validate = i;
+            }
+            assert(res1 == validate);
         }
     }
 
@@ -34,6 +42,7 @@ class ValuesGreaterThanN {
     static int valuesGreaterThanN(const vector<int>& values) {
         int n = values.size();
         vector<int> count(n + 1, 0);
+
         for (auto val : values)
             if (val >= n)  // for any values greater than the size of array, consider it for the last element of array.
                 count[n]++;

@@ -15,6 +15,7 @@ class LongestIncreasingSubsequence {
             {50, 41, 60},
             {41, 60},
             {60}};
+
         for (auto& arr : arrs) {
             int res1 = obj.longestUsingRecursion(arr);
             int res2 = obj.longestUsingDP(arr);

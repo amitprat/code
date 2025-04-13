@@ -24,7 +24,7 @@ class RobotInGrid {
             bool found = obj.findPathUsingMemoization(grid, grid.size(), grid[0].size(), startPos, {}, failedPaths, path);
             if (found) {
                 cout << "Found a path: ";
-                for (auto& p : path) cout << p.to_string() << ", ";
+                for (auto& p : path) cout << p << ", ";
                 cout << endl;
             }
         }
@@ -35,7 +35,7 @@ class RobotInGrid {
             if (found) {
                 cout << "Found following paths: " << endl;
                 for (auto& path : paths) {
-                    for (auto& p : path) cout << p.to_string() << ", ";
+                    for (auto& p : path) cout << p << ", ";
                     cout << endl;
                 }
                 cout << endl;
@@ -128,7 +128,7 @@ class RobotInGrid {
         if (found) {
             Point endPos = {n - 1, m - 1};
             while (endPos != startPos) {
-                cout << endPos.to_string() << "->";
+                cout << endPos << "->";
                 if (memo[endPos.x - 1][endPos.y])
                     endPos = Point{endPos.x - 1, endPos.y};
                 else if (memo[endPos.x][endPos.y - 1])

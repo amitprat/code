@@ -1,138 +1,145 @@
 #pragma once
-#include "../Header.h"
+#include <cassert>
+#include <memory>
+
+#include "../header.h"
 
 class RobotOrder {
-	struct Item {
-		string name;
-		double price;
-		int quantity;
-		int order;
+    struct Item {
+        string name;
+        double price;
+        int quantity;
+        int order;
 
-		virtual bool prepare() = 0;
-		virtual double amount() {
-			return price * order;
-		}
-	};
-	struct Sandwich : public Item {
-		Sandwich(int order) : Item() {
-			this->order = order;
-			this->name = "Sandwich";
-			this->price = 1;
-			this->quantity = 100;
-		}
+        virtual ~Item() = default;
+        virtual bool prepare() = 0;
 
-		bool prepare() {
-			if (order >= quantity) {
-				cout << "Can't serve item" << endl;
-				return false;
-			}
+        virtual double amount() const {
+            return price * order;
+        }
+    };
 
-			quantity -= order;
-			cout << "Preparing order" << endl;
+    struct Sandwich : public Item {
+        Sandwich(int orderAmount) {
+            name = "Sandwich";
+            price = 1;
+            quantity = 100;
+            order = orderAmount;
+        }
 
-			return true;
-		}
-	};
-	struct Coffee : public Item {
-		Coffee(int order) : Item() {
-			this->order = order;
-			this->name = "Coffee";
-			this->price = 1;
-			this->quantity = 100;
-		}
+        bool prepare() override {
+            if (order > quantity) {
+                cout << "Can't serve item" << endl;
+                return false;
+            }
+            quantity -= order;
+            cout << "Preparing sandwich order" << endl;
+            return true;
+        }
+    };
 
-		bool prepare() {
-			if (order >= quantity) {
-				cout << "Can't serve item" << endl;
-				return false;
-			}
+    struct Coffee : public Item {
+        Coffee(int orderAmount) {
+            name = "Coffee";
+            price = 1;
+            quantity = 100;
+            order = orderAmount;
+        }
 
-			quantity -= order;
-			cout << "Preparing order" << endl;
+        bool prepare() override {
+            if (order > quantity) {
+                cout << "Can't serve item" << endl;
+                return false;
+            }
+            quantity -= order;
+            cout << "Preparing coffee order" << endl;
+            return true;
+        }
+    };
 
-			return true;
-		}
-	};
-	struct Customer {
-		string name;
-		double balance;
-		vector<Item*> orders;
+    struct ItemFactory {
+        static shared_ptr<Item> create(const string& type, int orderAmount) {
+            if (type == "Sandwich") return make_shared<Sandwich>(orderAmount);
+            if (type == "Coffee") return make_shared<Coffee>(orderAmount);
+            return nullptr;
+        }
+    };
 
-		Customer(string name, double balance) :name(name), balance(balance) {}
-	};
-	struct Order {
-		Customer customer;
-		vector<Item*> items;
+    struct Customer {
+        string name;
+        double balance;
+        vector<shared_ptr<Item>> orders;
 
-		void addItem(Item* item) {
-			items.push_back(item);
-		}
+        Customer(const string& name, double balance) : name(name), balance(balance) {}
+    };
 
-		double getAmount() {
-			double amount = 0;
-			for (auto& item : items) {
-				amount += item->amount();
-			}
+    struct Order {
+        Customer customer;
+        vector<shared_ptr<Item>> items;
 
-			return amount;
-		}
-	};
+        Order(const Customer& customer) : customer(customer) {}
 
-private:
-	vector<Order> orders;
+        void addItem(shared_ptr<Item> item) {
+            items.push_back(item);
+        }
 
-public:
-	bool takeOrder(Order order) {
-		double balance = order.customer.balance;
-		double totalAmount = order.getAmount();
+        double getAmount() const {
+            double total = 0;
+            for (const auto& item : items) {
+                total += item->amount();
+            }
+            return total;
+        }
+    };
 
-		if (balance < totalAmount) {
-			cout << "Payment rejected" << endl;
-			return false;
-		}
-		order.customer.balance -= totalAmount;
-		orders.push_back(order);
+    vector<Order> orders;
 
-		return true;
-	}
+   public:
+    bool takeOrder(const Order& order) {
+        double totalAmount = order.getAmount();
 
-	void prepare() {
-		for (auto order : orders) {
-			for (auto item : order.items) {
-				item->prepare();
-			}
-			cout << "Order prepared for customer " << order.customer.name << ", serving food.." << endl;
-		}
-	}
+        if (order.customer.balance < totalAmount) {
+            cout << "Payment rejected" << endl;
+            return false;
+        }
 
-	void summary()
-	{
-		for (auto order : orders) {
-			cout << "Orders for customer: " << order.customer.name << ":" << endl;
-			for (auto item : order.items) {
-				cout << item->name << " " << item->order << endl;
-			}
-			cout << "Total amount for customer is " << order.getAmount() << endl;
-		}
-	}
-public:
-	static void test() {
-		RobotOrder robot;
+        orders.push_back(order);
+        return true;
+    }
 
-		Customer customer1 = Customer("Person1", 10);
-		Order order1(customer1);
-		Sandwich* sandwich = new Sandwich(2);
-		order1.addItem(sandwich);
-		robot.takeOrder(order1);
+    void prepare() {
+        for (auto& order : orders) {
+            for (auto& item : order.items) {
+                item->prepare();
+            }
+            cout << "Order prepared for customer " << order.customer.name << ", serving food.." << endl;
+        }
+    }
 
-		Customer customer2 = Customer("Person2", 10);
-		Order order2(customer2);
-		Coffee* coffee = new Coffee(2);
-		order2.addItem(coffee);
-		robot.takeOrder(order2);
+    void summary() const {
+        for (const auto& order : orders) {
+            cout << "Orders for customer: " << order.customer.name << ":" << endl;
+            for (const auto& item : order.items) {
+                cout << item->name << " " << item->order << endl;
+            }
+            cout << "Total amount for customer is " << order.getAmount() << endl;
+        }
+    }
 
-		robot.prepare();
+    static void test() {
+        RobotOrder robot;
 
-		robot.summary();
-	}
+        Customer customer1("Person1", 10);
+        Order order1(customer1);
+        order1.addItem(ItemFactory::create("Sandwich", 2));
+        robot.takeOrder(order1);
+
+        Customer customer2("Person2", 10);
+        Order order2(customer2);
+        order2.addItem(ItemFactory::create("Coffee", 2));
+        robot.takeOrder(order2);
+
+        robot.prepare();
+        robot.summary();
+    }
 };

@@ -20,12 +20,37 @@ class PrintAllPathsWithGivenSum {
         root->right->right = new Node(5);
         root->right->right->right = new Node(6);
 
-        printLevelOrder(root);
+        // printLevelOrder(root);
 
         int sum = 5;
         cout << "Number of paths with sum = " << sum << ":" << obj.countPathsWithSum(root, sum) << endl;
 
         vector<vector<Node*>> res = obj.getPathWithGivenSum(root, sum);
+    }
+
+   public:
+    int countPathsWithGivenSumBruteForce(Node* root, int sum) {
+        if (!root) return 0;
+
+        int cnt = countPathsWithGivenSumBruteForceFromThisNode(root, sum, 0);
+
+        cnt += countPathsWithGivenSumBruteForce(root->left, sum);
+        cnt += countPathsWithGivenSumBruteForce(root->right, sum);
+
+        return cnt;
+    }
+
+    int countPathsWithGivenSumBruteForceFromThisNode(Node* root, int sum, int cur) {
+        if (!root) return 0;
+
+        int total = 0;
+        cur += root->val;
+        if (cur == sum) total++;
+
+        total += countPathsWithGivenSumBruteForceFromThisNode(root->left, sum, cur);
+        total += countPathsWithGivenSumBruteForceFromThisNode(root->right, sum, cur);
+
+        return total;
     }
 
    public:
@@ -41,19 +66,20 @@ class PrintAllPathsWithGivenSum {
 
         curSum += root->val;
 
-        int result = map[total - (curSum + root->val)];  // find existing paths with given sum
-        map[curSum + root->val]++;                       // count this as prefix path with this sum
+        int result = map[curSum - total];  // find existing paths with given sum
+        map[curSum]++;                     // count this as prefix path with this sum
 
-        result += countPaths(root->left, total, curSum + root->val, map);
-        result += countPaths(root->right, total, curSum + root->val, map);
+        result += countPaths(root->left, total, curSum, map);
+        result += countPaths(root->right, total, curSum, map);
 
         // backtrack
-        map[curSum + root->val]--;
+        map[curSum]--;
 
         return result;
     }
 
    public:
+    // TODO
     vector<vector<Node*>> getPathWithGivenSum(Node* root, int sum) {
         vector<vector<Node*>> res;
         unordered_map<int, vector<vector<Node*>>> map;

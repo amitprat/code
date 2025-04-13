@@ -48,149 +48,160 @@ this activity and print it.
 
 class ActivitySelectionProblem {
     struct Job {
-        int start, end, weight;
-        Job(int start, int end, int weight) : start(start), end(end), weight(weight) {}
-        string to_string() {
-            return "{" + std::to_string(start) + "," + std::to_string(end) + "," + std::to_string(weight) + "}";
+        int start{}, end{}, weight{};
+
+        Job(int s, int e, int w) : start(s), end(e), weight(w) {}
+
+        [[nodiscard]] std::string to_string() const {
+            return std::format("{{{},{},{}}}", start, end, weight);
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const Job& job) {
+            return os << job.to_string();
         }
     };
 
    public:
     static void test() {
-        {
-            cout << "Select jobs with conflicting activities:" << endl;
-            vector<Interval> tasks = {{5, 9}, {1, 2}, {3, 4}, {0, 6}, {5, 7}, {8, 9}};
-            selectMaximumNumberOfNonConflictingActivities(tasks);
-        }
+        using namespace std;
 
-        {
-            vector<Job> weightedJobs = {{3, 10, 20}, {1, 2, 50}, {6, 19, 100}, {2, 100, 200}};
-            int res = selectJobsWithMaximumWeight(weightedJobs);
-            cout << "Result = " << res << endl;
-        }
+        cout << "\nSelect non-conflicting activities:\n";
+        vector<Interval> tasks = {{5, 9}, {1, 2}, {3, 4}, {0, 6}, {5, 7}, {8, 9}};
+        cout << "Input: " << tasks << endl;
+        selectMaximumNumberOfNonConflictingActivities(tasks);
 
-        {
-            vector<Job> weightedJobs = {{3, 10, 20}, {1, 2, 50}, {6, 19, 100}, {2, 100, 200}};
-            int res = selectJobsWithMaximumWeightOptimizedLinearSearch(weightedJobs);
-            cout << "Result = " << res << endl;
-        }
+        cout << "\nSelect non-conflicting activities with maximum weight:\n";
+        vector<Job> weightedJobs = {{3, 10, 20}, {1, 2, 50}, {6, 19, 100}, {2, 100, 200}};
+        cout << "Input: " << weightedJobs << endl;
 
-        {
-            vector<Job> weightedJobs = {{3, 10, 20}, {1, 2, 50}, {6, 19, 100}, {2, 100, 200}};
-            int res = selectJobsWithMaximumWeightOptimizedBinarySearch(weightedJobs);
-            cout << "Result = " << res << endl;
-        }
+        cout << "Result with memoization = " << selectJobsWithMaximumWeight(weightedJobs) << '\n';
+        cout << "Result with optimized linear search = " << selectJobsWithMaximumWeightOptimizedLinearSearch(weightedJobs) << '\n';
+        cout << "Result with optimized binary search = " << selectJobsWithMaximumWeightOptimizedBinarySearch(weightedJobs) << '\n';
 
-        {
-            vector<Job> weightedJobs = {{600, 830, 230}, {900, 1100, 200}, {1230, 1400, 150}, {800, 900, 100}, {1030, 1400, 350}, {900, 1130, 250}};
-            int res = selectJobsWithMaximumWeightOptimizedBinarySearch(weightedJobs);
-            cout << "Result = " << res << endl;
-        }
+        cout << "\nSelect non-conflicting activities with maximum weight:\n";
+        vector<Job> weightedJobs2 = {{600, 830, 230}, {900, 1100, 200}, {1230, 1400, 150}, {800, 900, 100}, {1030, 1400, 350}, {900, 1130, 250}};
+        cout << "Input: " << weightedJobs2 << endl;
+        cout << "Result with memoization = " << selectJobsWithMaximumWeight(weightedJobs2) << '\n';
+        cout << "Result with optimized linear search = " << selectJobsWithMaximumWeightOptimizedLinearSearch(weightedJobs2) << '\n';
+        cout << "Result with optimized binary search = " << selectJobsWithMaximumWeightOptimizedBinarySearch(weightedJobs2) << '\n';
     }
 
-   public:
-    static void selectMaximumNumberOfNonConflictingActivities(vector<Interval> tasks) {
-        sort(tasks.begin(), tasks.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
+    static void selectMaximumNumberOfNonConflictingActivities(const std::vector<Interval>& tasks) {
+        auto sortedTasks = tasks;
+        std::ranges::sort(sortedTasks, {}, &Interval::end);
 
-        int i = -1;
-        for (int j = 0; j < tasks.size(); j++) {
-            if (i == -1 || tasks[j].start >= tasks[i].end) {
-                cout << tasks[j].to_string() << ", ";
-                i = j;
+        int lastSelected = -1;
+        for (size_t i = 0; i < sortedTasks.size(); ++i) {
+            if (lastSelected == -1 || sortedTasks[i].start >= sortedTasks[lastSelected].end) {
+                std::cout << sortedTasks[i] << ", ";
+                lastSelected = static_cast<int>(i);
             }
         }
-        cout << endl;
+        std::cout << '\n';
     }
 
-   public:
-    static int selectMaximumTasks(vector<Interval> tasks) {
-        sort(tasks.begin(), tasks.end(), [](const auto& it1, const auto& it2) { return it1.end < it2.end; });
+    static int selectMaximumTasks(const std::vector<Interval>& tasks) {
+        if (tasks.empty()) return 0;
 
-        vector<Interval> result;
-        result.push_back(tasks[0]);
+        auto sortedTasks = tasks;
+        std::ranges::sort(sortedTasks, {}, &Interval::end);
 
-        int finish = tasks[0].end;
-        for (int i = 1; i < tasks.size(); i++) {
-            if (tasks[i].start >= finish) {
-                result.push_back(tasks[i]);
-                finish = tasks[i].end;
+        std::vector<Interval> selectedTasks{sortedTasks.front()};
+        int lastEnd = sortedTasks.front().end;
+
+        for (const auto& task : sortedTasks | std::views::drop(1)) {
+            if (task.start >= lastEnd) {
+                selectedTasks.push_back(task);
+                lastEnd = task.end;
             }
         }
 
-        cout << "Selected tasks: " << result << endl;
+        for (const auto& task : selectedTasks) {
+            std::cout << task << ", ";
+        }
+        std::cout << '\n';
 
-        return result.size();
+        return static_cast<int>(selectedTasks.size());
     }
 
    private:
-    static int selectJobsWithMaximumWeight(vector<Job>& weightedJobs) {
-        sort(weightedJobs.begin(), weightedJobs.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
-        int n = weightedJobs.size();
+    [[nodiscard]] static int selectJobsWithMaximumWeight(std::vector<Job>& weightedJobs) {
+        if (weightedJobs.empty()) return 0;
 
-        int* memo = new int[n + 1];
-        memo[0] = 0;
+        std::ranges::sort(weightedJobs, {}, &Job::end);
+        const int n = static_cast<int>(weightedJobs.size());
 
-        for (int i = 1; i <= n; i++) {
+        std::vector<int> memo(n + 1, 0);
+
+        for (int i = 1; i <= n; ++i) {
             memo[i] = memo[i - 1];
-            for (int j = i - 1; j >= 0; j--) {
-                if (j == 0 || weightedJobs[j - 1].end <= weightedJobs[i - 1].start)
-                    memo[i] = max(memo[i], memo[j] + weightedJobs[i - 1].weight);
+            for (int j = i - 1; j >= 0; --j) {
+                if (j == 0 || weightedJobs[j - 1].end <= weightedJobs[i - 1].start) {
+                    memo[i] = std::max(memo[i], memo[j] + weightedJobs[i - 1].weight);
+                    break;
+                }
             }
         }
-
         return memo[n];
     }
 
-   private:
-    static int selectJobsWithMaximumWeightOptimizedLinearSearch(vector<Job>& weightedJobs) {
+    [[nodiscard]] static int selectJobsWithMaximumWeightOptimizedLinearSearch(std::vector<Job>& weightedJobs) {
         if (weightedJobs.empty()) return 0;
 
-        sort(weightedJobs.begin(), weightedJobs.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
-        int n = weightedJobs.size();
+        std::ranges::sort(weightedJobs, {}, &Job::end);
+        const int n = static_cast<int>(weightedJobs.size());
 
-        int* memo = new int[n];
+        std::vector<int> memo(n, 0);
         memo[0] = weightedJobs[0].weight;
 
-        for (int i = 1; i < n; i++) {
-            int j = latestNonConflictingJob(weightedJobs, i);
-            memo[i] = max(memo[i - 1], memo[j] + weightedJobs[i].weight);
+        for (int i = 1; i < n; ++i) {
+            int incl = weightedJobs[i].weight;
+            int latest = latestNonConflictingJob(weightedJobs, i);
+            if (latest != -1) incl += memo[latest];
+            memo[i] = std::max(memo[i - 1], incl);
         }
 
-        return memo[n - 1];
+        return memo.back();
     }
 
-    static int latestNonConflictingJob(vector<Job> jobs, int curIndex) {
-        for (int j = curIndex - 1; j >= 0; j--) {
-            if (jobs[j].end <= jobs[curIndex].start)
+    [[nodiscard]] static int selectJobsWithMaximumWeightOptimizedBinarySearch(std::vector<Job>& weightedJobs) {
+        if (weightedJobs.empty()) return 0;
+
+        std::ranges::sort(weightedJobs, {}, &Job::end);
+        const int n = static_cast<int>(weightedJobs.size());
+
+        std::vector<int> memo(n, 0);
+        memo[0] = weightedJobs[0].weight;
+
+        for (int i = 1; i < n; ++i) {
+            int incl = weightedJobs[i].weight;
+            int latest = latestNonConflictingJobBinarySearch(weightedJobs, i);
+            if (latest != -1) incl += memo[latest];
+            memo[i] = std::max(memo[i - 1], incl);
+        }
+
+        return memo.back();
+    }
+
+    [[nodiscard]] static int latestNonConflictingJob(const std::vector<Job>& jobs, int index) {
+        for (int j = index - 1; j >= 0; --j) {
+            if (jobs[j].end <= jobs[index].start)
                 return j;
         }
         return -1;
     }
 
-   private:
-    static int selectJobsWithMaximumWeightOptimizedBinarySearch(vector<Job>& weightedJobs) {
-        if (weightedJobs.empty()) return 0;
-
-        sort(weightedJobs.begin(), weightedJobs.end(), [](const auto& f, const auto& s) { return f.end < s.end; });
-        int n = weightedJobs.size();
-
-        int* memo = new int[n];
-        memo[0] = weightedJobs[0].weight;
-
-        for (int i = 1; i < n; i++) {
-            int j = latestNonConflictingJobBinarySearch(weightedJobs, 0, i - 1, i);
-            memo[i] = max(memo[i - 1], memo[j] + weightedJobs[i].weight);
+    [[nodiscard]] static int latestNonConflictingJobBinarySearch(const std::vector<Job>& jobs, int index) {
+        int low = 0, high = index - 1, ans = -1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (jobs[mid].end <= jobs[index].start) {
+                ans = mid;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
         }
-
-        return memo[n - 1];
-    }
-
-    static int latestNonConflictingJobBinarySearch(vector<Job> jobs, int s, int e, int cur) {
-        if (s > e) return -1;
-        if (s == e) return jobs[s].end <= jobs[cur].start ? s : -1;
-
-        int m = (s + e + 1) / 2;
-        if (jobs[m].end <= jobs[cur].start) return latestNonConflictingJobBinarySearch(jobs, m, e, cur);
-        return latestNonConflictingJobBinarySearch(jobs, s, m - 1, cur);
+        return ans;
     }
 };

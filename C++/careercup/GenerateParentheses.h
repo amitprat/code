@@ -41,10 +41,7 @@ class GenerateParentheses {
    public:
     static void test() {
         GenerateParentheses obj;
-
-        START_METHOD()
         obj.generate(3, 3, "");
-        END_METHOD()
     }
 
     void generate(int l, int r, string str) {

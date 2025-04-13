@@ -16,14 +16,14 @@ class DijkastraMatrix {
                                      {0, 0, 2, 0, 0, 0, 6, 7, 0}};
 
         int s = 0;
-        vector<int> dist = obj.dijkstra(graph, s);
+        vector<int> dist = obj.dijkstraUsingMatrix(graph, s);
         for (auto i = 0; i < dist.size(); i++) {
             cout << "Min distance from " << s << " to " << i << " = " << dist[i] << endl;
         }
     }
 
    public:
-    vector<int> dijkstra(vector<vector<int>> graph, int s) {
+    vector<int> dijkstraUsingMatrix(vector<vector<int>> graph, int s) {
         vector<int> dist(graph.size(), INT_MAX);
         dist[s] = 0;
         vector<bool> visited(graph.size(), false);
@@ -31,10 +31,10 @@ class DijkastraMatrix {
         for (int cnt = 0; cnt < graph.size() - 1; cnt++) {
             int u = minWeightVertex(dist, visited);
             visited[u] = true;
+
             if (dist[u] != INT_MAX) {
                 for (int v = 0; v < graph.size(); v++) {
-                    if (graph[u][v] && !visited[v] &&
-                        dist[u] + graph[u][v] < dist[v]) {
+                    if (graph[u][v] && !visited[v] && dist[u] + graph[u][v] < dist[v]) {
                         dist[v] = dist[u] + graph[u][v];
                     }
                 }
@@ -48,12 +48,14 @@ class DijkastraMatrix {
     int minWeightVertex(vector<int> dist, vector<bool> visited) {
         int r = -1;
         int mnW = INT_MAX;
+
         for (int i = 0; i < dist.size(); i++) {
             if (!visited[i] && dist[i] < mnW) {
                 r = i;
                 mnW = dist[i];
             }
         }
+
         return r;
     }
 };
@@ -186,13 +188,13 @@ class DijkastraAdjGraph {
         g.add(7, 8, 7);
 
         int s = 0;
-        auto dist = obj.dijkstra(g, s);
+        auto dist = obj.dijkstraUsingCustomMinheap(g, s);
         for (auto i = 0; i < dist.size(); i++) {
             cout << "Min distance from " << s << " to " << i << " = " << dist[i] << endl;
         }
     }
 
-    vector<int> dijkstra(Graph g, int s) {
+    vector<int> dijkstraUsingCustomMinheap(Graph g, int s) {
         Minheap mh;
         for (auto v : g.vertices) {
             mh.put({v.first, INT_MAX});
@@ -220,23 +222,21 @@ class DijkastraAdjGraph {
    public:
     void dijkastraUsingSTL(Graph g, int src) {
         using P = pair<int, int>;
-        priority_queue<P, vector<P>, greater<P>> minHeap;
-        minHeap.push({0, src});
+
+        priority_queue<P, vector<P>, greater<P>> pq;
+        pq.push({0, src});
+
         vector<int> dist(g.vertices.size(), INT_MAX);
-        unordered_set<int> visited;
-        visited.insert(src);
+        dist[src] = 0;
 
-        int i = 0;
-        while (i++ < g.vertices.size() - 1) {
-            auto cur = minHeap.top();
-            minHeap.pop();
+        while (!pq.empty()) {
+            auto [w, u] = pq.top();
+            pq.pop();
 
-            dist[cur.second] = cur.first;
-
-            for (auto v : g.edges(cur.second)) {
-                if (visited.find(v.v) == visited.end() && dist[v.v] > dist[cur.second] + v.w) {
-                    minHeap.push({v.w, v.v});
-                    visited.insert(v.v);
+            for (auto [w, v] : g.edges(u)) {
+                if (dist[v] > dist[u] + w) {
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v], v});
                 }
             }
         }

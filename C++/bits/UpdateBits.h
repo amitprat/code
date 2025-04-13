@@ -56,6 +56,7 @@ class UpdateBits {
             res = (decimal & 1 ? '1' : '0') + res;
             decimal /= 2;
         }
+
         res = ".";
         int places = 0;
         while (fractional && places < 32) {
@@ -72,9 +73,22 @@ class UpdateBits {
         return res;
     }
 
+    /*
+    Flip Bit to Win: You have an integer and you can flip exactly one bit from a 0 to a 1. Write code to
+        find the length of the longest sequence of 1 s you could create.
+        EXAMPLE
+        Input:
+        1775
+        (or: 11011101111)
+        Output:
+        8
+    */
     int maxLengthSeq(int a) {
+        if (~a == 0) return 8 * sizeof(int);  // all 1s
+
         int prev = 0;
         int cur = 0;
+
         int mx = 1;
         while (a) {
             bool b = a & 1;
@@ -83,8 +97,8 @@ class UpdateBits {
             } else {
                 prev = cur;
                 cur = 0;
-                mx = max(mx, cur + prev + 1);
             }
+            mx = max(mx, cur + prev + 1);
 
             a >>= 1;
         }

@@ -16,7 +16,7 @@ class MaximumSumRectangleInMatrix {
 
         vector<int> tmp(m, 0);
         for (int curTop = 0; curTop < n; curTop++) {
-            for (int curBottom = top; curBottom < n; curBottom++) {
+            for (int curBottom = curTop; curBottom < n; curBottom++) {
                 for (int j = 0; j < m; j++) {
                     tmp[j] += matrix[curBottom][j];
                 }

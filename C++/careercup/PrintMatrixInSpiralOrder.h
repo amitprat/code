@@ -1,89 +1,152 @@
-#include "../Header.h"
+#include "../header.h"
 
 class PrintMatrixInSpiralOrder {
    public:
-    vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        vector<int> ans;
+    static vector<int> spiralOrder(const vector<vector<int>>& matrix) {
+        vector<int> result;
+        if (matrix.empty() || matrix[0].empty()) return result;
+
+        int top = 0, bottom = matrix.size() - 1;
         int left = 0, right = matrix[0].size() - 1;
-        int top = 0, bot = matrix.size() - 1;
-        while (true) {
-            if (left > right || top > bot)
-                break;
-            if (left == right) {
-                for (int i = top; i <= bot; i++)
-                    ans.push_back(matrix[i][left]);
-                break;
+
+        while (top <= bottom && left <= right) {
+            for (int j = left; j <= right; ++j)
+                result.push_back(matrix[top][j]);
+            ++top;
+
+            for (int i = top; i <= bottom; ++i)
+                result.push_back(matrix[i][right]);
+            --right;
+
+            if (top <= bottom) {
+                for (int j = right; j >= left; --j)
+                    result.push_back(matrix[bottom][j]);
+                --bottom;
             }
-            if (top == bot) {
-                for (int i = left; i <= right; i++)
-                    ans.push_back(matrix[top][i]);
-                break;
+
+            if (left <= right) {
+                for (int i = bottom; i >= top; --i)
+                    result.push_back(matrix[i][left]);
+                ++left;
             }
-            for (int i = left; i <= right; i++) {
-                ans.push_back(matrix[top][i]);
-            }
-            for (int i = top + 1; i <= bot; i++) {
-                ans.push_back(matrix[i][right]);
-            }
-            for (int i = right - 1; i >= left; i--) {
-                ans.push_back(matrix[bot][i]);
-            }
-            for (int i = bot - 1; i >= top + 1; i--) {
-                ans.push_back(matrix[i][left]);
-            }
-            left++, right--;
-            top++, bot--;
         }
-        return ans;
+        return result;
     }
 
    public:
-    void spiralOrder2(vector<vector<int>>& matrix) {
-        int n = matrix.size();
-        int m = matrix[0].size();
+    static void printSpiralMatrix(const vector<vector<int>>& matrix) {
+        if (matrix.empty()) return;
 
-        int i = 0, j = 0;
-        while (i < n && j < m) {
-            // first row (left->right)
-            for (int k = j; k < m; k++) cout << matrix[i][k] << " ";
-            i++;
+        int top = 0, bottom = matrix.size() - 1;
+        int left = 0, right = matrix[0].size() - 1;
 
-            // last column
-            for (int k = i; k < n - 1; k++) cout << matrix[k][m - 1] << " ";
-            m--;
+        while (top <= bottom && left <= right) {
+            // Top row
+            for (int j = left; j <= right; ++j)
+                cout << matrix[top][j] << ' ';
+            ++top;
 
-            // last row
-            if (j < m) {
-                for (int k = n - 1; k >= j; k--) cout << matrix[n - 1][k] << " ";
-                n--;
+            // Right column
+            for (int i = top; i <= bottom; ++i)
+                cout << matrix[i][right] << ' ';
+            --right;
+
+            // Bottom row
+            if (top <= bottom) {
+                for (int j = right; j >= left; --j)
+                    cout << matrix[bottom][j] << ' ';
+                --bottom;
             }
 
-            // first column
-            if (i < n) {
-                for (int k = n - 1; k >= i; k--) cout < matrix[k][j] << " ";
-                j++;
+            // Left column
+            if (left <= right) {
+                for (int i = bottom; i >= top; --i)
+                    cout << matrix[i][left] << ' ';
+                ++left;
+            }
+        }
+
+        cout << '\n';
+    }
+
+   private:
+    static void printSquareSpiralMatrix(vector<vector<int>>& mat) {
+        int n = mat.size();
+        int k = (n - 1) / 2;
+
+        for (int layer = 0; layer <= k; layer++) {
+            for (int i = layer; i < n - layer - 1; i++) {
+                cout << mat[i][layer] << " ";
+            }
+            for (int j = layer; j < n - layer - 1; j++) {
+                cout << mat[n - layer - 1][j] << " ";
+            }
+            for (int i = n - layer - 1; i > layer; i--) {
+                cout << mat[i][n - layer - 1] << " ";
+            }
+            for (int j = n - layer - 1; j > layer; j--) {
+                cout << mat[layer][j] << " ";
             }
         }
     }
 
-   private:
-    void spiral(vector<vector<int>>& mat) {
-        int N = mat.size();
-        int k = (N - 1) / 2;
+   public:
+    static vector<vector<int>> makeSquareSpiralMatrix(int n) {
+        int layer = (n - 1) / 2;
+        int s = 1;
 
-        for (int layer = 0; layer <= k; layer++) {
-            for (int i = layer; i < N - layer - 1; i++) {
-                cout << mat[i][layer] << " ";
+        vector<vector<int>> result(n, vector<int>(n));
+
+        for (int l = 0; l <= layer; l++) {
+            // single entry
+            if (l == 1 && n - l - 1 == 1) {
+                result[l][l] = s++;
+                break;
             }
-            for (int j = layer; j < N - layer - 1; j++) {
-                cout << mat[N - layer - 1][j] << " ";
+
+            // first row
+            for (int j = l; j < n - l - 1; j++) result[l][j] = s++;
+
+            // last col
+            for (int i = l; i < n - l - 1; i++) result[i][n - l - 1] = s++;
+
+            // last row
+            for (int j = n - l - 1; j > l; j--) result[n - l - 1][j] = s++;
+
+            // first col
+            for (int i = n - l - 1; i > l; i--) result[i][l] = s++;
+        }
+
+        return result;
+    }
+
+   public:
+    static void test() {
+        for (int i = 0; i < 5; i++) {
+            cout << "Make square spiral matrix of size: " << i << endl;
+            auto res = makeSquareSpiralMatrix(i);
+            cout << res << endl;
+        }
+
+        vector<vector<vector<int>>> testCases = {
+            {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},  // square 3x3
+            {{1, 2, 3, 4}},                     // 1x4
+            {{1}, {2}, {3}, {4}},               // 4x1
+            {{1, 2}, {3, 4}},                   // 2x2
+            {{1, 2, 3}, {4, 5, 6}},             // 2x3
+            {{1, 2}, {3, 4}, {5, 6}},           // 3x2
+            {}                                  // empty
+        };
+
+        for (const auto& matrix : testCases) {
+            cout << "Matrix:\n";
+            for (const auto& row : matrix) {
+                for (int val : row) cout << val << ' ';
+                cout << '\n';
             }
-            for (int i = N - layer - 1; i > layer; i--) {
-                cout << mat[i][N - layer - 1] << " ";
-            }
-            for (int j = N - layer - 1; j > layer; j--) {
-                cout << mat[layer][j] << " ";
-            }
+            cout << "Spiral Order: ";
+            printSpiralMatrix(matrix);
+            cout << "------\n";
         }
     }
 };

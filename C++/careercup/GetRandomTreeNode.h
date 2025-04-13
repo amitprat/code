@@ -8,6 +8,7 @@ class GetRandomTreeNode {
         Node *right = nullptr;
         Node(int val) : val(val), size(1) {}
     };
+
     class BinarySearchTree {
        public:
         BinarySearchTree() {
@@ -16,38 +17,14 @@ class GetRandomTreeNode {
 
         Node *root = nullptr;
 
+       public:
         void insert(int val) {
             root = insert(root, val);
         }
 
-        Node *find(int key) {
-            if (!root) return nullptr;
-
-            return find(root, key);
-        }
-
-        bool remove(int key) {
-            root = remove(root, key);
-
-            return true;
-        }
-
-        Node *getRandom() {
-            int sz = size(root);
-            int r = 1 + (rand() % sz);
-
-            return findNode(root, r);
-        }
-
-        void inorder() {
-            cout << "Inorder: ";
-            this->inorder(root);
-            cout << endl;
-        }
-
-       private:
         Node *insert(Node *root, int val) {
             if (!root) return new Node(val);
+
             if (val < root->val) {
                 root->size += 1;
                 root->left = insert(root->left, val);
@@ -58,6 +35,31 @@ class GetRandomTreeNode {
                 root->val = val;
 
             return root;
+        }
+
+       public:
+        Node *find(int key) {
+            if (!root) return nullptr;
+
+            return find(root, key);
+        }
+
+        Node *find(Node *root, int key) {
+            if (!root) return nullptr;
+
+            if (key == root->val)
+                return root;
+            else if (key < root->val)
+                return find(root->left, key);
+            else
+                return find(root->right, key);
+        }
+
+       public:
+        bool remove(int key) {
+            root = remove(root, key);
+
+            return true;
         }
 
         Node *remove(Node *root, int key) {
@@ -77,7 +79,7 @@ class GetRandomTreeNode {
                     root = newRoot;
                 } else {
                     Node *suc = getMin(root->right);
-                    swap(root->val, suc->val);
+                    root->val = suc->val;
 
                     root->size--;
                     root->right = remove(root->right, suc->val);
@@ -85,17 +87,6 @@ class GetRandomTreeNode {
             }
 
             return root;
-        }
-
-        Node *find(Node *root, int key) {
-            if (!root) return nullptr;
-
-            if (key == root->val)
-                return root;
-            else if (key < root->val)
-                return find(root->left, key);
-            else
-                return find(root->right, key);
         }
 
         Node *getMin(Node *root) {
@@ -106,6 +97,14 @@ class GetRandomTreeNode {
             }
 
             return root;
+        }
+
+       public:
+        Node *getRandom() {
+            int sz = size(root);
+            int r = 1 + (rand() % sz);
+
+            return findNode(root, r);
         }
 
         Node *findNode(Node *root, int pos) {
@@ -123,6 +122,13 @@ class GetRandomTreeNode {
         int size(Node *root) {
             if (!root) return 0;
             return root->size;
+        }
+
+       public:
+        void inorder() {
+            cout << "Inorder: ";
+            this->inorder(root);
+            cout << endl;
         }
 
         void inorder(Node *root) {
@@ -147,9 +153,9 @@ class GetRandomTreeNode {
         tree.inorder();
 
         Node *node = nullptr;
-        int key = 3;
+        vector<int> keys = {3, 4, 1, 6, 6};
         bool res = false;
-        {
+        for (auto &key : keys) {
             node = tree.find(key);
             cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
 
@@ -162,74 +168,7 @@ class GetRandomTreeNode {
             node = tree.find(key);
             cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
         }
-        tree.inorder();
-        cout << endl;
 
-        key = 4;
-        {
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.getRandom();
-            cout << format("Random node is = {}", node ? node->val : -1) << endl;
-
-            res = tree.remove(key);
-            cout << format("Key={} is removed from tree, Result={}", key, (res ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-        }
-        tree.inorder();
-        cout << endl;
-
-        key = 1;
-        {
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.getRandom();
-            cout << format("Random node is = {}", node ? node->val : -1) << endl;
-
-            res = tree.remove(key);
-            cout << format("Key={} is removed from tree, Result={}", key, (res ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-        }
-        tree.inorder();
-        cout << endl;
-
-        key = 6;
-        {
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.getRandom();
-            cout << format("Random node is = {}", node ? node->val : -1) << endl;
-
-            res = tree.remove(key);
-            cout << format("Key={} is removed from tree, Result={}", key, (res ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-        }
-        tree.inorder();
-        cout << endl;
-
-        key = 6;
-        {
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.getRandom();
-            cout << format("Random node is = {}", node ? node->val : -1) << endl;
-
-            res = tree.remove(key);
-            cout << format("Key={} is removed from tree, Result={}", key, (res ? "TRUE" : "FALSE")) << endl;
-
-            node = tree.find(key);
-            cout << format("Key={} is found in tree, Result={}", key, (node ? "TRUE" : "FALSE")) << endl;
-        }
         tree.inorder();
         cout << endl;
     }

@@ -80,7 +80,7 @@ class SubsetSum {
         for (int s = 1; s <= sum; s++) {
             for (int i = 1; i <= n; i++) {
                 table[s][i] = table[s][i - 1];                                 // by exluding the current element.
-                if (arr[i - 1] <= s) table[s][i] |= table[s - arr[i - 1]][i];  // by including current element
+                if (arr[i - 1] <= s) table[s][i] |= table[s - arr[i - 1]][i-1];  // by including current element
             }
         }
 

@@ -18,8 +18,12 @@ class SearchDuplicateElementRangeInSortedArray {
         SearchDuplicateElementRangeInSortedArray obj;
 
         vector<pair<vector<int>, int>> inputs = {
+            {{0, 2, 3, 3, 3, 10, 10}, -5},
+            {{0, 2, 3, 3, 3, 10, 10}, 0},
             {{0, 2, 3, 3, 3, 10, 10}, 3},
-            {{0, 2, 3, 3, 3, 10, 10}, 6}};
+            {{0, 2, 3, 3, 3, 10, 10}, 6},
+            {{0, 2, 3, 3, 3, 10, 10}, 10},
+            {{0, 2, 3, 3, 3, 10, 10}, 12}};
 
         for (const auto& input : inputs) {
             auto range = obj.search_range_single_loop(input.first, input.second);
@@ -30,6 +34,31 @@ class SearchDuplicateElementRangeInSortedArray {
 
    public:
     pair<int, int> search_range(const vector<int>& arr, int elem) {
+        pair<int, int> result;
+        int l = 0, r = arr.size() - 1;
+        while (l <= r) {
+            int m = (l + r) / 2;
+            if (elem <= arr[m])
+                r = m - 1;
+            else
+                l = m + 1;
+        }
+        result.first = (l < arr.size() && arr[l] == elem) ? l : -1;
+
+        while (l <= r) {
+            int m = (l + r) / 2;
+            if (elem < arr[m])
+                r = m - 1;
+            else
+                l = m + 1;
+        }
+        result.second = (r >= 0 && arr[r] == elem) ? r : -1;
+
+        return result;
+    }
+
+   public:
+    pair<int, int> search_range2(const vector<int>& arr, int elem) {
         int left = search_left(arr, 0, arr.size() - 1, elem);
         if (left == -1) return {-1, -1};
 

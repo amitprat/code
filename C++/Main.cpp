@@ -1,8 +1,8 @@
-#include "string/CountPalindromes.h"
+#include "careercup/MultiplyDivisionWithRecursion.h"
 using namespace std;
 
 int main() {
-    CountPalindromes::test();
+    MultiplyDivisionWithRecursion::test();
 
     return 0;
 }

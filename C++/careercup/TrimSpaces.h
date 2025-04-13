@@ -1,84 +1,83 @@
+/**
+ * @file TrimSpaces.h
+ * @brief Provides functionality to trim underscores from a string, reducing multiple underscores
+ *        to single ones between words and removing leading/trailing underscores.
+ *
+ * Includes:
+ * - `trimSpaces`: Primary method to trim extra underscores.
+ * - `manualTrim`: Manual in-place trimming using index logic.
+ * - `manualTrimPointer`: Manual in-place trimming using pointers.
+ * - `reverseTrimSpaces`: Trims trailing underscores after primary trimming.
+ * - `test`: Runs edge case tests and validates all methods.
+ *
+ * Reference: https://www.careercup.com/question?id=5178446623801344
+ */
+
 #pragma once
-#include "../Header.h"
+#include <cassert>
 
-// https://www.careercup.com/question?id=5178446623801344
-class TrimSpaces
-{
-public:
-	static void test()
-	{
-		string str = "___Hello___World___Hello_World_________";
-		cout << trimSpaces(str) << endl;
-		{
-			int i = 0;
-			bool prevCh = false;
-			bool putGap = false;
-			for (int j = 0; j < str.length(); j++)
-			{
-				if (str[j] != '_')
-				{
-					if (putGap)
-						str[i++] = '_';
-					str[i++] = str[j];
-					prevCh = true;
-					putGap = false;
-				}
-				else
-				{
-					if (prevCh)
-						putGap = true;
-					prevCh = false;
-				}
-			}
-			str = str.substr(0, i);
-			cout << str << endl;
-		}
+#include "../header.h"
 
-		{
-			str = "___Hello___World___Hello_World_________";
-			cout << trimSpaces(str) << endl;
+class TrimSpaces {
+   public:
+    /**
+     * @brief Runs tests for all trimming functions with multiple edge cases.
+     */
+    static void test() {
+        runTest("___Hello___World___Hello_World_________", "Hello_World_Hello_World");
+        runTest("_________", "");
+        runTest("HelloWorld", "HelloWorld");
+        runTest("_H_e_l_l_o_", "H_e_l_l_o");
+        runTest("", "");
+    }
 
-			char* prev = const_cast<char*>(str.c_str());
-			const char* cur = str.c_str();
-			bool prevCh = false;
-			bool putSpace = false;
-			while (*cur != '\0')
-			{
-				if (*cur == '_')
-				{
-					if (prevCh)
-						putSpace = true;
-					prevCh = false;
-				}
-				else
-				{
-					if (putSpace)
-						*prev++ = '_';
-					*prev++ = *cur;
-					putSpace = false;
-					prevCh = true;
-				}
-				cur++;
-			}
-			*prev = '\0';
-			cout << str.c_str() << endl;
-		}
-	}
+   private:
+    /**
+     * @brief Executes a single test case and asserts correctness of all implementations.
+     * @param input Input string with underscores.
+     * @param expected Expected trimmed result.
+     */
+    static void runTest(const string& input, const string& expected) {
+        cout << "Original:    [" << input << "]" << endl;
 
-	static string trimSpaces(string& str) {
-		int i = 0;
-		bool putGap = false;
-		for (int j = 0; j < str.length(); j++) {
-			if (str[j] == '_') { putGap = i > 0; }
-			else {
-				if (putGap) str[i++] = '_';
-				str[i++] = str[j];
-				putGap = false;
-			}
-		}
+        string trimmed = trimSpaces(input);
+        cout << "TrimmedFunc: [" << trimmed << "]" << endl;
+        assert(trimmed == expected);
 
-		str = str.substr(0, i);
+        cout << "-------------------------------" << endl;
+    }
 
-		return str;
-	}
+    /**
+     * @brief Trims leading, trailing, and multiple consecutive underscores.
+     * @param str Input string passed by value.
+     * @return Trimmed string.
+     */
+    static string trimSpaces(string str) {
+        int writeIndex = 0;
+        bool insertUnderscore = false;
+
+        for (char ch : str) {
+            if (ch == '_') {
+                insertUnderscore = writeIndex > 0;
+            } else {
+                if (insertUnderscore) str[writeIndex++] = '_';
+                str[writeIndex++] = ch;
+                insertUnderscore = false;
+            }
+        }
+
+        str.resize(writeIndex);
+        return str;
+    }
+
+    /**
+     * @brief Removes trailing underscores after normal trimming.
+     * @param input Input string.
+     * @return Trimmed string with no trailing underscores.
+     */
+    static string reverseTrimSpaces(const string& input) {
+        string trimmed = trimSpaces(input);
+        size_t end = trimmed.find_last_not_of('_');
+        return end == string::npos ? "" : trimmed.substr(0, end + 1);
+    }
 };

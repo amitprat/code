@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ctype.h>
-
 #include <algorithm>
 #include <any>
 #include <array>
@@ -39,282 +37,202 @@
 #include "linkedlist/LinkedList.h"
 #include "tree/BinaryTree.h"
 
-using namespace std::views;
 using namespace std;
+using namespace std::views;
 
-/*----------------------Overload ostream << operators------------------------------------*/
-template <typename T>
-std::ostream &operator<<(std::ostream &out, const vector<T> &v) {
-    if (!v.empty()) {
-        out << '[';
-        std::ranges::copy(v, std::ostream_iterator<T>(out, ", "));
-        out << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
-    }
-    return out;
+// Logging utilities
+template <typename... Args>
+void trace(std::string_view label, Args&&... args) {
+    std::cerr << "[TRACE] " << label << ": ";
+    ((std::cerr << args << " "), ...);
+    std::cerr << std::endl;
 }
 
-template <typename T>
-std::ostream &operator<<(std::ostream &out, vector<T> &v) {
-    if (!v.empty()) {
-        out << '[';
-        std::ranges::copy(v, std::ostream_iterator<T>(out, ", "));
-        out << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
-    }
-    return out;
+inline void traceLine(std::string_view msg = "") {
+    std::cerr << "[------] " << msg << std::endl;
 }
 
-template <typename T>
-string to_string(const vector<T> &v) {
-    stringstream ss;
-    if (!v.empty()) {
-        ss << '[';
-        std::ranges::copy(v, std::ostream_iterator<T>(ss, ", "));
-        ss << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
+inline void traceHeader(std::string_view msg) {
+    std::cerr << "\n========= " << msg << " =========\n";
+}
+
+// Timer for benchmarking
+class ScopedTimer {
+   public:
+    explicit ScopedTimer(std::string name = "") : name(std::move(name)), start(chrono::high_resolution_clock::now()) {}
+    ~ScopedTimer() {
+        const auto end = chrono::high_resolution_clock::now();
+        chrono::duration<double> duration = end - start;
+        std::cerr << format("[TIMER] {} took {:.6f} seconds\n", name, duration.count());
     }
 
-    return ss.str();
+   private:
+    std::string name;
+    chrono::high_resolution_clock::time_point start;
+};
+
+// Overload ostream << for vector
+template <typename T>
+ostream& operator<<(ostream& out, const vector<T>& v) {
+    out << '[';
+    for (size_t i = 0; i < v.size(); ++i)
+        out << v[i] << (i + 1 < v.size() ? ", " : "");
+    return out << ']';
 }
 
+// Overload ostream << for vector<pair<T, T>>
 template <typename T>
-std::ostream &operator<<(std::ostream &out, const vector<pair<T, T>> &arr) {
-    if (!arr.empty()) {
-        out << "[";
-        for (auto &val : arr) {
-            out << val << ", ";
-        }
-        out << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
-    }
-
-    return out;
-}
-
-template <typename T>
-std::ostream &operator<<(std::ostream &out, const pair<T, T> &v) {
-    out << "{" << v.first << ", " << v.second << "}";
-    return out;
-}
-
-template <typename T>
-std::string to_string(const pair<T, T> &v) {
-    stringstream ss;
-    ss << "{" << v.first << ", " << v.second << "}";
-    return ss.str();
+ostream& operator<<(ostream& out, const vector<pair<T, T>>& arr) {
+    out << '[';
+    for (size_t i = 0; i < arr.size(); ++i)
+        out << arr[i] << (i + 1 < arr.size() ? ", " : "");
+    return out << ']';
 }
 
 template <typename U, typename V>
-std::ostream &operator<<(std::ostream &out, const map<U, V> &v) {
-    if (!v.empty()) {
-        out << "[";
-        for (auto &e : v) out << "(" << e.first << ", " << e.second << ")";
-        out << '\b' << '\b' << ']';
-    }
-
-    return out;
+ostream& operator<<(ostream& out, const pair<U, V>& p) {
+    return out << format("{{{}, {}}}", p.first, p.second);
 }
 
 template <typename U, typename V>
-std::ostream &operator<<(std::ostream &out, const unordered_map<U, V> &v) {
-    if (!v.empty()) {
-        out << "[";
-        for (auto &e : v) out << "(" << e.first << ", " << e.second << ")";
-        out << '\b' << '\b' << ']';
-    }
-
-    return out;
-}
-
-template <typename U>
-std::ostream &operator<<(std::ostream &out, const unordered_set<U> &v) {
-    if (!v.empty()) {
-        out << "[";
-        for (auto &e : v) out << e << ", ";
-        out << '\b' << '\b' << ']';
-    }
-
-    return out;
+ostream& operator<<(ostream& out, const vector<pair<U, V>>& arr) {
+    out << '[';
+    for (size_t i = 0; i < arr.size(); ++i)
+        out << arr[i] << (i + 1 < arr.size() ? ", " : "");
+    return out << ']';
 }
 
 template <typename T>
-string to_string(const unordered_set<T> &v) {
-    stringstream ss;
-    if (!v.empty()) {
-        ss << '[';
-        std::ranges::copy(v, std::ostream_iterator<T>(ss, ", "));
-        ss << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
-    }
-
+string to_string(const vector<T>& v) {
+    ostringstream ss;
+    ss << v;
     return ss.str();
-}
-
-template <typename U>
-std::ostream &operator<<(std::ostream &out, const set<U> &v) {
-    if (!v.empty()) {
-        out << "[";
-        for (auto &e : v) out << e.first << ", ";
-        out << '\b' << '\b' << ']';
-    }
-
-    return out;
 }
 
 template <typename T>
-string to_string(const set<T> &v) {
-    stringstream ss;
-    if (!v.empty()) {
-        ss << '[';
-        std::ranges::copy(v, std::ostream_iterator<T>(ss, ", "));
-        ss << '\b' << '\b' << ']';  // use two ANSI backspace characters '\b' to overwrite final ", "
-    }
+ostream& operator<<(ostream& out, const pair<T, T>& p) {
+    return out << format("{{{}, {}}}", p.first, p.second);
+}
 
+template <typename T>
+string to_string(const pair<T, T>& p) {
+    return format("{{{}, {}}}", p.first, p.second);
+}
+
+template <typename U, typename V>
+ostream& operator<<(ostream& out, const map<U, V>& m) {
+    out << '[';
+    for (auto it = m.begin(); it != m.end(); ++it)
+        out << '(' << it->first << ", " << it->second << ')' << (next(it) != m.end() ? ", " : "");
+    return out << ']';
+}
+
+template <typename U, typename V>
+ostream& operator<<(ostream& out, const unordered_map<U, V>& m) {
+    out << '[';
+    for (const auto& [k, v] : m)
+        out << '(' << k << ", " << v << "), ";
+    if (!m.empty()) out.seekp(-2, ios_base::end);
+    return out << ']';
+}
+
+template <typename T>
+ostream& operator<<(ostream& out, const unordered_set<T>& s) {
+    out << '[';
+    for (const auto& e : s)
+        out << e << ", ";
+    if (!s.empty()) out.seekp(-2, ios_base::end);
+    return out << ']';
+}
+
+template <typename T>
+string to_string(const unordered_set<T>& s) {
+    ostringstream ss;
+    ss << s;
     return ss.str();
 }
 
-template <typename U, std::size_t N>
-std::ostream &operator<<(std::ostream &out, const array<U, N> &v) {
-    if (!v.empty()) {
-        out << "[";
-        for (auto &e : v) out << e << ", ";
-        out << '\b' << '\b' << ']';
-    }
+template <typename T>
+ostream& operator<<(ostream& out, const set<T>& s) {
+    out << '[';
+    for (auto it = s.begin(); it != s.end(); ++it)
+        out << *it << (next(it) != s.end() ? ", " : "");
+    return out << ']';
+}
 
+template <typename T>
+string to_string(const set<T>& s) {
+    return to_string(vector<T>{s.begin(), s.end()});
+}
+
+template <typename T, size_t N>
+ostream& operator<<(ostream& out, const array<T, N>& a) {
+    out << '[';
+    for (size_t i = 0; i < a.size(); ++i)
+        out << a[i] << (i + 1 < a.size() ? ", " : "");
+    return out << ']';
+}
+
+template <typename T>
+ostream& operator<<(ostream& out, const vector<vector<T>>& matrix) {
+    for (const auto& row : matrix) out << row << '\n';
     return out;
 }
 
-template <class T>
-std::ostream &operator<<(std::ostream &out, vector<vector<T>> &matrix) {
-    int N = matrix.size();
-    if (N > 0) {
-        for (int i = 0; i < N; i++) {
-            out << matrix[i] << endl;
-        }
-    }
-
-    return out;
-}
-
-// std::ostream &operator<<(std::ostream &out, Tree::Node *root) {
-//     Tree::prettyPrintTree(root, out);
-//     return out;
-// }
-/*----------------------Overload ostream << operators------------------------------------*/
-
-/*----------------------Common Data structures------------------------------------*/
 struct Point {
-    int x;
-    int y;
+    int x{}, y{};
 
-    Point() {}
-    Point(int x, int y) : x(x), y(y) {}
+    constexpr Point(int x = 0, int y = 0) : x(x), y(y) {}
 
-    string to_string() const {
-        stringstream ss;
-        ss << "{" << x << "," << y << "}";
-
-        return ss.str();
+    friend ostream& operator<<(ostream& out, const Point& p) {
+        return out << format("{{{}, {}}}", p.x, p.y);
     }
 
-    bool operator==(const Point &that) {
-        return this->x == that.x && this->y == that.y;
-    }
-
-    bool operator!=(const Point &that) {
-        return (this->x != that.x || this->y != that.y);
-    }
-
-    Point operator+(const Point &that) {
-        Point newPoint;
-        newPoint.x = this->x + that.x;
-        newPoint.y = this->y + that.y;
-
-        return newPoint;
-    }
-
-    friend ostream &operator<<(ostream &out, const Point &p) {
-        out << p.to_string();
-        return out;
-    }
+    bool operator==(const Point&) const = default;
+    Point operator+(const Point& other) const { return {x + other.x, y + other.y}; }
 };
 
 struct Interval {
-    int start = 0, end = 0;
-    string to_string() const {
-        stringstream ss;
-        ss << "{" << start << "," << end << "}";
-        return ss.str();
+    int start{}, end{};
+
+    constexpr Interval(int s = 0, int e = 0) : start(s), end(e) {}
+
+    friend ostream& operator<<(ostream& out, const Interval& i) {
+        return out << format("{{{}, {}}}", i.start, i.end);
     }
 
-    bool operator==(const Interval &that) {
-        return this->start == that.start && this->end == that.end;
-    }
-
-    friend ostream &operator<<(ostream &out, const Interval &it) {
-        out << it.to_string();
-
-        return out;
-    }
+    bool operator==(const Interval&) const = default;
 };
-/*----------------------Common Data structures------------------------------------*/
 
-/*----------------------Common Assert operations start------------------------------------*/
 template <typename T>
-bool areEqual(const vector<T> &arr1, const vector<T> &arr2) {
-    if (arr1.size() != arr2.size()) {
-        cerr << "array size mismatch, arr1 size: " << arr1.size() << ", arr2 size: " << arr2.size() << endl;
+bool areEqual(const vector<T>& a, const vector<T>& b) {
+    if (a.size() != b.size()) {
+        trace("Size Mismatch", a.size(), "vs", b.size());
         return false;
     }
-
-    for (int i = 0; i < arr1.size(); i++) {
-        if (arr1[i] != arr2[i]) {
-            cerr << "element mismatch, arr1[i]:" << arr1[i] << ", arr2[i]:" << arr2[i] << endl;
+    for (size_t i = 0; i < a.size(); ++i) {
+        if (!(a[i] == b[i])) {
+            trace("Element Mismatch", "index", i, a[i], "!=", b[i]);
             return false;
         }
     }
-
     return true;
 }
 
 template <typename T>
-bool areEqual(const typename LinkedList<T>::Node *first, const typename LinkedList<T>::Node *second) {
-    if (!first && !second) return true;
-    if (!first || !second) {
-        cerr << "One of specified list is null!" << endl;
+bool areEqual(const typename LinkedList<T>::Node* a, const typename LinkedList<T>::Node* b) {
+    const auto lenA = LinkedList<T>::length(a);
+    const auto lenB = LinkedList<T>::length(b);
+
+    if (lenA != lenB) {
+        trace("List length mismatch", lenA, "vs", lenB);
         return false;
     }
-    if (LinkedList<T>::length(first) != LinkedList<T>::length(second)) {
-        cerr << format("Length of first list {} != {} length of second list.", LinkedList<T>::length(first), LinkedList<T>::length(second)) << endl;
-        return false;
-    }
-
-    const typename LinkedList<T>::Node *tmpFirstRoot = first;
-    const typename LinkedList<T>::Node *tmpSecondRoot = second;
-
-    while (tmpFirstRoot) {
-        if (tmpFirstRoot->val != tmpSecondRoot->val) {
-            cerr << format("(List node value from first list) {} != {} (node value from second list).", tmpFirstRoot->val, tmpSecondRoot->val) << endl;
+    for (; a && b; a = a->next, b = b->next) {
+        if (a->val != b->val) {
+            trace("List node mismatch", a->val, "!=", b->val);
             return false;
         }
-
-        tmpFirstRoot = tmpFirstRoot->next;
-        tmpSecondRoot = tmpSecondRoot->next;
     }
-
     return true;
 }
-/*----------------------Common Assert operations end--------------------------------------*/
-
-//-----------------------------------------unused---------------------------------------------------------
-#define START_METHOD() \
-    auto startTime = chrono::high_resolution_clock::now();
-
-#define END_METHOD()                                              \
-    auto endTime = chrono::high_resolution_clock::now();          \
-    std::chrono::duration<double> duration = endTime - startTime; \
-    std::cout << "Execution time: " << duration.count() << " seconds" << std::endl;
-
-// void logError(std::string_view errorMessage,
-//               std::source_location location = std::source_location::current()) {
-//     std::println("{}:{}:{} - An unexpected error occurred in {}: {}",
-//                  location.file_name(), location.line(), location.column(),
-//                  location.function_name(), errorMessage);
-// }
-//-----------------------------------------unused---------------------------------------------------------

@@ -78,7 +78,7 @@ class InorderSuccessorPredecessorOfBST {
             Node *parent = root->parent;
             while (parent && parent->right == root) {
                 root = root->parent;
-                parent = parent->parent;
+                parent = root->parent;
             }
             suc = parent;
         }
@@ -156,5 +156,25 @@ class InorderSuccessorPredecessorOfBST {
         inorder(root->left, out);
         out << root->val << " ";
         inorder(root->right, out);
+    }
+
+   private:
+    Node *inorder_suc(Node *root, Node *node) {
+        if (!root || !node) return NULL;
+        if (root->right) return min(root->right);
+
+        Node *parent = root->parent;
+        while (parent && parent->left != root) {
+            root = parent;
+            parent = root->parent;
+        }
+        return parent;
+    }
+
+    Node *min(Node *node) {
+        while (node->left) {
+            node = node->left;
+        }
+        return node;
     }
 };

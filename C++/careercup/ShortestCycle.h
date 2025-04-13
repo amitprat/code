@@ -1,12 +1,15 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 /*
 https://www.careercup.com/question?id=5744699292778496
 
 given a target node in a directed graph, find the shortest cycle including this node, return the whole path.
 
-Straight forward BFS to find shortest path from s to s. Just ensure, the start node is not put into the visited nodes at first. Since there is no relaxation (unweighted graph) needed, the order of first discovery from BFS is as well the shortest path to that node. Store it's parent and don't care about rediscovery (as usually). If I get back to S, I have the shortest cycle.
+Straight forward BFS to find shortest path from s to s. Just ensure, the start node is not put into the visited
+nodes at first. Since there is no relaxation (unweighted graph) needed, the order of first discovery from BFS is
+as well the shortest path to that node. Store it's parent and don't care about rediscovery (as usually).
+If I get back to S, I have the shortest cycle.
 
 Runtime is O(|V|+|E|), especially if there is no cycle, this might happen (e.g. if you
 give me the root of a tree as start). Space is O(|V|).
@@ -31,16 +34,15 @@ while (!q.empty()) {
         }
     }
 }
-
 */
-
 class ShortestCycle {
     struct Node {
         int val;
         vector<Node*> neighbours;
-        Node(int val) :val(val) {}
+        Node(int val) : val(val) {}
     };
-public:
+
+   public:
     static void test() {
         ShortestCycle obj;
         Node* root = new Node(1);
@@ -69,19 +71,21 @@ public:
     vector<int> findShortestCycle(Node* node) {
         queue<Node*> q;
         q.push(node);
+
         unordered_map<Node*, Node*> parent;
         bool cycle = false;
         while (!q.empty()) {
-            auto f = q.front(); q.pop();
+            auto f = q.front();
+            q.pop();
 
             for (auto& neighbour : f->neighbours) {
                 if (parent.find(neighbour) != parent.end()) continue;
                 parent[neighbour] = f;
+
                 if (neighbour->val == node->val) {
                     cycle = true;
                     break;
-                }
-                else
+                } else
                     q.push(neighbour);
             }
         }
@@ -94,9 +98,12 @@ public:
                 cur = parent[cur];
             } while (cur != node);
             result.push_back(cur->val);
-            reverse(result.begin(), result.end());
+
+            std::reverse(result.begin(), result.end());
+
             return result;
         }
+
         return {};
     }
 };

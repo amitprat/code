@@ -38,14 +38,11 @@ class IntersectionOfLinkedLists {
         int l1 = length(root1);
         int l2 = length(root2);
 
-        if (l1 < l2)
-            root2 = moveNode(root2, l2 - l1);
-        else if (l1 > l2)
-            root1 = moveNode(root1, l1 - l2);
+        if (l1 < l2) root2 = moveNode(root2, l2 - l1);
+        else if (l1 > l2) root1 = moveNode(root1, l1 - l2);
 
         while (root1 && root2) {
-            if (root1 == root2)
-                return root1;
+            if (root1 == root2) return root1;
 
             root1 = root1->next;
             root2 = root2->next;

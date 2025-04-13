@@ -1,11 +1,11 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class MergeIntervals {
-public:
+   public:
     static void test() {
-        vector<Interval> arr1 = { {1, 2},{3, 9} };
-        vector<Interval> arr2 = { {4, 5},{8, 10},{11, 12} };
+        vector<Interval> arr1 = {{1, 2}, {3, 9}};
+        vector<Interval> arr2 = {{4, 5}, {8, 10}, {11, 12}};
 
         auto res = merge(arr1, arr2);
         cout << to_string(res) << endl;
@@ -18,20 +18,25 @@ public:
             if (arr1[i].start <= arr2[j].start) {
                 mergeOrInsert(result, arr1[i]);
                 i++;
-            }
-            else {
+            } else {
                 mergeOrInsert(result, arr2[j]);
                 j++;
             }
         }
 
-        while (i < arr1.size()) { mergeOrInsert(result, arr1[i]); i++; }
-        while (j < arr2.size()) { mergeOrInsert(result, arr2[j]); j++; }
+        while (i < arr1.size()) {
+            mergeOrInsert(result, arr1[i]);
+            i++;
+        }
+        while (j < arr2.size()) {
+            mergeOrInsert(result, arr2[j]);
+            j++;
+        }
 
         return result;
     }
 
-private:
+   private:
     static void mergeOrInsert(vector<Interval>& result, Interval& it) {
         if (result.empty() || it.start > result.back().end) result.push_back(it);
         else {

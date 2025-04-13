@@ -1,3 +1,5 @@
+#include <compare>
+
 #include "../header.h"
 
 class AnimalShelter {
@@ -33,18 +35,7 @@ class AnimalShelter {
     };
     struct Order {
         int position = 0;
-
-        bool operator<(const Order &that) {
-            return position < that.position;
-        }
-
-        bool operator>(const Order &that) {
-            return position > that.position;
-        }
-
-        bool operator==(const Order &that) {
-            return position == that.position;
-        }
+        bool operator<=>(const Order& that) const = default;
 
         string to_string() {
             return "Position: " + std::to_string(position);
@@ -57,6 +48,7 @@ class AnimalShelter {
 
         AnimalInfo(string type, string name) {
             this->detail.name = name;
+
             if (type == "Cat")
                 this->type = AnimalType::CAT;
             else if (type == "Dog")
@@ -80,6 +72,7 @@ class AnimalShelter {
     void push(AnimalInfo info) {
         globalOrder++;
         info.order.position = globalOrder;
+
         if (info.type == AnimalType::DOG) {
             dogsInfo.push(info);
         } else if (info.type == AnimalType::CAT) {
@@ -88,10 +81,8 @@ class AnimalShelter {
     }
 
     AnimalInfo pop() {
-        if (dogsInfo.empty())
-            return pop(AnimalType::CAT);
-        else if (catsInfo.empty())
-            return pop(AnimalType::DOG);
+        if (dogsInfo.empty()) return pop(AnimalType::CAT);
+        else if (catsInfo.empty()) return pop(AnimalType::DOG);
 
         auto dog = dogsInfo.top();
         auto cat = catsInfo.top();
@@ -129,7 +120,7 @@ class AnimalShelter {
 
     AnimalInfo popDog() {
         if (dogsInfo.empty())
-            throw exception("No dogs available.");
+            throw runtime_error("No dogs available.");
 
         auto val = dogsInfo.top();
         dogsInfo.pop();
@@ -138,7 +129,7 @@ class AnimalShelter {
 
     AnimalInfo popCat() {
         if (catsInfo.empty())
-            throw exception("No cats available.");
+            throw runtime_error("No cats available.");
 
         auto val = catsInfo.top();
         catsInfo.pop();
@@ -171,5 +162,90 @@ class AnimalShelter {
 
     bool isEmpty() {
         return dogsInfo.empty() && catsInfo.empty();
+    }
+};
+
+class AnimalShelter2 {
+    struct AnimalInfo {
+        string name;
+        string type;
+        int globalOrder;
+
+        string to_string() {
+            stringstream ss;
+            ss << "{" << name << ", " << type << ", " << globalOrder << "}";
+            return ss.str();
+        }
+    };
+
+    stack<AnimalInfo> dogs, cats;
+    int globalOrder = 0;
+
+   public:
+    void push(const string& name, const string& type) {
+        type == "dog"
+            ? dogs.push(AnimalInfo{.name = name, .type = "dog", .globalOrder = globalOrder})
+            : cats.push(AnimalInfo{.name = name, .type = "cat", .globalOrder = globalOrder});
+        globalOrder++;
+    }
+
+    AnimalInfo pop() {
+        auto dog = top("dog");
+        auto cat = top("cat");
+        if (dog.globalOrder > cat.globalOrder) {
+            dogs.pop();
+            return dog;
+        } else {
+            cats.pop();
+            return cat;
+        }
+    }
+
+    AnimalInfo pop(const string& type) {
+        if (type == "dog" && dogs.empty()) throw runtime_error("No dogs found");
+        if (type == "cat" && cats.empty()) throw runtime_error("No cat found");
+
+        AnimalInfo animal;
+        if (type == "dog") {
+            animal = dogs.top();
+            dogs.pop();
+        } else {
+            animal = cats.top();
+            cats.pop();
+        }
+
+        return animal;
+    }
+
+    AnimalInfo top() {
+        auto dog = top("dog");
+        auto cat = top("cat");
+        return dog.globalOrder > cat.globalOrder ? dog : cat;
+    }
+
+    AnimalInfo top(const string& type) {
+        if (type == "dog" && dogs.empty()) return AnimalInfo{.type = "dog", .globalOrder = -1};
+        if (type == "cat" && cats.empty()) return AnimalInfo{.type = "cat", .globalOrder = -1};
+        return type == "dog" ? dogs.top() : cats.top();
+    }
+
+    bool empty() { return dogs.empty() && cats.empty(); }
+
+   public:
+    static void test() {
+        AnimalShelter2 obj;
+        obj.push("jacky", "dog");
+        obj.push("pussy", "cat");
+
+        auto animal = obj.top();
+        cout << "Top Animal: " << animal.to_string() << endl;
+
+        auto dog = obj.top("dog");
+        cout << "Top Dog: " << dog.to_string() << endl;
+
+        obj.push("pissa", "cat");
+
+        auto cat = obj.top("cat");
+        cout << "Top Cat: " << cat.to_string() << endl;
     }
 };

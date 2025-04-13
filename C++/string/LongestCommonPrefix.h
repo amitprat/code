@@ -2,10 +2,10 @@
 #include "../header.h"
 
 class LongestCommonPrefix {
-public:
+   public:
     static void test() {
         LongestCommonPrefix obj;
-        vector<string> input = { "geeksforgeeks", "geeks", "geek", "geezer" };
+        vector<string> input = {"geeksforgeeks", "geeks", "geek", "geezer"};
         cout << obj.longestPrfix(input) << endl;
     }
 
@@ -15,7 +15,8 @@ public:
         while (!done) {
             for (int j = 0; j < input.size(); j++) {
                 if (i != 0 && input[i] != input[i - 1]) {
-                    done = true;  break;
+                    done = true;
+                    break;
                 }
             }
             i++;

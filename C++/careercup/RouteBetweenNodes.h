@@ -1,22 +1,18 @@
 #include "../header.h"
 
-class RouteBetweenNodes
-{
-    class Graph
-    {
-    public:
+class RouteBetweenNodes {
+    class Graph {
+       public:
         int V;
         unordered_map<int, vector<int>> adjMap;
         unordered_set<int> vertices;
 
         Graph(int v) : V(v) {}
-        void addVertex(int src)
-        {
+        void addVertex(int src) {
             vertices.insert(src);
         }
 
-        void addEdge(int src, int dst)
-        {
+        void addEdge(int src, int dst) {
             vertices.insert(src);
             vertices.insert(dst);
 
@@ -24,9 +20,8 @@ class RouteBetweenNodes
         }
     };
 
-public:
-    static void test()
-    {
+   public:
+    static void test() {
         Graph g(6);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -43,8 +38,7 @@ public:
             vector<int> path;
             vector<bool> visited(g.V, false);
             bool res = obj.isConnectedUsingDFS(g, src, dst, visited, path);
-            if (res)
-            {
+            if (res) {
                 cout << "Is connected: " << path << endl;
             }
         }
@@ -58,10 +52,9 @@ public:
         }
     }
 
-    bool isConnectedUsingDFS(Graph g, int src, int dst, vector<bool> visited, vector<int> &path)
-    {
-        if (src == dst)
-        {
+   public:
+    bool isConnectedUsingDFS(Graph g, int src, int dst, vector<bool> visited, vector<int> &path) {
+        if (src == dst) {
             path.push_back(src);
             return true;
         }
@@ -69,10 +62,8 @@ public:
         path.push_back(src);
         visited[src] = true;
 
-        for (auto v : g.adjMap[src])
-        {
-            if (!visited[v])
-            {
+        for (auto v : g.adjMap[src]) {
+            if (!visited[v]) {
                 if (isConnectedUsingDFS(g, v, dst, visited, path))
                     return true;
             }
@@ -84,34 +75,22 @@ public:
         return false;
     }
 
-    friend std::ostream &operator<<(std::ostream &out, vector<int> &path)
-    {
-        for (auto u : path)
-        {
-            out << u << " ";
-        }
-
-        return out;
-    }
-
-    bool isConnectedUsingBFS(Graph g, int src, int dst)
-    {
+   public:
+    bool isConnectedUsingBFS(Graph g, int src, int dst) {
         vector<bool> visited(g.V, false);
         queue<int> q;
+
         q.push(src);
         visited[src] = true;
 
-        while (!q.empty())
-        {
+        while (!q.empty()) {
             auto u = q.front();
             q.pop();
-            if (u == dst)
-                return true;
 
-            for (auto v : g.adjMap[u])
-            {
-                if (!visited[v])
-                {
+            if (u == dst) return true;
+
+            for (auto v : g.adjMap[u]) {
+                if (!visited[v]) {
                     q.push(v);
                     visited[v] = true;
                 }
@@ -119,5 +98,14 @@ public:
         }
 
         return false;
+    }
+
+   private:
+    friend std::ostream &operator<<(std::ostream &out, vector<int> &path) {
+        for (auto u : path) {
+            out << u << " ";
+        }
+
+        return out;
     }
 };

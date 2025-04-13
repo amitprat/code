@@ -27,9 +27,9 @@ class SearchInRowColumnSortedMatrix {
         if (n == 0) return {-1, -1};
 
         int m = matrix[0].size();
-        int i = 0, j = m;
+        int i = 0, j = m - 1;
 
-        while (i < n && m >= 0) {
+        while (i < n && j >= 0) {
             if (element == matrix[i][j]) {
                 return {i, j};
             } else if (element < matrix[i][j]) {

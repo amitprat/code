@@ -1,6 +1,25 @@
 #pragma once
 #include "../header.h"
 
+/**
+ * Problem: Zero Matrix
+ *
+ * Given an MxN matrix, if an element is 0, set its entire row and column to 0.
+ *
+ * Example:
+ * Input:
+ *   1  2  0  4
+ *   5  6  7  8
+ *   9  0 11 12
+ *   0 14 15 16
+ *
+ * Output:
+ *   0  0  0  0
+ *   5  0  0  8
+ *   0  0  0  0
+ *   0  0  0  0
+ */
+
 class ZeroMatrix {
    public:
     static void test() {
@@ -10,78 +29,71 @@ class ZeroMatrix {
             {9, 0, 11, 12},
             {0, 14, 15, 16}};
 
-        cout << "Original Matrix:" << endl;
+        cout << "Original Matrix:\n";
         cout << matrix << endl;
 
         ZeroMatrix obj;
         obj.setZeros(matrix);
 
-        cout << "Zeros Matrix:" << endl;
+        cout << "\nZeroed Matrix:\n";
         cout << matrix << endl;
     }
 
-   private:
+   public:
     void setZeros(vector<vector<int>>& matrix) {
-        int N = matrix.size();
-        bool rowHasZero = false;
-        bool colHasZero = false;
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        bool firstRowZero = false, firstColZero = false;
 
-        for (int j = 0; j < N; j++) {
-            if (matrix[0][j] == 0) rowHasZero = true;
-        }
+        // Check if first row has any zero
+        for (int j = 0; j < cols; ++j)
+            if (matrix[0][j] == 0) firstRowZero = true;
 
-        for (int i = 0; i < N; i++) {
-            if (matrix[i][0] == 0) colHasZero = true;
-        }
+        // Check if first column has any zero
+        for (int i = 0; i < rows; ++i)
+            if (matrix[i][0] == 0) firstColZero = true;
 
-        for (int i = 1; i < N; i++) {
-            for (int j = 1; j < N; j++) {
+        // Use first row and column as markers
+        for (int i = 1; i < rows; ++i)
+            for (int j = 1; j < cols; ++j)
                 if (matrix[i][j] == 0)
                     matrix[i][0] = matrix[0][j] = 0;
-            }
-        }
 
-        for (int i = 1; i < N; i++) {
-            for (int j = 1; j < N; j++) {
+        // Apply zeroes based on markers
+        for (int i = 1; i < rows; ++i)
+            for (int j = 1; j < cols; ++j)
                 if (matrix[i][0] == 0 || matrix[0][j] == 0)
                     matrix[i][j] = 0;
-            }
-        }
 
-        if (rowHasZero) {
-            for (int j = 0; j < N; j++)
+        // Zero out first row
+        if (firstRowZero)
+            for (int j = 0; j < cols; ++j)
                 matrix[0][j] = 0;
-        }
 
-        if (colHasZero) {
-            for (int i = 0; i < N; i++)
+        // Zero out first column
+        if (firstColZero)
+            for (int i = 0; i < rows; ++i)
                 matrix[i][0] = 0;
-        }
     }
 
-   private:
+   public:
+    // Less optimal version using O(m+n) space
     void setZeros2(vector<vector<int>>& matrix) {
-        int n = matrix.size();
-        if (n == 0) return;
-        int m = matrix[0].size();
+        int rows = matrix.size();
+        if (rows == 0) return;
+        int cols = matrix[0].size();
 
-        bool* rows = new bool[n];
-        bool* cols = new bool[m];
-        memset(rows, 0, n * sizeof(bool));
-        memset(cols, 0, m * sizeof(bool));
+        vector<bool> rowZero(rows, false);
+        vector<bool> colZero(cols, false);
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (matrix[i][j] == 0) rows[i] = cols[j] = true;
-            }
-        }
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+                if (matrix[i][j] == 0)
+                    rowZero[i] = colZero[j] = true;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (rows[i] || cols[j]) {
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+                if (rowZero[i] || colZero[j])
                     matrix[i][j] = 0;
-                }
-            }
-        }
     }
 };

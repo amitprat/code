@@ -18,167 +18,142 @@ class AddLinkedLists {
     static void test() {
         AddLinkedLists obj;
 
-        LinkedList<int>::Node* root1 = LinkedList<int>::create({9, 9, 9, 5, 6, 3});
-        LinkedList<int>::Node* root2 = LinkedList<int>::create({9, 4, 3});
+        LinkedList<int> list1({9, 9, 9, 5, 6, 3});
+        LinkedList<int> list2({9, 4, 3});
 
-        LinkedList<int>::Node* result1 = obj.addLists1(root1, root2);
-        LinkedList<int>::Node* result2 = obj.addLists2(root1, root2);
-        LinkedList<int>::Node* result3 = obj.addLists3(root1, root2);
+        auto result1 = obj.addLists1(list1.getHead(), list2.getHead());
+        auto result2 = obj.addLists2(list1.getHead(), list2.getHead());
+        auto result3 = obj.addLists3(list1.getHead(), list2.getHead());
 
         assert(areEqual<int>(result1, result2));
         assert(areEqual<int>(result1, result3));
 
-        cout << "Adding list1:" << root1 << " and " << root2 << endl;
-        cout << "Result: " << result1 << endl;
+        cout << "Adding list1:" << list1 << " and " << list2 << endl;
+        cout << "Result: " << LinkedList<int>::to_string(result1) << endl;
+
+        std::cout << "Adding lists completed successfully.\n";
     }
 
    public:
-    LinkedList<int>::Node* addLists1(LinkedList<int>::Node* root1, LinkedList<int>::Node* root2) {
-        int l1 = LinkedList<int>::length(root1);
-        int l2 = LinkedList<int>::length(root2);
-        if (l1 > l2) {
-            swap(root1, root2);
-            swap(l1, l2);
+    [[nodiscard]] LinkedList<int>::Node* addLists1(LinkedList<int>::Node* l1, LinkedList<int>::Node* l2) {
+        int len1 = LinkedList<int>::length(l1);
+        int len2 = LinkedList<int>::length(l2);
+        if (len1 > len2) {
+            std::swap(l1, l2);
+            std::swap(len1, len2);
         }
 
-        // pad list with  zeros.
-        root1 = padListWithZeros(root1, l2 - l1);
-
+        l1 = padListWithZeros(l1, len2 - len1);
         int carry = 0;
-        LinkedList<int>::Node* root = addListsOfSameSize(root1, root2, carry);
+        auto result = addListsOfSameSize(l1, l2, carry);
 
         if (carry) {
-            LinkedList<int>::Node* newNode = new LinkedList<int>::Node(carry);
-            newNode->next = root;
-            root = newNode;
-        }
-
-        return root;
-    }
-
-   private:
-    LinkedList<int>::Node* padListWithZeros(LinkedList<int>::Node* root, int diff) {
-        while (diff--) {
-            LinkedList<int>::Node* newNode = new LinkedList<int>::Node(0);
-            newNode->next = root;
-            root = newNode;
-        }
-
-        return root;
-    }
-
-    LinkedList<int>::Node* addListsOfSameSize(LinkedList<int>::Node* root1, LinkedList<int>::Node* root2, int& carry) {
-        if (!root1 || !root2) return nullptr;
-
-        auto next = addListsOfSameSize(root1->next, root2->next, carry);
-
-        auto val1 = root1->val + root2->val + carry;
-        carry = val1 / 10;
-
-        auto cur = new LinkedList<int>::Node(val1 % 10);
-        cur->next = next;
-
-        return cur;
-    }
-
-   public:
-    LinkedList<int>::Node* addLists2(LinkedList<int>::Node* head1, LinkedList<int>::Node* head2) {
-        int sz1 = LinkedList<int>::length(head1);
-        int sz2 = LinkedList<int>::length(head2);
-
-        int carry = 0;
-        LinkedList<int>::Node* result = nullptr;
-        if (sz1 == sz2) {
-            result = addSameSize(head1, head2, carry);
-        } else {
-            int diff = 0;
-            if (sz1 < sz2) {
-                swap(head1, head2);
-                diff = sz2 - sz1;
-            } else
-                diff = sz1 - sz2;
-
-            LinkedList<int>::Node* larger = head1;
-            LinkedList<int>::Node* smaller = head2;
-            while (diff--) larger = larger->next;
-
-            result = addSameSize(larger, smaller, carry);
-            result = addRemaining(head1, larger, result, carry);
-        }
-
-        if (carry) {
-            LinkedList<int>::Node* newHead = new LinkedList<int>::Node(carry);
-            newHead->next = result;
-            result = newHead;
+            auto newNode = new LinkedList<int>::Node(carry);
+            newNode->next = result;
+            result = newNode;
         }
 
         return result;
     }
 
    private:
-    LinkedList<int>::Node* addSameSize(LinkedList<int>::Node* head1, LinkedList<int>::Node* head2, int& carry) {
-        if (!head1) return nullptr;  // as both lists are of same size so check on one is ok.
-
-        LinkedList<int>::Node* next = addSameSize(head1->next, head2->next, carry);
-
-        int rem = (head1->val + head2->val + carry) % 10;
-        carry = (head1->val + head2->val + carry) / 10;
-
-        LinkedList<int>::Node* curNode = new LinkedList<int>::Node(rem);
-        curNode->next = next;
-
-        return curNode;
-    }
-
-    LinkedList<int>::Node* addRemaining(LinkedList<int>::Node* larger, LinkedList<int>::Node* smaller, LinkedList<int>::Node* result, int& carry) {
-        if (larger == smaller) return result;
-
-        LinkedList<int>::Node* next = addRemaining(larger->next, smaller, result, carry);
-
-        int rem = (larger->val + carry) % 10;
-        carry = (larger->val + carry) / 10;
-
-        LinkedList<int>::Node* newNode = new LinkedList<int>::Node(rem);
-        newNode->next = next;
-
-        return newNode;
-    }
-
-   public:
-    LinkedList<int>::Node* addLists3(LinkedList<int>::Node* head1, LinkedList<int>::Node* head2) {
-        if (!head1 && !head2) return nullptr;
-        int n = LinkedList<int>::length(head1);
-        int m = LinkedList<int>::length(head2);
-
-        if (n < m) {
-            swap(head1, head2);
-            swap(n, m);
+    [[nodiscard]] LinkedList<int>::Node* padListWithZeros(LinkedList<int>::Node* head, int count) {
+        while (count--) {
+            auto newNode = new LinkedList<int>::Node(0);
+            newNode->next = head;
+            head = newNode;
         }
-
-        int carry = 0;
-        auto head = addLists3(head1, head2, n - m, carry);
-
-        if (carry) {
-            LinkedList<int>::Node* newHead = new LinkedList<int>::Node(carry);
-            newHead->next = head;
-            head = newHead;
-        }
-
         return head;
     }
 
-   private:
-    LinkedList<int>::Node* addLists3(LinkedList<int>::Node* head1, LinkedList<int>::Node* head2, int diff, int& carry) {
-        if (!head1 && !head2) return nullptr;
+    [[nodiscard]] LinkedList<int>::Node* addListsOfSameSize(LinkedList<int>::Node* n1, LinkedList<int>::Node* n2, int& carry) {
+        if (!n1) return nullptr;
 
-        auto next = addLists3(head1->next, (diff > 0 ? head2 : head2->next), diff - 1, carry);
-
-        int sum = carry + head1->val + (diff > 0 ? 0 : head2->val);
-        auto cur = new LinkedList<int>::Node(sum % 10);
+        auto next = addListsOfSameSize(n1->next, n2->next, carry);
+        int sum = n1->val + n2->val + carry;
         carry = sum / 10;
 
-        cur->next = next;
+        auto node = new LinkedList<int>::Node(sum % 10);
+        node->next = next;
 
-        return cur;
+        return node;
+    }
+
+   public:
+    [[nodiscard]] LinkedList<int>::Node* addLists2(LinkedList<int>::Node* h1, LinkedList<int>::Node* h2) {
+        int len1 = LinkedList<int>::length(h1);
+        int len2 = LinkedList<int>::length(h2);
+
+        if (len1 < len2) {
+            std::swap(h1, h2);
+            std::swap(len1, len2);
+        }
+
+        int carry = 0;
+        auto result = addLists2Helper(h1, h2, len1 - len2, carry);
+
+        if (carry) {
+            auto newNode = new LinkedList<int>::Node(carry);
+            newNode->next = result;
+            result = newNode;
+        }
+
+        return result;
+    }
+
+   private:
+    [[nodiscard]] LinkedList<int>::Node* addLists2Helper(LinkedList<int>::Node* longer, LinkedList<int>::Node* shorter, int diff, int& carry) {
+        if (!longer) return nullptr;
+
+        LinkedList<int>::Node* next;
+        int sum = 0;
+
+        if (diff > 0) {
+            next = addLists2Helper(longer->next, shorter, diff - 1, carry);
+            sum = carry + longer->val;
+        } else {
+            next = addLists2Helper(longer->next, shorter->next, 0, carry);
+            sum = carry + longer->val + shorter->val;
+        }
+
+        carry = sum / 10;
+        auto node = new LinkedList<int>::Node(sum % 10);
+        node->next = next;
+        return node;
+    }
+
+   public:
+    [[nodiscard]] LinkedList<int>::Node* addLists3(LinkedList<int>::Node* h1, LinkedList<int>::Node* h2) {
+        int len1 = LinkedList<int>::length(h1);
+        int len2 = LinkedList<int>::length(h2);
+
+        if (len1 < len2) {
+            std::swap(h1, h2);
+            std::swap(len1, len2);
+        }
+
+        int carry = 0;
+        auto result = addLists3Helper(h1, h2, len1 - len2, carry);
+
+        if (carry) {
+            auto newNode = new LinkedList<int>::Node(carry);
+            newNode->next = result;
+            result = newNode;
+        }
+
+        return result;
+    }
+
+   private:
+    [[nodiscard]] LinkedList<int>::Node* addLists3Helper(LinkedList<int>::Node* h1, LinkedList<int>::Node* h2, int diff, int& carry) {
+        if (!h1) return nullptr;
+
+        auto next = addLists3Helper(h1->next, diff > 0 ? h2 : h2->next, diff - 1, carry);
+        int sum = carry + h1->val + (diff > 0 ? 0 : h2->val);
+
+        carry = sum / 10;
+        auto node = new LinkedList<int>::Node(sum % 10);
+        node->next = next;
+        return node;
     }
 };

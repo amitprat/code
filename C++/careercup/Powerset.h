@@ -8,12 +8,10 @@ class Powerset {
         Powerset obj;
 
         auto res1 = obj.powersetUsingBitwise(nums);
-        obj.print(std::cout, res1);
-        cout << endl;
+        std::cout << res1 << std::endl;
 
         auto res2 = obj.powersetUsingRecursion(nums);
-        obj.print(std::cout, res2);
-        cout << endl;
+        std::cout << res2 << std::endl;
     }
 
    private:
@@ -51,28 +49,5 @@ class Powerset {
         }
 
         return result;
-    }
-
-   private:
-    friend std::ostream& operator<<(std::ostream& out, const vector<vector<int>>& result) {
-        out << "{";
-        for (auto& cur : result) {
-            out << "{";
-            for (auto& num : cur) out << num << ",";
-            out << "}";
-        }
-        out << "}";
-
-        return out;
-    }
-
-    void print(std::ostream& out, const vector<vector<int>>& result) {
-        out << "{";
-        for (auto& cur : result) {
-            out << "{";
-            for (auto& num : cur) out << num << ",";
-            out << "}, ";
-        }
-        out << "}";
     }
 };

@@ -43,13 +43,15 @@ class BinarySearchTreeToDoublyLinkedList {
         if (!root) return;
 
         static BinarySearchTree<int>::Node* prev = nullptr;
+
         covertBSTToDLL(root->left, head);
-        if (!prev)
-            head = root;
-        else
-            prev->right = root;
+
+        if (!prev) head = root;
+        else prev->right = root;
+
         root->left = prev;
         prev = root;
+
         covertBSTToDLL(root->right, head);
     }
 

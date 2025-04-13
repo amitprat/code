@@ -1,82 +1,92 @@
-#include "header.h"
+#include "../header.h"
+using namespace std;
 
-template <class T>
+template <typename T>
+concept Comparable = requires(T a, T b) {
+    { a == b } -> std::convertible_to<bool>;
+    { a < b } -> std::convertible_to<bool>;
+};
+
+template <Comparable T>
 class PriorityQueue {
    private:
-    vector<T> keys;
-    function<bool(T, T)> comp;
+    vector<T> heap;
+    function<bool(const T&, const T&)> comparator;
 
    public:
-    PriorityQueue(function<bool(T, T)> comp) : comp(comp) {}
+    using iterator = typename vector<T>::iterator;
+    using const_iterator = typename vector<T>::const_iterator;
 
-    void insert(vector<T> keys) {
-        for (auto &key : keys) {
-            this->keys.push_back(key);
+    explicit PriorityQueue(function<bool(const T&, const T&)> comp) : comparator(std::move(comp)) {}
+
+    void insert(const vector<T>& values) {
+        for (const auto& val : values) {
+            heap.push_back(val);
         }
-
-        this->buildHeap();
+        buildHeap();
     }
 
-    void insert(T key) {
-        this->keys.push_back(key);
-
-        this->upHeapify(this->size() - 1);
+    void insert(const T& value) {
+        heap.push_back(value);
+        upHeapify(heap.size() - 1);
     }
 
-    void remove(T key) {
-        int pos = find(key);
-        swap(keys[pos], keys[this->size() - 1]);
-        keys.pop_back();
-
-        this->down_heapify(pos);
+    void remove(const T& value) {
+        int index = find(value);
+        swap(heap[index], heap.back());
+        heap.pop_back();
+        if (index < heap.size()) {
+            downHeapify(index);
+            upHeapify(index);
+        }
     }
 
-    T top() {
-        if (empty())
-            throw exception("Empty");
-
-        return keys[0];
+    const T& top() const {
+        if (empty()) throw runtime_error("PriorityQueue is empty.");
+        return heap.front();
     }
 
     T pop() {
-        if (empty())
-            throw exception("Empty");
-
-        T val = keys[0];
-        keys[0] = keys[this->size() - 1];
-        keys.pop_back();
-
-        this->down_heapify(0);
-
-        return val;
+        if (empty()) throw runtime_error("PriorityQueue is empty.");
+        T topElement = heap.front();
+        heap.front() = heap.back();
+        heap.pop_back();
+        downHeapify(0);
+        return topElement;
     }
 
-    bool empty() {
-        return keys.size() <= 0;
+    bool empty() const noexcept {
+        return heap.empty();
     }
 
-    inline int size() { return keys.size(); }
+    size_t size() const noexcept {
+        return heap.size();
+    }
+
+    iterator begin() noexcept { return heap.begin(); }
+    iterator end() noexcept { return heap.end(); }
+    const_iterator begin() const noexcept { return heap.begin(); }
+    const_iterator end() const noexcept { return heap.end(); }
+    const_iterator cbegin() const noexcept { return heap.cbegin(); }
+    const_iterator cend() const noexcept { return heap.cend(); }
 
    private:
     void buildHeap() {
-        int n = this->size();
+        int n = heap.size();
         int s = (n - 1) / 2;
-
-        for (int i = s; i >= 0; i--) {
-            this->down_heapify(i);
+        for (int i = s; i >= 0; --i) {
+            downHeapify(i);
         }
     }
 
-    void down_heapify(int i) {
+    void down_heapify_rec(int i) {
         int n = this->size();
         int l = this->left(i);
         int r = this->right(i);
 
         int idx = i;
-        if (l < n && this->comp(keys[l], keys[idx]))
-            idx = l;
-        if (r < n && this->comp(keys[r], keys[idx]))
-            idx = r;
+        if (l < n && this->comp(keys[l], keys[idx])) idx = l;
+        if (r < n && this->comp(keys[r], keys[idx])) idx = r;
 
         if (idx != i) {
             swap(keys[i], keys[idx]);
@@ -84,31 +94,43 @@ class PriorityQueue {
         }
     }
 
-    void upHeapify(int i) {
-        int p = this->parent(i);
+    void down_heapify(size_t i) {
+        size_t n = heap.size();
 
-        while (i != 0 && !this->comp(keys[p], keys[i])) {
-            swap(keys[p], keys[i]);
-            i = p;
-            p = this->parent(i);
+        while (true) {
+            size_t smallest = i;
+            size_t leftChild = left(i);
+            size_t rightChild = right(i);
+
+            if (leftChild < n && comparator(heap[leftChild], heap[smallest])) smallest = leftChild;
+            if (rightChild < n && comparator(heap[rightChild], heap[smallest])) smallest = rightChild;
+
+            if (smallest != i) {
+                swap(heap[i], heap[smallest]);
+                i = smallest;
+            } else {
+                break;
+            }
         }
     }
 
-    int find(T key) {
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys[i] == key)
-                return i;
+    void upHeapify(size_t i) {
+        while (i > 0 && comparator(heap[i], heap[parent(i)])) {
+            swap(heap[i], heap[parent(i)]);
+            i = parent(i);
         }
-
-        throw exception("Not found");
     }
 
-    inline int left(int i) { return 2 * i + 1; }
-    inline int right(int i) { return 2 * i + 2; }
-    inline int parent(int i) { return (i - 1) / 2; }
-};
+    int find(const T& value) const {
+        auto it = std::find(heap.begin(), heap.end(), value);
+        if (it == heap.end()) throw runtime_error("Element not found in PriorityQueue.");
+        return distance(heap.begin(), it);
+    }
 
-class PriorityQueueTester {
+    constexpr size_t left(size_t i) const noexcept { return 2 * i + 1; }
+    constexpr size_t right(size_t i) const noexcept { return 2 * i + 2; }
+    constexpr size_t parent(size_t i) const noexcept { return (i - 1) / 2; }
+
    public:
     static void test() {
         PriorityQueue<int> pq([](int x, int y) { return x < y; });
@@ -118,19 +140,23 @@ class PriorityQueueTester {
         pq.insert(0);
         pq.insert(4);
 
-        while (!pq.empty()) {
-            cout << pq.pop() << " ";
-        }
-
+        cout << "PriorityQueue output 1: ";
+        for (int val : pq) cout << val << " ";
         cout << endl;
-        pq.insert(10);
-        pq.insert(0);
-        pq.insert(4);
+
+        while (!pq.empty()) cout << pq.pop() << " ";
+        cout << endl;
+
+        pq.insert({10, 0, 4});
         pq.insert({3, 1, 2});
-        while (!pq.empty()) {
-            cout << pq.pop() << " ";
-        }
 
+        cout << "PriorityQueue output 2: ";
+        for (int val : pq) cout << val << " ";
         cout << endl;
+
+        while (!pq.empty()) cout << pq.pop() << " ";
+        cout << endl;
+
+        cout << "All tests passed.\n";
     }
 };

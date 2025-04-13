@@ -4,15 +4,14 @@ class AllPathsFromSourceToDestination {
     class Graph {
        public:
         int V;
-        Graph(int v) : V(v) {}
-
         unordered_set<int> vertices;
         unordered_map<int, vector<int>> adjMap;
+
+        explicit Graph(int v) : V(v) {}
 
         void addEdge(int u, int v) {
             vertices.insert(u);
             vertices.insert(v);
-
             adjMap[u].push_back(v);
         }
     };
@@ -29,40 +28,80 @@ class AllPathsFromSourceToDestination {
 
         AllPathsFromSourceToDestination obj;
         int s = 2, d = 3;
-        cout << "Following are all different paths from " << s
-             << " to " << d << endl;
-        obj.printAllPaths(g, s, d);
+
+        cout << "DFS-based paths from " << s << " to " << d << ":\n";
+        obj.printAllPathsDFS(g, s, d);
+
+        cout << "BFS-based paths from " << s << " to " << d << ":\n";
+        obj.printAllPathsBFS(g, s, d);
     }
 
    private:
-    void printAllPaths(Graph g, int s, int d) {
+    void printAllPathsDFS(const Graph& g, int s, int d) {
         vector<vector<int>> paths;
         vector<bool> visited(g.V, false);
 
-        this->printAllPaths(g, s, d, visited, {}, paths);
+        vector<int> path;
+        dfs(g, s, d, visited, path, paths);
 
-        cout << "All paths: " << endl;
-        for (auto &path : paths) {
-            cout << "Path: " << path << endl;
+        for (const auto& p : paths) {
+            for (int node : p) cout << node << " ";
+            cout << endl;
         }
-        cout << endl;
     }
 
-    void printAllPaths(Graph g, int s, int d, vector<bool> &visited, vector<int> path, vector<vector<int>> &paths) {
-        path.push_back(s);
+   public:
+    void dfs(const Graph& g, int s, int d, vector<bool>& visited,
+             vector<int>& path, vector<vector<int>>& paths) {
         visited[s] = true;
+        path.push_back(s);
 
         if (s == d) {
             paths.push_back(path);
         } else {
-            for (auto &v : g.adjMap[s]) {
-                if (!visited[v]) {
-                    this->printAllPaths(g, v, d, visited, path, paths);
+            for (int neighbor : g.adjMap.at(s)) {
+                if (!visited[neighbor]) {
+                    dfs(g, neighbor, d, visited, path, paths);
                 }
             }
         }
 
         path.pop_back();
         visited[s] = false;
+    }
+
+   public:
+    void printAllPathsBFS(const Graph& g, int s, int d) {
+        vector<vector<int>> result;
+
+        queue<vector<int>> q;
+        vector<bool> visisted(g.V, false);
+
+        q.push({s});
+        visisted[s] = true;
+
+        while (!q.empty()) {
+            auto path = q.front();
+            q.pop();
+            int u = path.back();
+
+            if (u == d) {
+                result.push_back(path);
+                continue;
+            }
+
+            for (const auto& v : g.adjMap[u]) {
+                if (find(path.begin(), path.end(), v) == path.end()) {
+                    vector<int> new_path = path;
+                    new_path.push_back(v);
+                    q.push(move(new_path));
+                }
+            }
+        }
+
+        for (const auto& p : result) {
+            for (int node : p) cout << node << " ";
+            cout << endl;
+        }
     }
 };

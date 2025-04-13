@@ -101,8 +101,8 @@ class LongestPalindromicSubsequence {
         for (int l = 2; l <= n; l++) {
             for (int i = 0; i < n - l + 1; i++) {
                 int j = i + l - 1;
-                if (l == 2 && s[i] == s[j])
-                    table[i][j] = 2;
+                if (l == 2)
+                    table[i][j] = s[i] == s[j] ? 2 : 1;
                 else if (s[i] == s[j])
                     table[i][j] = table[i + 1][j - 1] + 2;
                 else

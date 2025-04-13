@@ -14,6 +14,7 @@ class LongestSubstrWithoutRepeatingChars {
              << longest1;
     }
 
+   public:
     static string longestUniqueSubstr(string str) {
         int* visited = new int[26];
         memset(visited, -1, sizeof(bool) * 26);
@@ -39,7 +40,7 @@ class LongestSubstrWithoutRepeatingChars {
         return x.length() > y.length() ? x : y;
     }
 
-   private:
+   public:
     static string longestUniqueSubstr2(const string& str) {
         pair<int, int> maxPos = {0, -1};
         vector<int> lastPos(256, -1);
@@ -56,5 +57,35 @@ class LongestSubstrWithoutRepeatingChars {
         }
 
         return str.substr(maxPos.first, maxPos.second - maxPos.first + 1);
+    }
+
+   public:
+    static int lengthOfLongestSubstring(const string& str) {
+        unordered_map<char, int> lastPos;
+
+        int res = 0;
+
+        int s = 0, e = 0;
+        while (e < str.length()) {
+            if (lastPos.find(str[e]) == lastPos.end())
+                lastPos[str[e]] = e;
+            else {
+                int cur = e - s;
+                res = max(res, cur);
+
+                while (s <= lastPos[str[e]]) {
+                    lastPos.erase(str[s]);
+                    s++;
+                }
+
+                lastPos[str[e]] = e;
+            }
+
+            e++;
+        }
+
+        res = max(res, e - s);
+
+        return res;
     }
 };

@@ -9,48 +9,42 @@ class QueueUsingTwoStacks {
         q.push(1);
         q.push(3);
 
-        cout << "Queue: ";
+        std::cout << "Queue: ";
         while (!q.empty()) {
-            cout << q.front() << " ";
+            std::cout << q.front() << " ";
             q.pop();
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 
-   private:
-    stack<int> s1, s2;
-
-   public:
     void push(int val) {
-        s2.push(val);
+        input.push(val);
     }
 
-    int pop() {
-        if (s1.empty()) {
-            while (!s2.empty()) {
-                s1.push(s2.top());
-                s2.pop();
-            }
-        }
-
-        auto val = s1.top();
-        s1.pop();
-
-        return val;
+    void pop() {
+        shiftStacks();
+        output.pop();
     }
 
     int front() {
-        if (s1.empty()) {
-            while (!s2.empty()) {
-                s1.push(s2.top());
-                s2.pop();
-            }
-        }
-
-        return s1.top();
+        shiftStacks();
+        return output.top();
     }
 
-    bool empty() {
-        return s1.empty() && s2.empty();
+    bool empty() const {
+        return input.empty() && output.empty();
+    }
+
+   private:
+    std::stack<int> input;
+    std::stack<int> output;
+
+    void shiftStacks() {
+        if (output.empty()) {
+            while (!input.empty()) {
+                output.push(input.top());
+                input.pop();
+            }
+        }
     }
 };

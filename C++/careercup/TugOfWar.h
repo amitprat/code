@@ -3,41 +3,65 @@
 class TugOfWar {
    public:
     static void test() {
-        TugOfWar obj;
-        vector<int> arr = {23, 45, -34, 12, 0, 98, -99, 4, 189, -1, 4};
-        obj.tugOfWar(arr);
+        TugOfWar solver;
+
+        vector<vector<int>> testCases = {
+            {23, 45, -34, 12, 0, 98, -99, 4, 189, -1, 4},  // odd length, one more in one group
+            {1, 2, 3, 4},                                  // simple case
+            {10, 20, 15, 5, 25, 30},                       // even length
+            {100, -100, 50, -50, 0, 1, -1},                // balanced but needs care
+            {7, 3, 2, 1, 5, 6},                            // close sum candidates
+        };
+
+        for (const auto& arr : testCases) {
+            solver.solve(arr);
+            cout << "\n";
+        }
     }
 
    private:
-    void tugOfWar(vector<int>& arr) {
-        int n = arr.size();
-        int sum = accumulate(arr.begin(), arr.end(), 0);
+    void solve(const vector<int>& arr) {
+        const int n = arr.size();
+        const int totalSum = accumulate(arr.begin(), arr.end(), 0);
+        const int groupSize = n / 2;
 
-        vector<int> first, second;
-        int mnDiff = INT_MAX;
-        tugOfWar(arr, sum, 0, n, n / 2, mnDiff, {}, {}, first, second);
+        vector<int> bestA, bestB;
+        vector<int> groupA, groupB;
+        int minDiff = INT_MAX;
 
-        cout << "Sum: " << sum << endl;
-        cout << "First array:" << first << endl;
-        cout << "Second array:" << second << endl;
-        cout << "Min difference:" << accumulate(first.begin(), first.end(), 0) - accumulate(second.begin(), second.end(), 0) << endl;
+        dfs(arr, 0, 0, groupSize, totalSum, groupA, groupB, bestA, bestB, minDiff);
+
+        cout << "Input: " << arr << "\n";
+        cout << "Group A: " << bestA << "\n";
+        cout << "Group B: " << bestB << "\n";
+        cout << "Min sum diff: " << abs(accumulate(bestA.begin(), bestA.end(), 0) - accumulate(bestB.begin(), bestB.end(), 0)) << "\n";
     }
 
-    void tugOfWar(vector<int>& arr, int sum, int cur, int n, int cnt, int& mnDiff, vector<int> first, vector<int> second, vector<int>& outFirst, vector<int>& outSecond) {
-        if (n < 0) return;
-        if (cnt == 0 && (mnDiff > abs(sum / 2 - cur))) {
-            mnDiff = abs(sum / 2 - cur);
-            outFirst = first;
-            outSecond = second;
+    void dfs(const vector<int>& arr, int index, int sumA, int maxA,
+             int totalSum,
+             vector<int>& groupA, vector<int>& groupB,
+             vector<int>& bestA, vector<int>& bestB,
+             int& minDiff) {
+        if (index == arr.size()) {
+            if (groupA.size() == maxA) {
+                int diff = abs(totalSum - 2 * sumA);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    bestA = groupA;
+                    bestB = groupB;
+                }
+            }
             return;
         }
 
-        second.push_back(arr[n - 1]);
-        tugOfWar(arr, sum, cur, n - 1, cnt, mnDiff, first, second, outFirst, outSecond);
-        second.pop_back();
+        if (groupA.size() < maxA) {
+            groupA.push_back(arr[index]);
+            dfs(arr, index + 1, sumA + arr[index], maxA, totalSum, groupA, groupB, bestA, bestB, minDiff);
+            groupA.pop_back();
+        }
 
-        first.push_back(arr[n - 1]);
-        tugOfWar(arr, sum, cur + arr[n - 1], n - 1, cnt - 1, mnDiff, first, second, outFirst, outSecond);
-        first.pop_back();
+        groupB.push_back(arr[index]);
+        dfs(arr, index + 1, sumA, maxA, totalSum, groupA, groupB, bestA, bestB, minDiff);
+        groupB.pop_back();
     }
 };

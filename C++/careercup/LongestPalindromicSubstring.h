@@ -29,6 +29,7 @@ class LongestPalindromicSubstring {
     string longestPalSubstrExpandAroundCenter(string str) {
         string res;
         int n = str.length();
+
         for (int i = 0; i < n; i++) {
             auto cur = expand(str, i, i, n);
             if (cur.length() > res.length()) res = cur;
@@ -47,6 +48,7 @@ class LongestPalindromicSubstring {
             l--;
             r++;
         }
+
         return str.substr(l + 1, r - l - 1);
     }
 

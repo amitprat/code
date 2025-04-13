@@ -2,14 +2,18 @@
 #include "../header.h"
 
 /*
-https://careercup.com/question?id=5705581721550848
+Problem: Word Break (Dictionary Decomposition)
+--------------------------------------------------
+Given a dictionary of strings and a key, determine whether the key can be segmented into a space-separated
+sequence of one or more dictionary words.
 
-You're given a dictionary of strings, and a key. Check if the key is composed of an arbitrary number of concatenations of strings from the dictionary. For example:
-
-dictionary: "world", "hello", "super", "hell"
-key: "helloworld" --> return true
-key: "superman" --> return false
-key: "hellohello" --> return true
+Examples:
+  dictionary: {"world", "hello", "super", "hell"}
+  key: "helloworld"    -> true
+  key: "superman"      -> false
+  key: "hellohello"    -> true
+--------------------------------------------------
+Reference: https://careercup.com/question?id=5705581721550848
 */
 
 class WordBreak {
@@ -17,148 +21,182 @@ class WordBreak {
     static void test() {
         WordBreak obj;
 
-        unordered_set<string> dict = {"jess", "looked", "Hello", "Are", "World", "just", "like", "You", "Here", "are", "some", "extra", "words", "tim", "her", "brother", "How"};
-        vector<string> words = {"jesslookedjustliketimherbrother", "HelloHowAreYou", "HelloWhatAreYouUpto"};
+        unordered_set<string> dict = {"jess", "looked", "Hello", "Are", "World", "just", "like", "You", "Here", "are", "some", "extra", "words", "tim", "her", "brother", "How", "hello", "world", "hell"};
+        vector<string> words = {
+            "jesslookedjustliketimherbrother",  // true
+            "HelloHowAreYou",                   // true
+            "HelloWhatAreYouUpto",              // false
+            "hellohello",                       // true
+            "helloworld",                       // true
+            "superman",                         // false
+            "",                                 // true (empty string)
+            "unknownword"                       // false (unbreakable)
+        };
 
-        for (auto word : words) {
+        for (const auto& word : words) {
             bool exists1 = obj.wordBreakRecursive(word, dict);
             bool exists2 = obj.wordBreakDP(word, dict);
             bool exists3 = obj.wordBreakDP2(word, dict);
             vector<int> indices = obj.findWords(word, dict);
-            bool exists4 = !indices.empty();
+            bool exists4 = !indices.empty() || word.empty();
 
             assert(exists1 == exists2);
             assert(exists1 == exists3);
             assert(exists1 == exists4);
 
             cout << "\nFollowing is word break for word: " << word << endl;
-            if (exists4) {
+            if (exists4 && !word.empty()) {
                 int start = 0;
-                for (auto i : indices) {
+                for (int i : indices) {
                     cout << word.substr(start, i - start) << " ";
                     start = i;
                 }
             } else {
-                cout << "No word break exists!";
+                cout << (word.empty() ? "Empty word is trivially breakable." : "No word break exists!");
             }
             cout << endl;
 
-            auto res = obj.minimumWordBreaksDP(word, dict);
-            cout << format("Minimum word breaks for {0} are {1}.", word, res) << endl;
+            int res = obj.minimumWordBreaksDP(word, dict);
+            cout << format("Minimum word breaks for \"{0}\" are {1}.", word, res) << endl;
         }
     }
 
    private:
-    // get the indices if word break exists
-    vector<int> findWords(string str, unordered_set<string> dict) {
-        vector<bool> seen(str.size() + 1, false);
-        seen[0] = true;
+    /**
+     * Find valid break indices using DP.
+     * Time: O(n^2), Space: O(n^2)
+     */
+    vector<int> findWords(const string& str, const unordered_set<string>& dict) {
+        int n = str.size();
+        vector<bool> seen(n + 1, false);
         unordered_map<int, vector<int>> results;
+        seen[0] = true;
 
-        for (int i = 1; i <= str.size(); i++) {
-            if (!seen[i] && contains(dict, str.substr(0, i))) {
+        for (int i = 1; i <= n; ++i) {
+            if (!seen[i] && dict.count(str.substr(0, i))) {
                 seen[i] = true;
-                results.insert({i, {i}});
+                results[i] = {i};
             }
             if (seen[i]) {
                 auto cur = results[i];
-                for (int j = i + 1; j <= str.size(); j++) {
-                    if (!seen[j] && contains(dict, str.substr(i, j - i))) {
+                for (int j = i + 1; j <= n; ++j) {
+                    if (!seen[j] && dict.count(str.substr(i, j - i))) {
                         seen[j] = true;
                         auto tmp = cur;
                         tmp.push_back(j);
-                        results.insert({j, tmp});
+                        results[j] = tmp;
                     }
                 }
             }
-            if (seen[str.size()]) {
-                return results[str.size()];
+        }
+        return seen[n] ? results[n] : vector<int>{};
+    }
+
+    /**
+     * Find valid break indices using DP.
+     * Time: O(n^2), Space: O(n + k) where k = number of splits
+     */
+    static bool findWords2(const unordered_set<string>& dict, const string& input, vector<string>& path) {
+        int n = static_cast<int>(input.size());
+        vector<bool> dp(n + 1, false);
+        vector<int> prev(n + 1, -1);
+        dp[0] = true;
+
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                string word = input.substr(j, i - j);
+                if (dp[j] && dict.count(word)) {
+                    dp[i] = true;
+                    prev[i] = j;
+                    break;
+                }
             }
         }
 
-        if (!(seen[str.size()])) return {};
+        if (!dp[n]) return false;
 
-        return {};
-    }
-
-    bool contains(unordered_set<string> dict, string str) {
-        return dict.find(str) != dict.end();
-    }
-
-    // check if word break exists
-   private:
-    bool wordBreakRecursive(string str, unordered_set<string> dict) {
-        if (str.empty()) return true;
-
-        for (int i = 1; i <= str.length(); i++) {
-            string cur = str.substr(0, i);
-            if ((dict.find(cur) != dict.end()) && wordBreakRecursive(str.substr(i), dict)) return true;
+        // Recover path from backtracking
+        for (int at = n; at > 0; at = prev[at]) {
+            path.push_back(input.substr(prev[at], at - prev[at]));
         }
+        std::reverse(path.begin(), path.end());
 
+        return true;
+    }
+
+    /**
+     * Recursive approach (naive).
+     * Time: Exponential, Space: O(n) recursive stack
+     */
+    bool wordBreakRecursive(const string& str, const unordered_set<string>& dict) {
+        if (str.empty()) return true;
+        for (int i = 1; i <= str.length(); ++i) {
+            if (dict.count(str.substr(0, i)) && wordBreakRecursive(str.substr(i), dict)) return true;
+        }
         return false;
     }
 
-   private:
-    bool wordBreakDP(string str, unordered_set<string>& dict) {
+    /**
+     * DP top-down (build table for reachability).
+     * Time: O(n^2), Space: O(n)
+     */
+    bool wordBreakDP(const string& str, const unordered_set<string>& dict) {
         int n = str.length();
         vector<bool> table(n + 1, false);
         table[0] = true;
 
-        for (int i = 1; i <= n; i++) {
-            string first = str.substr(0, i);
-            if (!table[i] && dict.find(first) != dict.end()) table[i] = true;
-
+        for (int i = 1; i <= n; ++i) {
+            if (!table[i] && dict.count(str.substr(0, i))) {
+                table[i] = true;
+            }
             if (table[i]) {
-                for (int j = i + 1; j <= n; j++) {
-                    string rest = str.substr(i, j - i);
-                    if (!table[j] && dict.find(rest) != dict.end()) table[j] = true;
+                for (int j = i + 1; j <= n; ++j) {
+                    if (!table[j] && dict.count(str.substr(i, j - i))) {
+                        table[j] = true;
+                    }
                 }
             }
-
             if (table[n]) return true;
         }
-
-        return false;
+        return table[n];
     }
 
-   private:
-    bool wordBreakDP2(string str, unordered_set<string>& dict) {
+    /**
+     * Optimized DP version.
+     * Time: O(n^2), Space: O(n)
+     */
+    bool wordBreakDP2(const string& str, const unordered_set<string>& dict) {
         int n = str.length();
         vector<bool> table(n + 1, false);
         table[0] = true;
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 0; j <= i; j++) {
-                string cur = str.substr(j, i - j);
-                if (table[j] && dict.find(cur) != dict.end()) table[i] = true;
-            }
-        }
-
-        return table[n];
-    }
-
-   private:
-    int minimumWordBreaksDP(string str, unordered_set<string>& dict) {
-        int n = str.length();
-        vector<int> table(n + 1, INT_MAX);
-        table[0] = 1;
-
-        int mnBreaks = INT_MAX;
-
-        for (int i = 1; i <= n; i++) {
-            string first = str.substr(0, i);
-            if (dict.find(first) != dict.end()) table[i] = 1;
-
-            if (table[i] != INT_MAX) {
-                for (int j = i + 1; j <= n; j++) {
-                    string rest = str.substr(i, j - i);
-                    if (dict.find(rest) != dict.end()) {
-                        table[j] = min(table[j], 1 + table[i]);
-                    }
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (table[j] && dict.count(str.substr(j, i - j))) {
+                    table[i] = true;
+                    break;
                 }
             }
         }
-
         return table[n];
+    }
+
+    /**
+     * Minimum word breaks using DP.
+     * Time: O(n^2), Space: O(n)
+     */
+    int minimumWordBreaksDP(const string& str, const unordered_set<string>& dict) {
+        int n = str.length();
+        vector<int> dp(n + 1, INT_MAX);
+        dp[0] = 0;
+
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (dp[j] != INT_MAX && dict.count(str.substr(j, i - j))) {
+                    dp[i] = min(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        return dp[n] == INT_MAX ? -1 : dp[n];
     }
 };

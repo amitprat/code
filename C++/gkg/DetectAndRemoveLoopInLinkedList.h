@@ -6,7 +6,7 @@ class DetectAndRemoveLoopInLinkedList {
     static void test() {
         DetectAndRemoveLoopInLinkedList obj;
         LinkedList<int> l({1, 2, 3, 4, 5, 6});
-        auto head = l.get_head();
+        auto head = l.getHead();
         head->next->next->next->next->next->next = head->next->next;
 
         cout << "List : ";

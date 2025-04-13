@@ -1,9 +1,17 @@
 #include "../header.h"
 
-class FindMagicNumber {
+/*
+Magic Index: A magic index in an array A [1. .. n -1] is defined to be an index such that A[ i]
+i. Given a sorted array of distinct integers, write a method to find a magic index, if one exists, in
+array A.
+FOLLOW UP
+What if the values are not distinct?
+*/
+
+class MagicIndex {
    public:
     static void test() {
-        FindMagicNumber obj;
+        MagicIndex obj;
 
         {
             vector<int> arr = {-40, -20, -1, 1, 2, 3, 5, 7, 9, 12, 13};
@@ -27,7 +35,7 @@ class FindMagicNumber {
             int m = (l + r) / 2;
             if (arr[m] == m) return m;
             // if mid element is less than mid index, then its not possible to match index = element on left side as
-            // elements are all distict and sorted so element on left must decrease by atleast on left side, if so
+            // elements are all distict and sorted so element on left must decrease by atleast one on left side, if so
             // it will never match the index.
             else if (arr[m] < m)
                 l = m + 1;
@@ -59,7 +67,7 @@ class FindMagicNumber {
             if (left != -1) return left;
             return magicNumberWithDuplicates(arr, m + 1, r);
         } else if (arr[m] > m) {
-            return magicNumberWithDuplicates(arr, m + 1, r);
+            return magicNumberWithDuplicates(arr, l, min(m - 1, arr[m]));
         }
     }
 };

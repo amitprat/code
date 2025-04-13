@@ -1,153 +1,83 @@
 #pragma once
-#include "../header.h"
 #include "../design/Set.h"
+#include "../header.h"
 #include "LinkedList.h"
 
 class RemoveDuplicates {
-public:
+    using Node = LinkedList<int>::Node;
+
+   public:
     static void test() {
         RemoveDuplicates obj;
-        {
-            LinkedList<int> list;
-            cout << "List:" << list.to_string() << endl;
 
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
-        }
-        {
-            LinkedList<int> list;
-            list.add(1);
-            cout << "List:" << list.to_string() << endl;
+        std::vector<std::vector<int>> testCases = {
+            {}, {1}, {1, 1}, {1, 1, 2}, {1, 2, 3}, {1, 2, 3, 3, 3}, {1, 1, 2, 2, 3, 3}};
 
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
-        }
-        {
-            LinkedList<int> list;
-            list.add(1);
-            list.add(1);
-            cout << "List:" << list.to_string() << endl;
-
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
-        }
-        {
-            LinkedList<int> list;
-            list.add(1);
-            list.add(1);
-            list.add(2);
-            cout << "List:" << list.to_string() << endl;
-
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
-        }
-        {
-            LinkedList<int> list;
-            list.add(1);
-            list.add(2);
-            list.add(3);
-            cout << "List:" << list.to_string() << endl;
-
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
-        }
-
-        {
-            LinkedList<int> list;
-            list.add(1);
-            list.add(2);
-            list.add(3);
-            list.add(3);
-            list.add(3);
-            cout << "List:" << list.to_string() << endl;
-
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
-        }
-
-        {
-            LinkedList<int> list;
-            list.add(1);
-            list.add(1);
-            list.add(2);
-            list.add(2);
-            list.add(3);
-            list.add(3);
-            cout << "List:" << list.to_string() << endl;
-
-            obj.removeDups2(list);
-            cout << "List:" << list.to_string() << endl;
+        for (const auto& vals : testCases) {
+            LinkedList<int> list(vals);
+            std::cout << "Original List: " << list.to_string() << '\n';
+            obj.removeDupsSorted(list);  // Choose one
+            std::cout << "After Removal: " << list.to_string() << '\n';
         }
     }
 
-    // keep no copy of duplicates
-    void removeDups(LinkedList<int>& list) {
-        Node<int>* head = list.getRaw();
+    // Remove all duplicates from sorted list (no duplicates remain)
+    void removeDupsSorted(LinkedList<int>& list) {
+        Node dummy{-1};
+        dummy.next = list.getHead();
+        Node* prev = &dummy;
 
-        Node<int>* newHead = new Node<int>(-1);
-        newHead->next = head;
-        Node<int>* tmp = newHead;
-        while (tmp->next) {
-            if (tmp->next->next && tmp->next->val == tmp->next->next->val) {
-                int curVal = tmp->next->val;
-                while (tmp->next && tmp->next->val == curVal) {
-                    tmp->next = tmp->next->next;
-                }
+        while (prev->next) {
+            Node* cur = prev->next;
+            bool duplicate = false;
+            while (cur->next && cur->val == cur->next->val) {
+                Node* temp = cur->next;
+                cur->next = temp->next;
+                delete temp;
+                duplicate = true;
             }
-            else {
-                tmp = tmp->next;
+            if (duplicate) {
+                Node* temp = prev->next;
+                prev->next = cur->next;
+                delete temp;
+            } else {
+                prev = prev->next;
             }
         }
-        list.setRaw(newHead->next);
+        list.setHead(dummy.next);
     }
 
-
-    void removeDups2(LinkedList<int>& list) {
-        Node<int>* cur = list.getRaw();
-        Node<int>* prev = new Node<int>(-1);
-        Node<int>* newHead = prev;
-        while (cur) {
-            int curVal = cur->val;
-            do {
-                prev->next = cur;
+    // Keep one copy of each element in sorted list
+    void removeDupsKeepOneSorted(LinkedList<int>& list) {
+        Node* cur = list.getHead();
+        while (cur && cur->next) {
+            if (cur->val == cur->next->val) {
+                Node* tmp = cur->next;
+                cur->next = tmp->next;
+                delete tmp;
+            } else {
                 cur = cur->next;
-            } while (cur && cur->val == curVal);
-            if (curVal == prev->next->val) prev->next = cur;
-            prev = prev->next;
-        }
-        list.setRaw(newHead->next);
-    }
-
-    // keep only one copy of duplicates
-    void removeDups3(LinkedList<int>& list) {
-        auto* head = list.getRaw();
-        auto* newHead = head;
-        auto* tmp = newHead;
-        while (newHead) {
-            auto next = newHead->next;
-            while (next && newHead->val == next->val) {
-                newHead = next;
-                next = next->next;
-
             }
-            newHead = newHead->next;
         }
-        list.setRaw(tmp);
     }
 
-    // keep only one copy of duplicates
-    void removeDups4(LinkedList<int>& list) {
+    // Keep one copy of each element (unsorted list)
+    void removeDupsUnsorted(LinkedList<int>& list) {
         if (list.empty()) return;
-        Set<int> set;
-        auto* head = list.getRaw();
-        auto* newHead = head;
-        auto* tmp = newHead;
-        set.add(tmp->val);
-        while (tmp->next) {
-            if (set.exists(tmp->next->val)) tmp->next = tmp->next->next;
-            else set.add(tmp->val);
-            tmp = tmp->next;
+
+        std::unordered_set<int> seen;
+        Node* cur = list.getHead();
+        seen.insert(cur->val);
+
+        while (cur->next) {
+            if (seen.contains(cur->next->val)) {
+                Node* tmp = cur->next;
+                cur->next = tmp->next;
+                delete tmp;
+            } else {
+                seen.insert(cur->next->val);
+                cur = cur->next;
+            }
         }
-        list.setRaw(newHead);
     }
 };

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class MinimumSpanningTreeInAdjMatrixGraph {
    public:
@@ -12,12 +12,9 @@ class MinimumSpanningTreeInAdjMatrixGraph {
             {6, 8, 0, 0, 9},
             {0, 5, 7, 9, 0}};
 
-        int V = g.size();
-        auto res = obj.minimumSpanningTreeUsingPrims(g);
-        auto dist = res.first;
-        auto parent = res.second;
+        auto [dist, parent] = obj.minimumSpanningTreeUsingPrims(g);
         int minSpanningDist = 0;
-        for (int v = 1; v < V; v++) {
+        for (int v = 1; v < g.size(); v++) {
             minSpanningDist += dist[v];
             auto u = parent[v];
 
@@ -31,7 +28,8 @@ class MinimumSpanningTreeInAdjMatrixGraph {
         vector<int> dst(g.size(), INT_MAX);
         vector<int> parent(g.size(), -1);
         vector<bool> visited(g.size(), false);
-        dst[0] = 0;
+
+        dst[0] = 0;  // start position
 
         for (int cnt = 0; cnt < g.size() - 1; cnt++) {
             int u = minVertex(dst, visited);
@@ -229,17 +227,16 @@ class MinimumSpanningTreeInAdjListGraph {
         pq.push({dist[src], src});  // {w,v}
 
         while (!pq.empty()) {
-            auto u = pq.top();
+            auto [w, u] = pq.top();
             pq.pop();
 
-            if (visited.count(u.second) != 0) continue;
+            if (visited.count(u) != 0) continue;
+            visited.insert(u);
 
-            visited.insert(u.second);
-
-            for (auto e : g.edges[u.second]) {
+            for (auto e : g.edges[u]) {
                 if (visited.count(e.v) == 0 && e.w < dist[e.v]) {
                     dist[e.v] = e.w;
-                    parent[e.v] = u.second;
+                    parent[e.v] = u;
 
                     pq.push({dist[e.v], e.v});
                 }
@@ -331,8 +328,11 @@ class MinimumSpanningTreeKrushkalsInEdgeGraph {
    private:
     vector<Edge> minimumSpanningTreeKrushkalsUsingUnionFind(Graph g) {
         sort(g.edges.begin(), g.edges.end(), [](auto f, auto s) { return f.w < s.w; });
+
         vector<Edge> edges;
+
         UnionFind uf(g.V);
+
         int e = 0;
         while (edges.size() < g.V - 1 && e < g.edges.size()) {
             auto edge = g.edges[e++];  // pick first edge

@@ -1,148 +1,171 @@
 #pragma once
 #include "../header.h"
 
-template <class T>
+template <typename T>
 class BinaryTree {
    public:
-    class Node {
-       public:
+    struct Node {
         T val;
         int sz;
-
-        Node *left, *right;
+        Node* left;
+        Node* right;
 
         Node(T val) : val(val), sz(0), left(nullptr), right(nullptr) {}
 
-        string to_string() {
+        string to_string() const {
             return std::to_string(val);
         }
     };
 
    public:
-    Node *root = nullptr;
-
-    BinaryTree(Node *root) : root(root) {}
+    Node* root = nullptr;
+    BinaryTree(Node* root = nullptr) : root(root) {}
 
    public:
-    string preorder() {
+    string preorder() const {
         stringstream ss;
         preorder(root, ss);
-
         return ss.str();
     }
 
-   private:
-    void preorder(Node *root, stringstream &ss) {
-        if (!root) return;
+    void preorder(Node* node, stringstream& ss) const {
+        if (!node) return;
 
-        ss << root->val << " ";
-        preorder(root->left, ss);
-        preorder(root->right, ss);
+        ss << node->val << " ";
+        preorder(node->left, ss);
+        preorder(node->right, ss);
     }
 
    public:
-    list<Node *> preorder_list() {
-        list<Node *> out;
+    list<Node*> preorder_list() const {
+        list<Node*> out;
         preorder(root, out);
-
         return out;
     }
 
-    void preorder(Node *root, list<Node *> &out) {
-        if (!root) return;
+    void preorder(Node* node, list<Node*>& out) const {
+        if (!node) return;
 
-        out.push_back(root);
-        preorder(root->left, out);
-        preorder(root->right, out);
+        out.push_back(node);
+        preorder(node->left, out);
+        preorder(node->right, out);
     }
 
    public:
-    string postorder() {
+    string postorder() const {
         stringstream ss;
         postorder(root, ss);
-
         return ss.str();
     }
 
-   private:
-    void postorder(Node *root, stringstream &ss) {
-        if (!root) return;
+    void postorder(Node* node, stringstream& ss) const {
+        if (!node) return;
 
-        postorder(root->left, ss);
-        postorder(root->right, ss);
-        ss << root->val << " ";
+        postorder(node->left, ss);
+        postorder(node->right, ss);
+        ss << node->val << " ";
     }
 
    public:
-    string inorder() {
+    string inorder() const {
         stringstream ss;
         inorder(root, ss);
-
         return ss.str();
     }
 
-   private:
-    void inorder(Node *root, stringstream &ss) {
-        if (!root) return;
+    void inorder(Node* node, stringstream& ss) const {
+        if (!node) return;
 
-        inorder(root->left, ss);
-        ss << root->val << " ";
-        inorder(root->right, ss);
+        inorder(node->left, ss);
+        ss << node->val << " ";
+        inorder(node->right, ss);
     }
 
    public:
-    string levelOrder() {
+    string levelOrder() const {
         map<int, vector<T>> out;
         levelOrder(out);
-
-        return stringfyMap(out);
+        return stringifyMap(out);
     }
 
-   public:
-    void levelOrder(map<int, vector<T>> &out) {
-        queue<Node *> q;
-
+    void levelOrder(map<int, vector<T>>& out) const {
+        queue<Node*> q;
         if (root) q.push(root);
+
         int level = 0;
         while (!q.empty()) {
             int sz = q.size();
             out[level] = {};
 
-            while (sz--) {
-                auto *cur = q.front();
+            for (int i = 0; i < sz; ++i) {
+                Node* cur = q.front();
                 q.pop();
 
                 out[level].push_back(cur->val);
-
                 if (cur->left) q.push(cur->left);
                 if (cur->right) q.push(cur->right);
             }
 
-            level++;
+            ++level;
         }
     }
 
-   private:
-    std::string stringfyMap(const std::map<int, std::vector<T>> &myMap) {
-        std::ostringstream oss;
-
+   public:
+    string stringifyMap(const map<int, vector<T>>& m) const {
+        ostringstream oss;
         oss << "{";
-        bool firstEntry = true;  // To handle commas correctly
-        for (const auto &[key, valueVec] : myMap) {
-            if (!firstEntry) oss << ", ";
-            firstEntry = false;
+        bool first = true;
+        for (const auto& [k, v] : m) {
+            if (!first) oss << ", ";
+            first = false;
 
-            // Key
-            oss << key << ": [";
-
-            // Vector values
-            for (size_t i = 0; i < valueVec.size(); ++i) {
-                oss << valueVec[i];
-                if (i != valueVec.size() - 1) oss << ", ";
+            oss << k << ": [";
+            for (size_t i = 0; i < v.size(); ++i) {
+                oss << v[i];
+                if (i < v.size() - 1) oss << ", ";
             }
             oss << "]";
         }
         oss << "}";
         return oss.str();
+    }
+
+   public:
+    int height() const {
+        return height(root);
+    }
+    int height(Node* node) const {
+        if (!node) return 0;
+
+        return 1 + max(height(node->left), height(node->right));
+    }
+
+   public:
+    void test() {
+        using Tree = BinaryTree<int>;
+        Tree::Node* n1 = new Tree::Node(1);
+        Tree::Node* n2 = new Tree::Node(2);
+        Tree::Node* n3 = new Tree::Node(3);
+        Tree::Node* n4 = new Tree::Node(4);
+        Tree::Node* n5 = new Tree::Node(5);
+
+        n1->left = n2;
+        n1->right = n3;
+        n2->left = n4;
+        n2->right = n5;
+
+        Tree tree(n1);
+
+        assert(tree.preorder() == "1 2 4 5 3 ");
+        assert(tree.postorder() == "4 5 2 3 1 ");
+        assert(tree.inorder() == "4 2 5 1 3 ");
+        assert(tree.levelOrder() == "{0: [1], 1: [2, 3], 2: [4, 5]}");
+        assert(tree.height() == 3);
+
+        delete n4;
+        delete n5;
+        delete n2;
+        delete n3;
+        delete n1;
     }
 };

@@ -1,268 +1,286 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class SerializeDeserializeTree {
-public:
-	static void test() {
-		cout << "First tree:" << endl;
-		{
-			ITNode* root = new ITNode(1);
-			root->left = new ITNode(2);
-			root->right = new ITNode(3);
-			root->left->right = new ITNode(5);
-			root->left->right->left = new ITNode(6);
-			root->right = new ITNode(7);
-			root->right->left = new ITNode(8);
-			root->right->right = new ITNode(9);
-			root->right->right->right = new ITNode(11);
-			cout << to_string(root) << endl;
+    using ITNode = BinaryTree<int>::Node;
 
-			{
-				vector<int> res;
-				serialize(root, res);
-				int index = 0;
-				ITNode* node = deserialize(res, index);
-				cout << to_string(node) << endl;
-			}
+   public:
+    static void test() {
+        cout << "First tree:" << endl;
+        {
+            ITNode* root = new ITNode(1);
+            root->left = new ITNode(2);
+            root->right = new ITNode(3);
+            root->left->right = new ITNode(5);
+            root->left->right->left = new ITNode(6);
+            root->right = new ITNode(7);
+            root->right->left = new ITNode(8);
+            root->right->right = new ITNode(9);
+            root->right->right->right = new ITNode(11);
+            cout << root << endl;
 
-			{
-				vector<int> res = serialize(root);
-				ITNode* node = deserialize(res);
-				cout << to_string(node) << endl;
-			}
+            {
+                vector<int> res;
+                serialize(root, res);
+                int index = 0;
+                ITNode* node = deserialize(res, index);
+                cout << node << endl;
+            }
 
-			{
-				SerializeDeserializeTree1 obj;
-				string serialized = obj.serialize(root);
-				cout << serialized << endl;
-				ITNode* newTree = obj.deserialize(serialized);
-				cout << to_string(newTree) << endl;
-			}
+            {
+                vector<int> res = serialize(root);
+                ITNode* node = deserialize(res);
+                cout << node << endl;
+            }
 
-			{
-				SerializeDeserializeTree2 obj;
-				string serialized = obj.serialize(root);
-				cout << serialized << endl;
-				ITNode* newTree = obj.deserialize(serialized);
-				cout << to_string(newTree) << endl;
-			}
-		}
-		cout << endl;
+            {
+                SerializeDeserializeTree1 obj;
+                string serialized = obj.serialize(root);
+                cout << serialized << endl;
+                ITNode* newTree = obj.deserialize(serialized);
+                cout << newTree << endl;
+            }
 
-		cout << "Second tree:" << endl;
-		{
-			ITNode* root = new ITNode(1);
-			root->left = new ITNode(2);
-			root->right = new ITNode(3);
-			root->left->left = new ITNode(4);
-			root->left->right = new ITNode(5);
-			root->left->left->left = new ITNode(6);
-			root->right = new ITNode(7);
-			root->right->left = new ITNode(8);
-			root->right->right = new ITNode(9);
-			root->right->right->left = new ITNode(10);
-			root->right->right->right = new ITNode(11);
-			cout << to_string(root) << endl;
+            {
+                SerializeDeserializeTree2 obj;
+                string serialized = obj.serialize(root);
+                cout << serialized << endl;
+                ITNode* newTree = obj.deserialize(serialized);
+                cout << newTree << endl;
+            }
+        }
+        cout << endl;
 
-			{
-				vector<int> res;
-				serialize(root, res);
-				int index = 0;
-				ITNode* node = deserialize(res, index);
-				cout << to_string(node) << endl;
-			}
+        cout << "Second tree:" << endl;
+        {
+            ITNode* root = new ITNode(1);
+            root->left = new ITNode(2);
+            root->right = new ITNode(3);
+            root->left->left = new ITNode(4);
+            root->left->right = new ITNode(5);
+            root->left->left->left = new ITNode(6);
+            root->right = new ITNode(7);
+            root->right->left = new ITNode(8);
+            root->right->right = new ITNode(9);
+            root->right->right->left = new ITNode(10);
+            root->right->right->right = new ITNode(11);
+            cout << root << endl;
 
-			{
-				vector<int> res = serialize(root);
-				ITNode* node = deserialize(res);
-				cout << to_string(node) << endl;
-			}
-		}
-		cout << endl;
+            {
+                vector<int> res;
+                serialize(root, res);
+                int index = 0;
+                ITNode* node = deserialize(res, index);
+                cout << node << endl;
+            }
 
-		cout << "Third tree:" << endl;
-		{
-			ITNode* root = new ITNode(1);
-			root->left = new ITNode(2);
-			root->right = new ITNode(3);
-			root->left->left = new ITNode(4);
-			root->right->left = new ITNode(5);
-			root->right->right = new ITNode(6);
-			cout << to_string(root) << endl;
+            {
+                vector<int> res = serialize(root);
+                ITNode* node = deserialize(res);
+                cout << node << endl;
+            }
+        }
+        cout << endl;
 
-			{
-				vector<int> res;
-				serialize(root, res);
-				int index = 0;
-				ITNode* node = deserialize(res, index);
-				cout << to_string(node) << endl;
-			}
+        cout << "Third tree:" << endl;
+        {
+            ITNode* root = new ITNode(1);
+            root->left = new ITNode(2);
+            root->right = new ITNode(3);
+            root->left->left = new ITNode(4);
+            root->right->left = new ITNode(5);
+            root->right->right = new ITNode(6);
+            cout << root << endl;
 
-			{
-				vector<int> res = serialize(root);
-				ITNode* node = deserialize(res);
-				cout << to_string(node) << endl;
-			}
-		}
-	}
+            {
+                vector<int> res;
+                serialize(root, res);
+                int index = 0;
+                ITNode* node = deserialize(res, index);
+                cout << node << endl;
+            }
 
-	static void serialize(ITNode* root, vector<int>& res) {
-		if (!root) {
-			res.push_back(INT_MIN);
-			return;
-		}
+            {
+                vector<int> res = serialize(root);
+                ITNode* node = deserialize(res);
+                cout << node << endl;
+            }
+        }
+    }
 
-		res.push_back(root->val);
+   public:
+    static void serialize(ITNode* root, vector<int>& res) {
+        if (!root) {
+            res.push_back(INT_MIN);
+            return;
+        }
 
-		serialize(root->left, res);
-		serialize(root->right, res);
-	}
+        res.push_back(root->val);
 
-	static ITNode* deserialize(vector<int>& res, int& index) {
-		if (index >= res.size()) return nullptr;
+        serialize(root->left, res);
+        serialize(root->right, res);
+    }
 
-		auto cur = res[index++];
-		if (cur == INT_MIN) return nullptr;
+    static ITNode* deserialize(vector<int>& res, int& index) {
+        if (index >= res.size()) return nullptr;
 
-		auto root = new ITNode(cur);
-		root->left = deserialize(res, index);
-		root->right = deserialize(res, index);
+        auto cur = res[index++];
+        if (cur == INT_MIN) return nullptr;
 
-		return root;
-	}
+        auto root = new ITNode(cur);
+        root->left = deserialize(res, index);
+        root->right = deserialize(res, index);
 
-	static vector<int> serialize(ITNode* root) {
-		vector<int> result;
-		if (!root) return result;
+        return root;
+    }
 
-		queue<ITNode*> q;
-		q.push(root);
+   public:
+    static vector<int> serialize(ITNode* root) {
+        vector<int> result;
+        if (!root) return result;
 
-		while (!q.empty()) {
-			auto cur = q.front(); q.pop();
-			if (cur == nullptr) result.push_back(INT_MIN);
-			else result.push_back(cur->val);
+        queue<ITNode*> q;
+        q.push(root);
 
-			if (cur != nullptr) {
-				q.push(cur->left);
-				q.push(cur->right);
-			}
-		}
+        while (!q.empty()) {
+            auto cur = q.front();
+            q.pop();
 
-		return result;
-	}
+            if (cur == nullptr)
+                result.push_back(INT_MIN);
+            else
+                result.push_back(cur->val);
 
-	static ITNode* deserialize(vector<int> result) {
-		if (result.empty()) return nullptr;
-		queue<ITNode*> q;
-		int index = 0;
-		ITNode* root = new ITNode(result[index++]);
-		q.push(root);
+            if (cur != nullptr) {
+                q.push(cur->left);
+                q.push(cur->right);
+            }
+        }
 
-		while (!q.empty()) {
-			auto cur = q.front(); q.pop();
+        return result;
+    }
 
-			auto val = result[index++];
-			cur->left = val != INT_MIN ? new ITNode(val) : nullptr;
+    static ITNode* deserialize(vector<int> result) {
+        if (result.empty()) return nullptr;
 
-			val = result[index++];
-			cur->right = val != INT_MIN ? new ITNode(val) : nullptr;
+        queue<ITNode*> q;
 
-			if (cur->left) q.push(cur->left);
-			if (cur->right) q.push(cur->right);
-		}
+        int index = 0;
+        ITNode* root = new ITNode(result[index++]);
+        q.push(root);
 
-		return root;
-	}
+        while (!q.empty()) {
+            auto cur = q.front();
+            q.pop();
 
-	class SerializeDeserializeTree1 {
-	public:
-		string serialize(ITNode* root) {
-			string serialized;
-			serialize(root, serialized);
+            auto val = result[index++];
+            cur->left = val != INT_MIN ? new ITNode(val) : nullptr;
 
-			if (!serialized.empty()) serialized.erase(0, 1);
+            val = result[index++];
+            cur->right = val != INT_MIN ? new ITNode(val) : nullptr;
 
-			return serialized;
-		}
+            if (cur->left) q.push(cur->left);
+            if (cur->right) q.push(cur->right);
+        }
 
-		void serialize(ITNode* root, string& serialized) {
-			if (!root) { serialized = serialized + "," + "#"; return; }
+        return root;
+    }
 
-			serialized += "," + std::to_string(root->val);
+    class SerializeDeserializeTree1 {
+       public:
+        string serialize(ITNode* root) {
+            string serialized;
+            serialize(root, serialized);
 
-			serialize(root->left, serialized);
-			serialize(root->right, serialized);
-		}
+            if (!serialized.empty()) serialized.erase(0, 1);
 
-		ITNode* deserialize(string& serialized) {
-			stringstream ss(serialized);
-			char delim = ',';
+            return serialized;
+        }
 
-			ITNode* root = deserialize(serialized, ss, delim);
-			return root;
-		}
+        void serialize(ITNode* root, string& serialized) {
+            if (!root) {
+                serialized = serialized + "," + "#";
+                return;
+            }
 
-		ITNode* deserialize(string& serialized, stringstream& ss, char delim) {
-			string cur;
-			if (!getline(ss, cur, delim)) return nullptr;
-			if (cur == "#") return nullptr;
+            serialized += "," + std::to_string(root->val);
 
-			ITNode* node = new ITNode(stoi(cur));
-			node->left = deserialize(serialized, ss, delim);
-			node->right = deserialize(serialized, ss, delim);
+            serialize(root->left, serialized);
+            serialize(root->right, serialized);
+        }
 
-			return node;
-		}
-	};
+        ITNode* deserialize(string& serialized) {
+            stringstream ss(serialized);
+            char delim = ',';
 
-	class SerializeDeserializeTree2 {
-	public:
-		string serialize(ITNode* root) {
-			string serialized;
+            ITNode* root = deserialize(serialized, ss, delim);
+            return root;
+        }
 
-			queue<ITNode*> q;
-			q.push(root);
+        ITNode* deserialize(string& serialized, stringstream& ss, char delim) {
+            string cur;
+            if (!getline(ss, cur, delim)) return nullptr;
+            if (cur == "#") return nullptr;
 
-			while (!q.empty()) {
-				auto cur = q.front(); q.pop();
-				if (cur == nullptr) serialized = serialized + "," + "#";
-				else serialized += "," + std::to_string(cur->val);
+            ITNode* node = new ITNode(stoi(cur));
+            node->left = deserialize(serialized, ss, delim);
+            node->right = deserialize(serialized, ss, delim);
 
-				if (cur) {
-					q.push(cur->left);
-					q.push(cur->right);
-				}
-			}
+            return node;
+        }
+    };
 
-			if (!serialized.empty()) serialized.erase(0, 1);
+    class SerializeDeserializeTree2 {
+       public:
+        string serialize(ITNode* root) {
+            string serialized;
 
-			return serialized;
-		}
+            queue<ITNode*> q;
+            q.push(root);
 
-		ITNode* deserialize(string& serialized) {
-			stringstream ss(serialized);
-			char delim = ',';
-			int index = 0;
+            while (!q.empty()) {
+                auto cur = q.front();
+                q.pop();
+                if (cur == nullptr)
+                    serialized = serialized + "," + "#";
+                else
+                    serialized += "," + std::to_string(cur->val);
 
-			string cur;
-			if (!getline(ss, cur, delim) || cur == "#") return nullptr;
+                if (cur) {
+                    q.push(cur->left);
+                    q.push(cur->right);
+                }
+            }
 
-			queue<ITNode*> q;
-			q.push(new ITNode(stoi(cur)));
-			ITNode* root = q.front();
+            if (!serialized.empty()) serialized.erase(0, 1);
 
-			while (!q.empty()) {
-				auto curNode = q.front(); q.pop();
+            return serialized;
+        }
 
-				if (getline(ss, cur, delim) && cur != "#") curNode->left = new ITNode(stoi(cur));
-				if (getline(ss, cur, delim) && cur != "#") curNode->right = new ITNode(stoi(cur));
+        ITNode* deserialize(string& serialized) {
+            stringstream ss(serialized);
+            char delim = ',';
+            int index = 0;
 
-				if (curNode->left) q.push(curNode->left);
-				if (curNode->right) q.push(curNode->right);
-			}
+            string cur;
+            if (!getline(ss, cur, delim) || cur == "#") return nullptr;
 
-			return root;
-		}
-	};
+            queue<ITNode*> q;
+            q.push(new ITNode(stoi(cur)));
+            ITNode* root = q.front();
+
+            while (!q.empty()) {
+                auto curNode = q.front();
+                q.pop();
+
+                if (getline(ss, cur, delim) && cur != "#") curNode->left = new ITNode(stoi(cur));
+                if (getline(ss, cur, delim) && cur != "#") curNode->right = new ITNode(stoi(cur));
+
+                if (curNode->left) q.push(curNode->left);
+                if (curNode->right) q.push(curNode->right);
+            }
+
+            return root;
+        }
+    };
 };
