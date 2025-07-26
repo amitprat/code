@@ -10,7 +10,7 @@ class BinarySearchTree : public BinaryTree<T> {
     }
 
    private:
-    BinaryTree<T>::Node *insert(BinaryTree<T>::Node *root, T val) {
+    BinaryTree<T>::Node* insert(BinaryTree<T>::Node* root, T val) {
         if (!root) return new BinaryTree<T>::Node(val);
 
         if (val < root->val) {

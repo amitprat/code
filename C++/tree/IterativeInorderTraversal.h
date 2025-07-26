@@ -18,28 +18,27 @@ class IterativeInorderTraversal {
         node1->right->right = new Node(15);
         node1->right->right->right = new Node(17);
 
-        cout << "Recursive Inorder traversal:" << endl;
+        std::cout << "Recursive Inorder traversal (Tree 1): ";
         obj.recursiveInorder(node1);
-        cout << endl;
-
-        cout << "Iterative Inorder traversal:" << endl;
+        std::cout << "\nIterative Inorder traversal (Tree 1): ";
         obj.iterativeInorder(node1);
-        cout << endl;
+        std::cout << "\n\n";
 
         Node* node2 = new Node(3);
         node2->left = new Node(1);
         node2->left->right = new Node(2);
         node2->right = new Node(5);
 
-        cout << "Recursive Inorder traversal:" << endl;
+        std::cout << "Recursive Inorder traversal (Tree 2): ";
         obj.recursiveInorder(node2);
-        cout << endl;
-
-        cout << "Iterative Inorder traversal:" << endl;
+        std::cout << "\nIterative Inorder traversal (Tree 2): ";
         obj.iterativeInorder(node2);
-        cout << endl;
+        std::cout << "\n\n";
 
-        obj.mergeTrees(node1, node2);
+        std::vector<int> merged = obj.mergeTrees(node1, node2);
+        std::cout << "Merged (sorted) values: ";
+        for (int v : merged) std::cout << v << " ";
+        std::cout << std::endl;
     }
 
     void recursiveInorder(Node* root) {
@@ -72,9 +71,6 @@ class IterativeInorderTraversal {
         stack<Node*> st2;
 
         vector<int> merged;
-
-        bool moveLeft = true, moveRight = true;
-
         while (true) {
             while (node1) {
                 st1.push(node1);
@@ -88,20 +84,16 @@ class IterativeInorderTraversal {
 
             if (st1.empty() && st2.empty()) break;
 
-            if (moveLeft) {
+            if (st2.empty() || st1.top()->val <= st2.top()->val) {
                 node1 = st1.top();
                 st1.pop();
-            }
-
-            if (moveRight) {
+                merged.push_back(node1->val);
+                node1 = node1->right;
+            } else {
                 node2 = st2.top();
                 st2.pop();
-            }
-
-            if (node1->val <= node2->val) {
-                merged.push_back(node1->val);
-            } else {
                 merged.push_back(node2->val);
+                node2 = node2->right;
             }
         }
 

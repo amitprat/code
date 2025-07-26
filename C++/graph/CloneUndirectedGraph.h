@@ -1,9 +1,11 @@
 #pragma once
-#include "../header.h"
+#include <print>
+
 #include "../design/Set.h"
+#include "../header.h"
 
 class GraphNode {
-public:
+   public:
     int label;
     GraphNode(int label) : label(label) {}
     string to_string() {
@@ -12,22 +14,22 @@ public:
 };
 
 class Graph {
-private:
+   private:
     unordered_map<GraphNode*, list<GraphNode*>> nodes;
 
-public:
+   public:
     void addNode(GraphNode* node) {
-        nodes.insert({ node,{} });
+        nodes.insert({node, {}});
     }
     void addChild(GraphNode* src, GraphNode* dst) {
-        if (nodes.find(src) == nodes.end()) throw exception("Source Not not found!");
-        if (nodes.find(dst) == nodes.end()) throw exception("Destination Not not found!");
+        if (nodes.find(src) == nodes.end()) throw runtime_error("Source Not not found!");
+        if (nodes.find(dst) == nodes.end()) throw runtime_error("Destination Not not found!");
         nodes[src].push_back(dst);
         nodes[dst].push_back(src);
     }
     void addChild_1(GraphNode* src, GraphNode* dst) {
-        if (nodes.find(src) == nodes.end()) throw exception("Source Not not found!");
-        if (nodes.find(dst) == nodes.end()) throw exception("Destination Not not found!");
+        if (nodes.find(src) == nodes.end()) throw runtime_error("Source Not not found!");
+        if (nodes.find(dst) == nodes.end()) throw runtime_error("Destination Not not found!");
         nodes[src].push_back(dst);
     }
     unordered_map<GraphNode*, list<GraphNode*>>& getNodes() {
@@ -55,7 +57,7 @@ public:
     }
 };
 class CloneGraph {
-public:
+   public:
     static void test() {
         CloneGraph obj;
         Graph graph;
@@ -74,14 +76,14 @@ public:
         cout << "Graph: " << endl;
         cout << graph.to_string() << endl;
         cout << "Connected Components: " << endl;
-        print(obj.connectedComponents(graph));
+        cout << obj.connectedComponents(graph) << endl;
         cout << endl;
 
         cout << "Cloned Graph: " << endl;
         auto cloned = obj.clone(graph);
         cout << cloned.to_string() << endl;
         cout << "Connected Components: " << endl;
-        print(obj.connectedComponents(cloned));
+        cout << obj.connectedComponents(graph) << endl;
         cout << endl;
     }
 
@@ -120,7 +122,8 @@ public:
         visited.add(node);
 
         while (!q.empty()) {
-            auto front = q.front(); q.pop();
+            auto front = q.front();
+            q.pop();
             result.push_back(front);
             for (auto& child : graph.getNodes(graph.getNode(front))) {
                 if (!visited.exists(child->label)) {

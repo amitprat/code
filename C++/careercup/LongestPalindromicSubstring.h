@@ -5,7 +5,7 @@ class LongestPalindromicSubstring {
    public:
     static void test() {
         LongestPalindromicSubstring obj;
-        vector<string> inputs = {"forgeeksskeegfor", "abcsdc", "sdfacxcasvsa"};
+        vector<string> inputs = {"forgeeksskeegfor", "abcsdc", "sdfacxcasvsa", "babad"};
         for (auto& str : inputs) {
             auto res = obj.longestPalSubstr(str);
             cout << std::format("Longest palindromic substring for str='{}' is '{}'", str, res) << endl;
@@ -58,18 +58,12 @@ class LongestPalindromicSubstring {
         int n = str.length();
         vector<vector<bool>> table(n, vector<bool>(n, false));
 
-        for (int i = 0; i < n; i++) {
-            if (longest.length() < 1) longest = string(1, str[i]);
-            table[i][i] = true;
-        }
-
-        for (int l = 2; l <= n; l++) {
+        for (int l = 1; l <= n; l++) {
             for (int i = 0; i < n - l + 1; i++) {
                 int j = i + l - 1;
-                if (l == 2 && str[i] == str[j])
-                    table[i][j] = true;
-                else if (str[i] == str[j])
-                    table[i][j] = table[i + 1][j - 1];
+                if (l == 1) table[i][j] = true;
+                else if (l == 2 && str[i] == str[j]) table[i][j] = true;
+                else if (str[i] == str[j]) table[i][j] = table[i + 1][j - 1];
 
                 if (table[i][j] && l > longest.length()) {
                     longest = str.substr(i, l);
@@ -83,19 +77,19 @@ class LongestPalindromicSubstring {
    private:
     int longestPalSubstrDP2(string s) {
         int l = s.length();
-        vector<vector<int>> table(l, vector<int>(l));
+        vector<vector<int>> table(l, vector<int>(l, 0));
 
         int max = 1;
         for (int i = 0; i < l; i++)
             table[i][i] = 1;
 
-        for (int cl = 2; cl < l; cl++) {
+        for (int cl = 2; cl <= l; cl++) {
             for (int i = 0; i < l - cl + 1; i++) {
                 int j = i + cl - 1;
 
                 if (cl == 2)
                     table[i][j] = ((s[i] == s[j]) ? 2 : 0);
-                else if (s[i] == s[j])
+                else if (s[i] == s[j] && table[i + 1][j - 1] > 0)
                     table[i][j] = table[i + 1][j - 1] + 2;
 
                 if (table[i][j] > max) max = table[i][j];

@@ -121,4 +121,15 @@ class MinJumpsToReachEnd {
 
         return memo[index];
     }
+
+   private:
+    // https://leetcode.com/problems/jump-game/?envType=study-plan-v2&envId=top-interview-150
+    bool canJump(vector<int>& nums) {
+        int maxReach = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (i > maxReach) return false;
+            maxReach = max(maxReach, i + nums[i]);
+        }
+        return true;
+    }
 };

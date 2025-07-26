@@ -1,10 +1,11 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
 class TicTacToePrinter {
     string top, bottom, middle;
     char vals[3][3];
-public:
+
+   public:
     TicTacToePrinter() {
         top = bottom = middle = "----------";
         for (int i = 0; i < 3; i++) {
@@ -48,14 +49,14 @@ public:
 };
 
 class TicTacToeStore {
-
 };
 
 class TicTacToeBoard {
     vector<char> board;
     TicTacToePrinter printer;
     TicTacToeStore store;
-public:
+
+   public:
     TicTacToeBoard() {
         for (int i = 0; i < 9; i++) board.push_back(' ');
     }
@@ -78,7 +79,7 @@ public:
             if (board[0 + i] == board[3 + i] && board[3 + i] == board[6 + i])
                 return board[i];
         }
-        for (int i = 0; i < 3; i+=3) {
+        for (int i = 0; i < 3; i += 3) {
             if (board[0 + i] == board[1 + i] && board[1 + i] == board[2 + i])
                 return board[i];
         }
@@ -100,11 +101,10 @@ public:
     }
 };
 class TicTacToe {
-public:
+   public:
     static void test() {
         TicTacToeBoard board;
         cout << board.to_string() << endl;
-        
 
         while (board.hasValidMove()) {
             int x, y;
@@ -127,4 +127,3 @@ public:
         cout << board.to_string() << endl;
     }
 };
-

@@ -119,6 +119,7 @@ class AddLinkedLists {
         carry = sum / 10;
         auto node = new LinkedList<int>::Node(sum % 10);
         node->next = next;
+
         return node;
     }
 

@@ -1,60 +1,51 @@
 #pragma once
 #include "../header.h"
-using namespace std;
 
 class MakeSmallestStringByRemovingDuplicateCharacters {
    public:
     static void test() {
         MakeSmallestStringByRemovingDuplicateCharacters obj;
-        vector<string> inputs = {"bcsbc", "cbacdcbc"};
-        for (auto& input : inputs) {
-            string res = obj.findSmallest(input);
-
-            cout << format("Smallest lexographic string for input={} is {}", input, res) << endl;
+        std::vector<std::string> inputs = {"bcsbc", "cbacdcbc"};
+        for (const auto& input : inputs) {
+            std::string res = obj.findSmallest(input);
+            std::cout << std::format("Smallest lexographic string for input={} is {}\n", input, res);
         }
     }
 
-    string findSmallest(string str) {
-        int len = str.length();
-        vector<int> next(len);
+    std::string findSmallest(const std::string& str) {
+        std::array<int, 26> lastPos{};
+        lastPos.fill(-1);
 
-        int lastPos[26];
-        for (int i = 0; i < 26; i++) lastPos[i] = -1;
-
-        for (int i = len - 1; i >= 0; i--) {
-            char cur = str[i] - 'a';
-            next[i] = lastPos[cur];
-            lastPos[cur] = i;
+        int len = static_cast<int>(str.length());
+        for (int i = 0; i < len; ++i) {
+            lastPos[str[i] - 'a'] = i;  // last occurrence of each character
         }
 
-        vector<bool> visited(26, false);
-        string res;
+        std::array<bool, 26> visited{};
+        visited.fill(false);
 
-        for (int i = 0; i < len; i++) {
-            int cur = str[i] - 'a';
-            if (visited[cur]) continue;
+        std::string res;
+        std::stack<char> st;
 
-            // if this is the last character of this type
-            if (next[i] == -1) {
-                res += str[i];
-                visited[cur] = true;
-            } else {
-                // find the next smallest possible character
-                int j = i + 1;
-                char nextSmall = str[i];
-                while (j < len) {
-                    if (!visited[str[j] - 'a']) {
-                        nextSmall = min(nextSmall, str[j]);
-                        if (next[j] == -1) break;
-                    }
-                    j++;
-                }
+        for (int i = 0; i < len; ++i) {
+            char c = str[i];
+            int idx = c - 'a';
+            if (visited[idx]) continue;
 
-                if (str[i] <= nextSmall) {
-                    res += str[i];
-                    visited[cur] = true;
-                }
+            while (!st.empty() && st.top() > c && lastPos[st.top() - 'a'] > i) {
+                visited[st.top() - 'a'] = false;
+                st.pop();
             }
+
+            st.push(c);
+            visited[idx] = true;
+        }
+
+        // Build the result from stack
+        res.resize(st.size());
+        for (int i = static_cast<int>(st.size()) - 1; i >= 0; --i) {
+            res[i] = st.top();
+            st.pop();
         }
 
         return res;

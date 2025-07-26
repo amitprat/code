@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 class LongestSubstrWithKUniqueChars {
@@ -29,21 +30,26 @@ class LongestSubstrWithKUniqueChars {
     string longest(string str, int k) {
         unordered_map<char, int> map;
         vector<int> positions;
+
         int start = 0;
         int startPositionOffset = 0;
+
         string res;
+
         for (int index = 0; index < str.length(); index++) {
-            char curChar = str[index];
-            if (map.find(curChar) == map.end()) {
+            char ch = str[index];
+
+            if (map.find(ch) == map.end()) {
                 positions.push_back(index);
-                map[curChar] = positions.size() - 1;
+                map[ch] = positions.size() - 1;
             } else {
-                auto posIndex = map[curChar];
+                auto posIndex = map[ch];
                 positions[posIndex] = index;
             }
 
             if (map.size() > k) {
                 if (index - start > res.length()) res = str.substr(start, index - start);
+
                 auto startChar = str[positions[startPositionOffset]];
                 map.erase(startChar);
                 start = positions[startPositionOffset++] + 1;
@@ -70,6 +76,7 @@ class LongestSubstrWithKUniqueChars {
             while (freqMap.size() > k) {
                 char pre = str[i];
                 freqMap[pre]--;
+
                 if (freqMap[pre] <= 0) freqMap.erase(pre);
                 i++;
             }

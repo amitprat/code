@@ -1,25 +1,23 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 using namespace std;
 
 template <class T>
-class Graph
-{
-private:
+class Graph {
+   private:
     using AdjList = unordered_map<T, vector<T>>;
     AdjList adjList;
     unordered_set<T> vertices;
-public:
+
+   public:
     int size() { return vertices.size(); }
-    void addEdge(T from, T to)
-    {
+    void addEdge(T from, T to) {
         vertices.insert(from);
         vertices.insert(to);
         adjList[from].push_back(to);
     }
 
-    vector<T> topoSort()
-    {
+    vector<T> topoSort() {
         cout << "Doing topological sorting: " << endl;
         vector<T> res;
         unordered_set<T> visited;
@@ -33,8 +31,7 @@ public:
         return res;
     }
 
-    void dfs(T u, unordered_set<T>& visited, vector<T>& res)
-    {
+    void dfs(T u, unordered_set<T>& visited, vector<T>& res) {
         visited.insert(u);
         for (auto v : adjList[u]) {
             if (visited.find(v) == visited.end()) {
@@ -68,13 +65,11 @@ public:
     }
 };
 
-class SortedWordsInAlienDictionary
-{
-public:
-    static void test()
-    {
+class SortedWordsInAlienDictionary {
+   public:
+    static void test() {
         SortedWordsInAlienDictionary obj;
-        vector<string> words = { "cc", "cb", "bb", "ac" };
+        vector<string> words = {"cc", "cb", "bb", "ac"};
         vector<char> order = obj.findOrdering(words);
         for (auto ch : order) {
             cout << ch << " ";
@@ -82,8 +77,7 @@ public:
         cout << endl;
     }
 
-    vector<char> findOrdering(vector<string> words)
-    {
+    vector<char> findOrdering(vector<string> words) {
         Graph<char> g;
         for (int i = 0; i < words.size() - 1; i++) {
             string f = words[i];

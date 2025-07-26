@@ -1,6 +1,11 @@
 #pragma once
+#include <climits>
+#include <sstream>
+#include <vector>
+
 #include "../header.h"
 #include "BinaryTree.h"
+using namespace std;
 
 class SerializeDeserializeBST {
     using Node = BinaryTree<int>::Node;
@@ -15,58 +20,62 @@ class SerializeDeserializeBST {
         root->left->right = new Node(2);
         root->right->left = new Node(4);
 
-        cout << "Original: " << (new BinaryTree<int>(root))->inorder() << endl;
+        cout << "Original inorder: " << (new BinaryTree<int>(root))->inorder() << endl;
 
         string serialized = obj.serialize(root);
-        cout << "Serialized :" << serialized << endl;
+        cout << "Serialized: " << serialized << endl;
 
         Node* deserialized = obj.deserialize(serialized);
-        cout << "Deserialized:" << (new BinaryTree<int>(deserialized))->inorder() << endl;
+        cout << "Deserialized inorder: " << (new BinaryTree<int>(deserialized))->inorder() << endl;
     }
 
    public:
+    // Preorder serialization
     string serialize(Node* node) {
         if (!node) return "";
 
-        string result;
-        result += std::to_string(node->val);
-
+        string result = to_string(node->val);
         string left = serialize(node->left);
-        if (!left.empty()) result += " " + left;
-
         string right = serialize(node->right);
+
+        if (!left.empty()) result += " " + left;
         if (!right.empty()) result += " " + right;
 
         return result;
     }
 
-    Node* deserialize(string serilized) {
-        vector<int> items = split(serilized);
+    // Preorder deserialization
+    Node* deserialize(const string& serialized) {
+        if (serialized.empty()) return nullptr;
 
+        vector<int> items = split(serialized);
         int index = 0;
         return deserialize(items, index, INT_MIN, INT_MAX);
     }
 
-    Node* deserialize(vector<int> items, int& index, int mn, int mx) {
+   private:
+    Node* deserialize(const vector<int>& items, int& index, int mn, int mx) {
         if (index >= items.size()) return nullptr;
-        if (items[index] <= mn || items[index] >= mx) return nullptr;
+        int val = items[index];
+        if (val <= mn || val >= mx) return nullptr;
 
-        Node* root = new Node(items[index++]);
-        root->left = deserialize(items, index, mn, items[index]);
-        root->right = deserialize(items, index, items[index], mx);
+        Node* root = new Node(val);
+        index++;
+
+        root->left = deserialize(items, index, mn, val);
+        root->right = deserialize(items, index, val, mx);
 
         return root;
     }
 
-   private:
-    vector<int> split(string serialized) {
+    // Helper: split a space-separated string into integers
+    vector<int> split(const string& serialized) {
         vector<int> result;
         stringstream ss(serialized);
-        string word;
-        while (ss >> word) {
-            result.push_back(stoi(word));
+        int val;
+        while (ss >> val) {
+            result.push_back(val);
         }
-
         return result;
     }
 

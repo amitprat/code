@@ -12,16 +12,17 @@ struct Node {
 
 Without modifying original structure.
 */
+
 class PostOrderTraversalOfNaryTree {
    private:
     struct Node {
         int val;
-        vector<Node *> children;
+        vector<Node*> children;
     };
 
    public:
     /*Recursive*/
-    void postOrderRecursive(Node *root) {
+    void postOrderRecursive(Node* root) {
         if (!root) return;
 
         for (auto node : root->children) {
@@ -31,13 +32,13 @@ class PostOrderTraversalOfNaryTree {
     }
 
     /*Itervative*/
-    void postOrderIter(Node *root) {
+    void postOrderIter(Node* root) {
         if (!root) return;
-        stack<Node *> st1, st2;
+        stack<Node*> st1, st2;
         st1.push(root);
 
         while (!st1.empty()) {
-            Node *tmp = st1.top();
+            Node* tmp = st1.top();
             st1.pop();
 
             for (auto node : tmp->children)
@@ -53,7 +54,7 @@ class PostOrderTraversalOfNaryTree {
 
    public:
     static void test() {
-        Node *root = new Node(1);
+        Node* root = new Node(1);
         root->children.push_back(new Node(2));
         root->children.push_back(new Node(3));
         root->children.push_back(new Node(4));

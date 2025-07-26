@@ -23,6 +23,7 @@
 #include <numeric>
 #include <queue>
 #include <ranges>
+#include <regex>
 #include <semaphore>
 #include <set>
 #include <shared_mutex>

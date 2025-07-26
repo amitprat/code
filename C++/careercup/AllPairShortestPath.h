@@ -58,6 +58,7 @@ class AllPairShortestPath {
         for (int i = 0; i < matrix.size(); i++) {
             for (int j = 0; j < matrix[i].size(); j++) {
                 dist[i][j] = matrix[i][j];
+                
                 if (dist[i][j] == INT_MAX)
                     path[i][j] = -1;
                 else

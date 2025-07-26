@@ -1,21 +1,45 @@
 #include "../header.h"
 
 class CountPalindromicSubstrings {
+   public:
     static void test() {
         CountPalindromicSubstrings obj;
 
-        std::string inputString = "ababa";
-        int result = obj.countSubstringPalindromes(inputString);
+        auto strs = {"abc", "aba", "a", "aa", "aaa", "aca", "bba", "bac", "ababa"};
+        for (auto& str : strs) {
+            int result1 = obj.countSubstringPalindromes1(str);
+            int result2 = obj.countSubstringPalindromes2(str);
+            int result3 = obj.countSubstringPalindromes3(str);
+            assert(result1 == result2);
+            assert(result1 == result3);
 
-        std::cout << "Total number of substring palindromes: " << result << std::endl;
+            println("Total number of palindromes in string:{} are {}", str, result1);
+        }
     }
 
    private:
-    int countSubstringPalindromes(const std::string& inputString) {
+    int countSubstringPalindromes1(const std::string& str) {
+        int n = str.length();
+        int count = 0;
+        std::vector<std::vector<bool>> table(n, std::vector<bool>(n, false));
+
+        for (int len = 1; len <= n; len++) {
+            for (int i = 0; i < n - len + 1; i++) {
+                int j = i + len - 1;
+                if (len == 1) table[i][j] = true;
+                else if (len == 2) table[i][j] = (str[i] == str[j]);
+                else if (str[i] == str[j]) table[i][j] = table[i + 1][j - 1];
+                if (table[i][j]) count++;
+            }
+        }
+
+        return count;
+    }
+
+   private:
+    int countSubstringPalindromes2(const std::string& inputString) {
         int n = inputString.length();
         int count = 0;
-
-        // Create a 2D DP table to store palindrome information.
         std::vector<std::vector<bool>> isPalindrome(n, std::vector<bool>(n, false));
 
         // All individual characters are palindromes.
@@ -41,7 +65,7 @@ class CountPalindromicSubstrings {
     }
 
    private:
-    int countPalindromicSubstrings(const std::string& s) {
+    int countSubstringPalindromes3(const std::string& s) {
         int count = 0;
         int n = s.length();
 

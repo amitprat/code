@@ -9,15 +9,15 @@ class CloneBinaryTreeWithRandomPointers {
     };
 
    public:
-    Node *cloneTree(Node *orig) {
-        unordered_map<Node *, Node *> map;
+    Node* cloneTree(Node* orig) {
+        unordered_map<Node*, Node*> map;
 
-        Node *clonedNode = cloneLeftRightNodes(orig, map);
+        Node* clonedNode = cloneLeftRightNodes(orig, map);
 
         copyRandomPointers(orig, map);
     }
 
-    Node *cloneLeftRightNodes(Node *orig, unordered_map<Node *, Node *> &map) {
+    Node* cloneLeftRightNodes(Node* orig, unordered_map<Node*, Node*>& map) {
         if (!orig) return nullptr;
 
         map[orig] = new Node(orig->val);
@@ -28,7 +28,7 @@ class CloneBinaryTreeWithRandomPointers {
         return map[orig];
     }
 
-    void copyRandomPointers(Node *orig, unordered_map<Node *, Node *> &map) {
+    void copyRandomPointers(Node* orig, unordered_map<Node*, Node*>& map) {
         if (!orig) return;
 
         map[orig]->random = map[orig->random];

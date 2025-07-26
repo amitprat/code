@@ -8,12 +8,13 @@ class TaskSchedulingWithCooldown {
             {{'A', 'B', 'C', 'D'}, 3},
             {{'A', 'B', 'A', 'D'}, 3},
             {{'A', 'A', 'A', 'A'}, 3},
+            {{'A', 'A', 'A', 'B', 'C'}, 3},
             {{'A', 'B', 'C', 'A', 'C', 'B', 'D', 'A'}, 4},
             {{'A', 'A', 'A', 'B', 'B', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'}, 7}};
         for (auto& input : inputs) {
             auto tasks = input.first;
             int k = input.second;
-            int totalSpace = obj.leastInterval(tasks, k);
+            int totalSpace = obj.leastInterval3(tasks, k);
             cout << format("Input={}, K={}, totalSpace={}", to_string(tasks), k, totalSpace) << endl;
         }
     }
@@ -97,5 +98,31 @@ class TaskSchedulingWithCooldown {
         int time = (maxF - 1) * (K + 1) + maxFcount;
 
         return max(time, N);
+    }
+
+    int leastInterval3(vector<char>& tasks, int n) {
+        using P = pair<int, int>;
+        priority_queue<P> maxHeap;
+        unordered_map<char, int> freqs;
+        for (auto& task : tasks) freqs[task]++;
+        for (auto& freq : freqs) maxHeap.push({freq.second, freq.first});
+
+        unordered_map<char, int> lastPos;
+        int currentPos = 0;
+        while (!maxHeap.empty()) {
+            auto& top = maxHeap.top();
+            maxHeap.pop();
+            int freq = top.first;
+            auto val = top.second;
+
+            int space = 0;
+            if (lastPos.count(val)) space = (currentPos - lastPos[val]) + 1;
+            currentPos += space + 1;
+            lastPos[val] = currentPos;
+
+            if (freq - 1 > 0) maxHeap.push({freq - 1, val});
+        }
+
+        return currentPos;
     }
 };

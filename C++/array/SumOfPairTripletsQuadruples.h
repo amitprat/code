@@ -22,14 +22,12 @@ class SumOfPairTripletsQuadruples {
         assert(t1 == t2);
 
         cout << "Quadruple Sum:: ";
-        auto q1 = obj.quadrupleSum(arr, k);
+        auto q1 = obj.foursum1(arr, k);
         cout << "Output: " << get<0>(q1) << " " << get<1>(q1) << " " << get<2>(q1) << " " << get<3>(q1) << endl;
 
         cout << "All four sum: ";
-        auto allFour = obj.fourSum2(arr, k);
-        for (const auto &v : allFour)
-            for (int val : v) cout << val << ' ';
-        cout << endl;
+        auto q2 = obj.fourSum2(arr, k);
+        cout << "Output: " << q2[0] << " " << q2[1] << " " << q2[2] << " " << q2[3] << endl;
     }
 
    private:
@@ -57,7 +55,7 @@ class SumOfPairTripletsQuadruples {
    private:
     tuple<int, int, int> tripletSumUsingSort(vector<int> v, int sum) {
         sort(v.begin(), v.end());
-        for (int i = 0; i < (int)v.size() - 2; ++i) {
+        for (int i = 0; i < v.size() - 2; ++i) {
             int j = i + 1, k = v.size() - 1;
             while (j < k) {
                 int s = v[i] + v[j] + v[k];
@@ -91,8 +89,7 @@ class SumOfPairTripletsQuadruples {
     }
 
    private:
-    // find four sum
-    tuple<int, int, int, int> quadrupleSum(vector<int> v, int sum) {
+    tuple<int, int, int, int> foursum1(vector<int> v, int sum) {
         unordered_map<int, pair<int, int>> seen;
         for (int i = 0; i < (int)v.size(); ++i) {
             for (int j = i + 1; j < (int)v.size(); ++j) {
@@ -110,12 +107,10 @@ class SumOfPairTripletsQuadruples {
         return {-1, -1, -1, -1};
     }
 
-    // find all quadruples which makes to target sum
-    vector<vector<int>> fourSum2(const vector<int> &arr, int target) {
+    vector<vector<int>> fourSum2(const vector<int>& arr, int target) {
         vector<vector<int>> result;
         int n = arr.size();
-        if (n < 4)
-            return result;
+        if (n < 4) return result;
 
         using P = pair<int, int>;
         unordered_map<int, P> map;

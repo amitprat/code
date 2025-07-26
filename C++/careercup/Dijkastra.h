@@ -25,8 +25,9 @@ class DijkastraMatrix {
    public:
     vector<int> dijkstraUsingMatrix(vector<vector<int>> graph, int s) {
         vector<int> dist(graph.size(), INT_MAX);
-        dist[s] = 0;
         vector<bool> visited(graph.size(), false);
+
+        dist[s] = 0;
 
         for (int cnt = 0; cnt < graph.size() - 1; cnt++) {
             int u = minWeightVertex(dist, visited);

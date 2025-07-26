@@ -137,4 +137,47 @@ class CheckWordExistsInBoard {
 
         return neighbours;
     }
+
+   public:
+    bool exist(vector<vector<char>>& board, string word) {
+        // preprocess
+        unordered_map<char, vector<pair<int, int>>> pointMap;
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board[i].size(); j++) {
+                pointMap[board[i][j]].push_back({i, j});
+            }
+        }
+
+        // check existence
+        unordered_set<string> visited;
+        return exists(word, 0, word.length(), pointMap, {}, visited);
+    }
+
+    bool exists(const string& str, int index, int n,
+                unordered_map<char, vector<pair<int, int>>>& pointMap,
+                pair<int, int> prev,
+                unordered_set<string>& visited) {
+        if (index == n) return true;
+        if (index > n || pointMap.count(str[index]) == 0) return false;
+
+        auto points = pointMap[str[index]];
+        for (auto& point : points) {
+            stringstream ss;
+            ss << point.first << " : " << point.second;
+            if (visited.find(ss.str()) != visited.end()) continue;
+
+            if (index == 0 || neighbour(prev, point)) {
+                visited.insert(ss.str());
+                if (exists(str, index + 1, n, pointMap, point, visited)) return true;
+                visited.erase(ss.str());
+            }
+        }
+
+        return false;
+    }
+
+    bool neighbour(const pair<int, int>& prev, const pair<int, int>& cur) {
+        if (abs(prev.first - cur.first) + abs(prev.second - cur.second) == 1) return true;
+        return false;
+    }
 };

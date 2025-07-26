@@ -1,10 +1,14 @@
 #pragma once
-#include "../Header.h"
+#include "../header.h"
 
+// Print extreme nodes of each level in alternate order (first leftmost, then rightmost, then leftmost, etc.).
 class PrintExtremeNodes {
+    using ITNode = BinaryTree<int>::Node;
+
    public:
     static void test() {
         PrintExtremeNodes obj;
+
         ITNode* root = new ITNode(10);
         root->left = new ITNode(5);
         root->right = new ITNode(11);
@@ -15,26 +19,45 @@ class PrintExtremeNodes {
         root->right->right->left = new ITNode(25);
         root->left->left->left->right = new ITNode(30);
 
-        cout << to_string(root) << endl;
+        // Tree structure:
+        //         10
+        //      5      11
+        //    9   20      15
+        // 14         25
+        //    30
 
-        unordered_map<int, int> map;
-        obj.printExtremeNodes(root, 0, map, true);
-        cout << map << endl;
+        cout << "Extreme nodes in alternate order:" << endl;
+        obj.printExtremeNodes(root);
     }
 
-    void printExtremeNodes(ITNode* root, int level, unordered_map<int, int>& map, bool printLeft) {
+   public:
+    void printExtremeNodes(ITNode* root) {
         if (!root) return;
 
-        if (printLeft) {
-            cout << "printLeft" << endl;
-            printExtremeNodes(root->right, level + 1, map, !printLeft);
-            printExtremeNodes(root->left, level + 1, map, !printLeft);
-        } else {
-            cout << "printRight" << endl;
-            printExtremeNodes(root->left, level + 1, map, !printLeft);
-            printExtremeNodes(root->right, level + 1, map, !printLeft);
-        }
+        queue<ITNode*> q;
+        q.push(root);
+        bool printLeft = true;  // alternate between leftmost and rightmost
 
-        map[level] = root->val;
+        while (!q.empty()) {
+            int size = q.size();
+            vector<ITNode*> levelNodes;
+            levelNodes.reserve(size);
+
+            for (int i = 0; i < size; ++i) {
+                ITNode* node = q.front();
+                q.pop();
+                levelNodes.push_back(node);
+
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+
+            if (printLeft)
+                cout << "Level extreme (leftmost): " << levelNodes.front()->val << endl;
+            else
+                cout << "Level extreme (rightmost): " << levelNodes.back()->val << endl;
+
+            printLeft = !printLeft;  // alternate next level
+        }
     }
 };

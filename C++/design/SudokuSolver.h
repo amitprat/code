@@ -17,6 +17,7 @@ class SudokuSolver {
                         {1, 3, 0, 0, 0, 0, 2, 5, 0},
                         {0, 0, 0, 0, 0, 0, 0, 7, 4},
                         {0, 0, 5, 2, 0, 6, 3, 0, 0}};
+
         auto res = obj.SolveSudoku(board);
         cout << "Can be solved: " << res << endl;
 
@@ -117,33 +118,34 @@ class SudokuSolver {
         return false;
     }
 
-    private:
-        bool SolveSudokuOptimized(IBoard& board) {
+   private:
+    bool SolveSudokuOptimized(IBoard& board) {
         unordered_set<int> emptyBlocks;
-        bool SolveSudokuOptimized(IBoard& board) {
+        int N = board.size();
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board[i].size(); j++) {
-                if (grid[i][j] == 0) {
+                if (board[i][j] == 0) {
                     emptyBlocks.insert(i * N + j);
                 }
             }
         }
 
-        return SolveSudokuOptimized(grid, emptyBlocks);
+        return SolveSudokuOptimized(board, emptyBlocks);
     }
 
     bool SolveSudokuOptimized(IBoard& board, unordered_set<int>& emptyBlocks) {
         if (emptyBlocks.empty()) return true;
 
+        int N = board.size();
         auto pos = *emptyBlocks.begin();
         int x = pos / N, y = pos % N;
         emptyBlocks.erase(emptyBlocks.begin());
 
         for (int num = 1; num <= N; num++) {
-            if (isSafe(grid, x, y, num)) {
-                grid[x][y] = num;
-                if (SolveSudokuOptimized(grid, emptyBlocks)) return true;
-                grid[x][y] = 0;
+            if (isSafe(board, x, y, num)) {
+                board[x][y] = num;
+                if (SolveSudokuOptimized(board, emptyBlocks)) return true;
+                board[x][y] = 0;
             }
         }
         emptyBlocks.insert(pos);
@@ -151,4 +153,39 @@ class SudokuSolver {
         return false;
     }
 
+   public:
+    bool solveSudoku(IBoard& board) {
+        int n = board.size();
+        vector<bool> rows(n, false), cols(n, false), blocks(n, false);
+
+        vector<pair<int, int>> emptySlots;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == UNASSIGNED) emptySlots.push_back({i, j});
+            }
+        }
+
+        return solveSudoku(board, n, emptySlots, 0, emptySlots.size(), rows, cols, blocks);
+    }
+
+    bool solveSudoku(IBoard& board, int n, vector<pair<int, int>>& emptySlots, int index, int m,
+                     vector<bool>& rows, vector<bool>& cols, vector<bool>& blocks) {
+        if (index == m) return true;
+
+        auto slot = emptySlots[index];
+
+        for (int num = 1; num <= 9; num++) {
+            if (!rows[slot.first] && !cols[slot.second] && !blocks[(slot.first / n) * n + slot.second]) {
+                rows[slot.first] = cols[slot.second] = blocks[(slot.first / n) * n + slot.second] = true;
+                board[slot.first][slot.second] = num;
+
+                if (solveSudoku(board, n, emptySlots, index + 1, m, rows, cols, blocks)) return true;
+
+                rows[slot.first] = cols[slot.second] = blocks[(slot.first / n) * n + slot.second] = false;
+                board[slot.first][slot.second] = UNASSIGNED;
+            }
+        }
+
+        return false;
+    }
 };

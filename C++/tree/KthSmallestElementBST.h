@@ -93,6 +93,8 @@ class KthSmallestElementBST {
                 root = root->left;
             }
 
+            if (st.empty()) return -1;
+
             root = st.top();
             st.pop();
 

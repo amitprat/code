@@ -1,12 +1,12 @@
+#pragma once
+#include "../header.h"
+
 /*
       3                     3                   3
     2   1       -->     1       2     -->     1   2
   4       5               5   4             5       4
 */
 /*construct seperate mirror tree*/
-
-#pragma once
-#include "../header.h"
 
 class MirrorBinaryTree {
     struct Node {

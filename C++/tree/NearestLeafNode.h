@@ -1,78 +1,105 @@
 #pragma once
 #include "../header.h"
+#include "BinaryTree.h"
 
 class NearestLeafNode {
-    using ITNode = BinaryTree<int>::Node;
+    using Node = BinaryTree<int>::Node;
 
    public:
     static void test() {
         NearestLeafNode obj;
-        ITNode* root = new ITNode(1);
-        root->left = new ITNode(2);
-        root->right = new ITNode(3);
-        root->right->left = new ITNode(31);
-        root->right->right = new ITNode(32);
-        root->left->left = new ITNode(4);
-        root->left->right = new ITNode(5);
-        root->left->left->left = new ITNode(6);
-        root->left->left->right = new ITNode(7);
-        root->left->right->left = new ITNode(8);
-        root->left->right->right = new ITNode(9);
-        root->left->left->left->left = new ITNode(10);
-        root->left->left->left->right = new ITNode(11);
-        root->left->left->right->left = new ITNode(12);
-        root->left->left->right->right = new ITNode(13);
+        Node* root = new Node(1);
+        root->left = new Node(2);
+        root->right = new Node(3);
+        root->right->left = new Node(31);
+        root->right->right = new Node(32);
+        root->left->left = new Node(4);
+        root->left->right = new Node(5);
+        root->left->left->left = new Node(6);
+        root->left->left->right = new Node(7);
+        root->left->right->left = new Node(8);
+        root->left->right->right = new Node(9);
+        root->left->left->left->left = new Node(10);
+        root->left->left->left->right = new Node(11);
+        root->left->left->right->left = new Node(12);
+        root->left->left->right->right = new Node(13);
 
-        int val = obj.findNearestLeaf(root, 1);
-        cout << "val = " << val << endl;
-
-        val = obj.findNearestLeaf(root, 2);
-        cout << "val = " << val << endl;
-
-        val = obj.findNearestLeaf(root, 3);
-        cout << "val = " << val << endl;
-
-        val = obj.findNearestLeaf(root, 4);
-        cout << "val = " << val << endl;
-
-        val = obj.findNearestLeaf(root, 5);
-        cout << "val = " << val << endl;
-
-        val = obj.findNearestLeaf(root, 6);
-        cout << "val = " << val << endl;
+        vector<int> testVals = {1, 2, 3, 4, 5, 6};
+        for (int v : testVals) {
+            auto [leafVal, dist] = obj.findNearestLeafRecur(root, v);
+            cout << "Nearest leaf to " << v << " = " << leafVal->val
+                 << " (distance = " << dist << ")" << endl;
+        }
     }
 
-    int findNearestLeaf(ITNode* root, int val) {
-        int mnDistance = INT_MAX;
-        nearestLeafNode(root, val, mnDistance);
+   public:
+    pair<Node*, int> findNearestLeafRecur(Node* root, int targetVal) {
+        if (!root) return {nullptr, INT_MAX};
+        if (!root->left && !root->right) return {root, 1};
 
-        return mnDistance;
+        auto left = findNearestLeafRecur(root->left, targetVal);
+        auto right = findNearestLeafRecur(root->right, targetVal);
+
+        if (root->val == targetVal) return left.second < right.second ? left : right;
+
+        return (left.second < right.second) ? make_pair(left.first, left.second + 1) : make_pair(right.first, right.second + 1);
     }
 
-    pair<int, int> nearestLeafNode(ITNode* root, int val, int& mnDistance) {
-        if (!root) return {-1, INT_MAX};
+   public:
+    // Returns {nearest leaf value, distance}
+    pair<Node*, int> findNearestLeaf(Node* root, int targetVal) {
+        if (!root) return {nullptr, -1};
 
-        auto left = nearestLeafNode(root->left, val, mnDistance);
-        auto right = nearestLeafNode(root->right, val, mnDistance);
+        unordered_map<Node*, Node*> parent;
+        Node* target = nullptr;
 
-        int mnLeafNodeDist = min(left.first, right.first) + 1;
-        int valNodeDist = INT_MAX;
-        if (root->val == val) {
-            valNodeDist = 0;
-        } else {
-            if (left.second != INT_MAX) {
-                valNodeDist = left.second + 1;
+        // Step 1: Build parent map + find target node
+        fillParent(root, nullptr, targetVal, target, parent);
+        if (!target) return {nullptr, -1};
+
+        // Step 2: BFS outward from target
+        queue<pair<Node*, int>> q;  // node + distance
+        unordered_set<Node*> visited;
+        q.push({target, 0});
+        visited.insert(target);
+
+        while (!q.empty()) {
+            auto [curr, dist] = q.front();
+            q.pop();
+
+            // Found a leaf node
+            if (!curr->left && !curr->right)
+                return {curr, dist};
+
+            if (curr->left && !visited.count(curr->left)) {
+                visited.insert(curr->left);
+                q.push({curr->left, dist + 1});
             }
 
-            if (right.second != INT_MAX) {
-                valNodeDist = right.second + 1;
+            if (curr->right && !visited.count(curr->right)) {
+                visited.insert(curr->right);
+                q.push({curr->right, dist + 1});
+            }
+
+            if (parent[curr] && !visited.count(parent[curr])) {
+                visited.insert(parent[curr]);
+                q.push({parent[curr], dist + 1});
             }
         }
-        mnDistance = min(mnDistance, valNodeDist == INT_MAX ? valNodeDist : mnLeafNodeDist + valNodeDist);
 
-        // cout << "At node " << root->val << ", mnDistance = " << mnDistance << endl;
-        // cout << "Return value from node " << root->val << " = " << mnLeafNodeDist << ", " << valNodeDist << endl;
+        return {nullptr, -1};
+    }
 
-        return {mnLeafNodeDist, valNodeDist};
+   private:
+    void fillParent(Node* node, Node* parent, int targetVal, Node*& target,
+                    unordered_map<Node*, Node*>& parentMap) {
+        if (!node) return;
+
+        parentMap[node] = parent;
+
+        if (node->val == targetVal) target = node;
+
+        fillParent(node->left, node, targetVal, target, parentMap);
+        fillParent(node->right, node, targetVal, target, parentMap);
     }
 };

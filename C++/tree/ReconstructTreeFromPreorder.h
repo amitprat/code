@@ -6,58 +6,65 @@ class ReconstructTreeFromPreorder {
     using Node = BinarySearchTree<int>::Node;
 
    public:
-    void reconstruct(list<Node *> pre, Node *&root) {
-        stack<Node *> st;
-        Node *cur = pre.front();
-        pre.pop_front();
-        st.push(cur);
+    Node* buildBSTFromPreorder(const vector<int>& preorder) {
+        int index = 0;
+        return build(preorder, index, INT_MIN, INT_MAX);
+    }
 
-        while (!st.empty() && !pre.empty()) {
-            if (pre.front() > st.top()) {
-                st.push(cur = pre.front());
-                pre.pop_front();
-            } else {
-                Node *tmp = nullptr;
-                while (!st.empty() && st.top() < pre.front()) {
-                    tmp = st.top();
-                    st.pop();
-                }
-                if (tmp != nullptr) {
-                    tmp->right = cur = pre.front();
-                    st.push(tmp);
-                    pre.pop_front();
-                } else {
-                    st.push(cur = pre.front());
-                    pre.pop_front();
-                }
-            }
-            cout << cur->val << " ";
-        }
-        cout << endl;
+    Node* build(const vector<int>& preorder, int& index, int minVal, int maxVal) {
+        if (index >= preorder.size()) return nullptr;
 
-        root = st.top();
-        st.pop();
+        int val = preorder[index];
+        if (val < minVal || val > maxVal) return nullptr;
+
+        Node* root = new Node(val);
+        index++;
+
+        root->left = build(preorder, index, minVal, val);
+        root->right = build(preorder, index, val, maxVal);
+
+        return root;
+    }
+
+    void printInorder(Node* root) {
+        if (!root) return;
+        printInorder(root->left);
+        cout << root->val << " ";
+        printInorder(root->right);
+    }
+
+    vector<int> preorder(Node* root) {
+        vector<int> arr;
+        preorder(root);
+    }
+
+    void preorder(Node* root, vector<int>& arr) {
+        if (!root) return;
+        arr.push_back(root->val);
+
+        preorder(root->left, arr);
+        preorder(root->right, arr);
     }
 
    public:
     static void test() {
-        BinarySearchTree<int> bst;
-        bst.root = new Node(5);
-        bst.root->left = new Node(4);
-        bst.root->left->left = new Node(1);
-        bst.root->left->left->right = new Node(2);
-        bst.root->right = new Node(7);
-        bst.root->right->left = new Node(6);
-        bst.root->right->right = new Node(8);
-        bst.root->right->right->right = new Node(9);
-
-        list<Node *> preOrderArray = bst.preorder_list();
-        cout << "Preorder: " << bst.preorder() << endl;
+        Node* root = new Node(5);
+        root->left = new Node(4);
+        root->left->left = new Node(1);
+        root->left->left->right = new Node(2);
+        root->right = new Node(7);
+        root->right->left = new Node(6);
+        root->right->right = new Node(8);
+        root->right->right->right = new Node(9);
 
         ReconstructTreeFromPreorder obj;
-        BinarySearchTree<int> other;
-        obj.reconstruct(preOrderArray, other.root);
 
-        cout << "Preorder: " << other.preorder() << endl;
+        auto arr = obj.preorder(root);
+        cout << "Preorder: " << arr << endl;
+
+        Node* root2 = obj.buildBSTFromPreorder(arr);
+
+        auto arr2 = obj.preorder(root2);
+        cout << "Preorder: " << arr2 << endl;
     }
 };

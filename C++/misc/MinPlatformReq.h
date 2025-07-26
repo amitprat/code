@@ -82,7 +82,8 @@ public:
         int tmp = 0;
         for (auto m : map) {
             if (m.second == 'a') {
-                tmp++; if (tmp > result) result = tmp;
+                tmp++; 
+                if (tmp > result) result = tmp;
             }
             else tmp--;
         }

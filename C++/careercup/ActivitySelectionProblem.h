@@ -68,25 +68,26 @@ class ActivitySelectionProblem {
         cout << "\nSelect non-conflicting activities:\n";
         vector<Interval> tasks = {{5, 9}, {1, 2}, {3, 4}, {0, 6}, {5, 7}, {8, 9}};
         cout << "Input: " << tasks << endl;
-        selectMaximumNumberOfNonConflictingActivities(tasks);
+        selectMaximumNumberOfNonConflictingActivities1(tasks);
 
         cout << "\nSelect non-conflicting activities with maximum weight:\n";
         vector<Job> weightedJobs = {{3, 10, 20}, {1, 2, 50}, {6, 19, 100}, {2, 100, 200}};
         cout << "Input: " << weightedJobs << endl;
 
-        cout << "Result with memoization = " << selectJobsWithMaximumWeight(weightedJobs) << '\n';
+        cout << "Result with memoization = " << selectMaximumNumberOfNonConflictingActivitiesWithMaxWeight(weightedJobs) << '\n';
         cout << "Result with optimized linear search = " << selectJobsWithMaximumWeightOptimizedLinearSearch(weightedJobs) << '\n';
         cout << "Result with optimized binary search = " << selectJobsWithMaximumWeightOptimizedBinarySearch(weightedJobs) << '\n';
 
         cout << "\nSelect non-conflicting activities with maximum weight:\n";
         vector<Job> weightedJobs2 = {{600, 830, 230}, {900, 1100, 200}, {1230, 1400, 150}, {800, 900, 100}, {1030, 1400, 350}, {900, 1130, 250}};
         cout << "Input: " << weightedJobs2 << endl;
-        cout << "Result with memoization = " << selectJobsWithMaximumWeight(weightedJobs2) << '\n';
+        cout << "Result with memoization = " << selectMaximumNumberOfNonConflictingActivitiesWithMaxWeight(weightedJobs2) << '\n';
         cout << "Result with optimized linear search = " << selectJobsWithMaximumWeightOptimizedLinearSearch(weightedJobs2) << '\n';
         cout << "Result with optimized binary search = " << selectJobsWithMaximumWeightOptimizedBinarySearch(weightedJobs2) << '\n';
     }
 
-    static void selectMaximumNumberOfNonConflictingActivities(const std::vector<Interval>& tasks) {
+   private:
+    static void selectMaximumNumberOfNonConflictingActivities1(const std::vector<Interval>& tasks) {
         auto sortedTasks = tasks;
         std::ranges::sort(sortedTasks, {}, &Interval::end);
 
@@ -100,7 +101,8 @@ class ActivitySelectionProblem {
         std::cout << '\n';
     }
 
-    static int selectMaximumTasks(const std::vector<Interval>& tasks) {
+   private:
+    static int selectMaximumNumberOfNonConflictingActivities2(const std::vector<Interval>& tasks) {
         if (tasks.empty()) return 0;
 
         auto sortedTasks = tasks;
@@ -125,7 +127,7 @@ class ActivitySelectionProblem {
     }
 
    private:
-    [[nodiscard]] static int selectJobsWithMaximumWeight(std::vector<Job>& weightedJobs) {
+    [[nodiscard]] static int selectMaximumNumberOfNonConflictingActivitiesWithMaxWeight(std::vector<Job>& weightedJobs) {
         if (weightedJobs.empty()) return 0;
 
         std::ranges::sort(weightedJobs, {}, &Job::end);
@@ -145,6 +147,7 @@ class ActivitySelectionProblem {
         return memo[n];
     }
 
+   private:
     [[nodiscard]] static int selectJobsWithMaximumWeightOptimizedLinearSearch(std::vector<Job>& weightedJobs) {
         if (weightedJobs.empty()) return 0;
 
@@ -164,6 +167,15 @@ class ActivitySelectionProblem {
         return memo.back();
     }
 
+    [[nodiscard]] static int latestNonConflictingJob(const std::vector<Job>& jobs, int index) {
+        for (int j = index - 1; j >= 0; --j) {
+            if (jobs[j].end <= jobs[index].start)
+                return j;
+        }
+        return -1;
+    }
+
+   private:
     [[nodiscard]] static int selectJobsWithMaximumWeightOptimizedBinarySearch(std::vector<Job>& weightedJobs) {
         if (weightedJobs.empty()) return 0;
 
@@ -181,14 +193,6 @@ class ActivitySelectionProblem {
         }
 
         return memo.back();
-    }
-
-    [[nodiscard]] static int latestNonConflictingJob(const std::vector<Job>& jobs, int index) {
-        for (int j = index - 1; j >= 0; --j) {
-            if (jobs[j].end <= jobs[index].start)
-                return j;
-        }
-        return -1;
     }
 
     [[nodiscard]] static int latestNonConflictingJobBinarySearch(const std::vector<Job>& jobs, int index) {

@@ -3,7 +3,10 @@
 /*
 https://www.careercup.com/question?id=6282171643854848
 
-There are at most eight servers in a data center. Each server has got a capacity/memory limit. There can be at most 8 tasks that need to be scheduled on those servers. Each task requires certain capacity/memory to run, and each server can handle multiple tasks as long as the capacity limit is not hit. Write a program to see if all of the given tasks can be scheduled or not on the servers?
+There are at most eight servers in a data center. Each server has got a capacity/memory limit.
+There can be at most 8 tasks that need to be scheduled on those servers.
+Each task requires certain capacity/memory to run, and each server can handle multiple tasks as long as
+the capacity limit is not hit. Write a program to see if all of the given tasks can be scheduled or not on the servers?
 
 Ex:
 Servers capacity limits: 8, 16, 8, 32

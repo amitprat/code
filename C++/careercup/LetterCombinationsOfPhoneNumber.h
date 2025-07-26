@@ -38,11 +38,12 @@ class LetterCombinationsOfPhoneNumber {
         }
 
         if (idx > n) return;
-        auto ch = digits[idx];
-        if (mappings[ch].empty()) return;
 
-        for (auto& alpha : mappings[ch]) {
-            letterCombinations(digits, idx + 1, n, mappings, cur + alpha, result);
+        auto digit = digits[idx];
+        if (mappings[digit].empty()) return;  // no digit exist in mapping array
+
+        for (auto& ch : mappings[digit]) {
+            letterCombinations(digits, idx + 1, n, mappings, cur + ch, result);
         }
     }
 };

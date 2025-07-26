@@ -15,7 +15,6 @@ Examples:
 --------------------------------------------------
 Reference: https://careercup.com/question?id=5705581721550848
 */
-
 class WordBreak {
    public:
     static void test() {
@@ -136,6 +135,30 @@ class WordBreak {
         return false;
     }
 
+    bool wordBreakRec(string word, unordered_set<string>& dict, vector<vector<string>>& result) {
+        return wordBreakRec(word, dict, result, {});
+    }
+
+    bool wordBreakRec(string word, unordered_set<string>& dict, vector<vector<string>>& result, vector<string> cur) {
+        if (word.empty()) {
+            result.push_back(cur);
+            return true;
+        }
+
+        bool res = false;
+        for (int i = 1; i <= word.size(); i++) {
+            string first = word.substr(0, i);
+            string second = word.substr(i);
+            if (dict.find(first) != dict.end()) {
+                cur.push_back(first);
+                res |= wordBreakRec(second, dict, result, cur);
+                cur.pop_back();
+            }
+        }
+
+        return res;
+    }
+
     /**
      * DP top-down (build table for reachability).
      * Time: O(n^2), Space: O(n)
@@ -159,6 +182,72 @@ class WordBreak {
             if (table[n]) return true;
         }
         return table[n];
+    }
+
+    bool wordBreakDP(string word, unordered_set<string>& dict, vector<vector<string>>& result) {
+        bool* dp = new bool[word.size() + 1];
+        memset(dp, false, (word.size() + 1) * sizeof(bool));
+        dp[0] = true;
+        bool exists = false;
+
+        for (int i = 1; i <= word.size(); i++) {
+            if (!dp[i])
+                dp[i] = (dict.find(word.substr(0, i)) != dict.end());
+            if (dp[i]) {
+                for (int j = i + 1; j <= word.size(); j++) {
+                    if (!dp[j]) {
+                        dp[j] = (dict.find(word.substr(i, j - i)) != dict.end());
+                    }
+                }
+            }
+            if (dp[word.size()]) {
+                exists = true;
+                populateResult(dp, word, result);
+                for (int j = i + 1; j <= word.size(); j++) dp[j] = false;
+            }
+        }
+        return exists;
+    }
+
+    void populateResult(bool dp[], string word, vector<vector<string>>& result) {
+        vector<string> res;
+        int start = 0;
+        for (int i = 1; i <= word.size(); i++) {
+            if (dp[i]) {
+                res.push_back(word.substr(start, i - start));
+                start = i;
+            }
+        }
+        result.push_back(res);
+    }
+
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int n = s.length();
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+        vector<bool> table(n + 1, false);
+        table[0] = true;
+        vector<int> prev(n + 1, -1);
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (table[j] && dict.contains(s.substr(j, i - j))) {
+                    table[i] = true;
+                    prev[i] = j;
+                    break;
+                }
+            }
+        }
+        if (!table[n]) return false;
+
+        // print words
+        vector<string> result;
+        for (int i = n; i > 0; i = prev[i]) {
+            result.push_back(s.substr(prev[i], i - prev[i]));
+        }
+        std::reverse(result.begin(), result.end());
+        cout << result << endl;
+
+        return true;
     }
 
     /**
@@ -198,5 +287,41 @@ class WordBreak {
             }
         }
         return dp[n] == INT_MAX ? -1 : dp[n];
+    }
+
+   private:
+    bool wordBreakDP1(string word, unordered_set<string>& dict, vector<vector<string>>& result) {
+        int n = word.size();
+        unordered_map<int, vector<vector<string>>> memo;
+        memo[0].push_back({""});
+        bool exitst = false;
+
+        for (int i = 1; i <= n; i++) {
+            // if (memo[i].empty()) {
+            if (dict.find(word.substr(0, i)) != dict.end()) {
+                memo[i].push_back({word.substr(0, i)});
+            }
+            //}
+
+            if (!memo[i].empty()) {
+                for (int j = i + 1; j <= n; j++) {
+                    // if (memo[j].empty()) {
+                    if (dict.find(word.substr(i, j - i)) != dict.end()) {
+                        auto prev = memo[i];
+                        for (auto w : prev) {
+                            w.push_back(word.substr(i, j - i));
+                            memo[j].push_back(w);
+                        }
+                    }
+                    //}
+                }
+            }
+
+            if (!memo[n].empty()) {
+                exitst = true;
+            }
+        }
+        result = memo[n];
+        return exitst;
     }
 };

@@ -44,12 +44,16 @@ class OneEditDistance {
             bool r4 = obj.isOneEditDistance4(s1, s2);
             bool r5 = obj.isOneEditDistance5(s1, s2);
             bool r6 = obj.isOneEditDistance6(s1, s2);
+            bool r7 = obj.isOneEditAway(s1, s2);
+            bool r8 = obj.isOneEditAway2(s1, s2);
             cout << "Res1: " << r1 << ", Res2: " << r2 << ", Res3: " << r3 << ", Res4: " << r4 << endl;
             assert(r1 == r2);
             assert(diff1 == diff2);
             assert(r3 == r4);
             assert(r4 == r5);
             assert(r5 == r6);
+            assert(r6 == r7);
+            assert(r7 == r8);
         }
     }
 
@@ -218,5 +222,43 @@ class OneEditDistance {
         }
 
         return diffseen || (n < m);
+    }
+
+   public:
+    bool isOneEditAway(string& s1, string& s2) {
+        int n = s1.length();
+        int m = s2.length();
+        if (abs(n - m) > 1) return false;
+        if (n > m) {
+            swap(n, m);
+            swap(s1, s2);
+        }
+        bool diffSeen = false;
+        for (int i = 0, j = 0; i < n && j < m; i++, j++) {
+            if (s1[i] != s2[j]) {
+                if (diffSeen) return false;
+                if (n != m) i--;
+                diffSeen = true;
+            }
+        }
+        return (n < m && !diffSeen) || diffSeen;
+    }
+
+    bool isOneEditAway2(string& s1, string& s2) {
+        int n = s1.length();
+        int m = s2.length();
+        if (abs(n - m) > 1) return false;
+        if (n > m) {
+            swap(n, m);
+            swap(s1, s2);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (s1[i] != s2[i]) {
+                if (n < m) return s1.substr(i) == s2.substr(i + 1);
+                return s1.substr(i + 1) == s2.substr(i + 1);
+            }
+        }
+        return n < m;
     }
 };

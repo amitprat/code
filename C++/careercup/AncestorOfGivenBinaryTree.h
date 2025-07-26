@@ -21,7 +21,7 @@ class AncestorOfGivenBinaryTree {
     static void test() {
         AncestorOfGivenBinaryTree obj;
 
-        Node *root = new Node(1);
+        Node* root = new Node(1);
         root->left = new Node(2);
         root->right = new Node(3);
         root->left->right = new Node(4);
@@ -35,7 +35,7 @@ class AncestorOfGivenBinaryTree {
     }
 
    public:
-    bool printAncestors(Node *root, int key) {
+    bool printAncestors(Node* root, int key) {
         if (!root) return false;
         if (root->val == key) return true;
 
@@ -49,8 +49,8 @@ class AncestorOfGivenBinaryTree {
 
    public:
     // TODO - correct me
-    void printAncestors2(Node *root, int key) {
-        stack<Node *> st;
+    void printAncestors2(Node* root, int key) {
+        stack<Node*> st;
         while (true) {
             while (root && root->val != key) {
                 st.push(root);

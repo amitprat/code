@@ -9,14 +9,14 @@ class ConnectNodesAtSameLevel {
     };
 
    public:
-    void connect(Node *root) {
-        queue<Node *> q;
+    void connect(Node* root) {
+        queue<Node*> q;
         q.push(root);
 
         while (!q.empty()) {
             int sz = q.size();
 
-            Node *prev = nullptr;
+            Node* prev = nullptr;
             while (sz--) {
                 auto cur = q.front();
                 q.pop();
@@ -36,13 +36,13 @@ class ConnectNodesAtSameLevel {
 
    public:
     // works only for complete tree.
-    void connect(Node *p) {
+    void connect(Node* p) {
         p->nextRight = nullptr;
 
         connectRecur(p);
     }
 
-    void connectRecur(Node *p) {
+    void connectRecur(Node* p) {
         if (!p) return;
 
         if (p->left) p->left->nextRight = p->right;

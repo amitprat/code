@@ -1,4 +1,6 @@
 #pragma once
+#include <thread>
+
 #include "../header.h"
 
 class AtomicFlagExample {

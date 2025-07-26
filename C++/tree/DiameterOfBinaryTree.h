@@ -1,8 +1,3 @@
-// diameter_binary_tree.h
-// Computes the diameter (longest path between any two nodes) of a binary tree.
-// Author: Code Copilot
-// Date: 2025-04-16
-
 #pragma once
 #include "../header.h"
 
@@ -25,7 +20,7 @@ class DiameterOfBinaryTree {
         int ld = diameterNaive(root->left);
         int rd = diameterNaive(root->right);
 
-        return std::max({ld, rd, lh + rh});
+        return std::max({ld, rd, 1 + lh + rh});
     }
 
     /**
@@ -57,7 +52,7 @@ class DiameterOfBinaryTree {
         int rd = diameterOptimized(root->right, rh);
 
         height = 1 + std::max(lh, rh);
-        return std::max({ld, rd, lh + rh});
+        return std::max({ld, rd, 1 + lh + rh});
     }
 
    public:
@@ -84,7 +79,7 @@ class DiameterOfBinaryTree {
         int lh = diameterUtil(root->left, res);
         int rh = diameterUtil(root->right, res);
 
-        res = std::max(res, lh + rh);
+        res = std::max(res, 1 + lh + rh);
         return 1 + std::max(lh, rh);
     }
 

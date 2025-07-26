@@ -121,6 +121,38 @@ class PrintMatrixInSpiralOrder {
     }
 
    public:
+    static vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+
+        int n = matrix.size();
+        if (n == 0) return result;  // row count
+
+        int m = matrix[0].size();  // col count
+
+        int top = 0, left = 0, right = m - 1, bottom = n - 1;
+
+        while (top <= bottom && left <= right) {
+            // print top row
+            for (int j = left; j <= right; j++) result.push_back(matrix[top][j]);
+            top++;
+
+            // print right column
+            for (int i = top; i <= bottom; i++) result.push_back(matrix[i][right]);
+            right--;
+
+            // print bottom row if its present
+            for (int j = right; j >= left && top <= bottom; j--) result.push_back(matrix[bottom][j]);
+            bottom--;
+
+            // print left column if its present
+            for (int i = bottom; i >= top && left <= right; i--) result.push_back(matrix[i][left]);
+            left++;
+        }
+
+        return result;
+    }
+
+   public:
     static void test() {
         for (int i = 0; i < 5; i++) {
             cout << "Make square spiral matrix of size: " << i << endl;

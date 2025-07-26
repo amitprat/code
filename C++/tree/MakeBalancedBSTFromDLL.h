@@ -20,6 +20,8 @@ class MakeBalancedBSTFromDLL {
         cout << "BST3: " << bst3.to_string() << endl;
     }
 
+   public:
+    // Convert each bst to DLL (sorted), merge them and convert DLL back to BST.
     BST makeBalancedBST(BST bst1, BST bst2) {
         // convert bst to dll
         Node* root1 = nullptr;
@@ -51,6 +53,7 @@ class MakeBalancedBSTFromDLL {
    public:
     void makeDLL(Node* root, Node*& dllRoot) {
         static Node* prev = nullptr;
+
         if (root) {
             makeDLL(root->left, dllRoot);
 

@@ -1,0 +1,8 @@
+[package]
+name = "asynchat"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+futures = "0.3.0"
+async-std = "1"

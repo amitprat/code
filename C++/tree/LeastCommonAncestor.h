@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 #include "../header.h"
 #include "BinaryTree.h"
 
@@ -8,6 +10,7 @@ class LeastCommonAncestor {
    public:
     static void test() {
         LeastCommonAncestor obj;
+
         Node* root = new Node(1);
         root->left = new Node(2);
         root->left->left = new Node(3);
@@ -18,79 +21,65 @@ class LeastCommonAncestor {
         root->right->left->right = new Node(8);
         root->right->right = new Node(9);
 
-        auto* node = obj.findLCA(root, 2, 11);
-        if (node == nullptr)
-            cout << "No LCA for " << 2 << ", " << 6 << " exists." << endl;
-        else
-            cout << "LCA for " << 2 << ", " << 6 << " is " << node->val << endl;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                auto* node = obj.findLCA(root, i, j);
-                if (node == nullptr)
-                    cout << "No LCA for " << i << ", " << j << " exists." << endl;
-                else
-                    cout << "LCA for " << i << ", " << j << " is " << node->val << endl;
-            }
+        std::cout << "=== Testing LCA ===" << std::endl;
+
+        std::pair<int, int> pairs[] = {
+            {2, 11}, {2, 6}, {3, 5}, {4, 9}, {7, 8}, {5, 8}, {9, 11}, {3, 4}, {3, 10}, {10, 11}};
+
+        for (auto [a, b] : pairs) {
+            auto* node = obj.findLCA(root, a, b);
+            if (node == nullptr)
+                std::cout << "No LCA for " << a << ", " << b << " exists." << std::endl;
+            else
+                std::cout << "LCA for " << a << ", " << b << " is " << node->val << std::endl;
         }
     }
 
    public:
+    // ----------------------------------------------------------
+    // Public entry point
+    // ----------------------------------------------------------
     Node* findLCA(Node* root, int node1, int node2) {
-        Node* left = nullptr;
-        Node* right = nullptr;
+        bool found1 = false, found2 = false;
+        Node* lca = findLCAInternal(root, node1, node2, found1, found2);
 
-        auto* node = findLCA(root, node1, node2, left, right);
-        if (left && right)
-            return node;
-
-        return nullptr;
+        // Only return LCA if both nodes were found
+        return (found1 && found2) ? lca : nullptr;
     }
 
    private:
-    Node* findLCA(Node* root, int node1, int node2, Node*& node1Node, Node*& node2Node) {
-        if (root == nullptr) return root;
+    // ----------------------------------------------------------
+    // Recursive helper returns LCA if both found in subtree
+    // ----------------------------------------------------------
+    Node* findLCAInternal(Node* root, int node1, int node2,
+                          bool& found1, bool& found2) {
+        if (!root) return nullptr;
 
-        bool found = false;
+        Node* left = findLCAInternal(root->left, node1, node2, found1, found2);
+        Node* right = findLCAInternal(root->right, node1, node2, found1, found2);
+
         if (root->val == node1) {
-            node1Node = root;
-            found = true;
+            found1 = true;
+            return root;
         }
         if (root->val == node2) {
-            node2Node = root;
-            found = true;
+            found2 = true;
+            return root;
         }
 
-        if (found) return root;
-
-        auto* left = findLCA(root->left, node1, node2, node1Node, node2Node);
-        auto* right = findLCA(root->right, node1, node2, node1Node, node2Node);
-
+        if (left && right) return root;  // both found in different subtrees
         return left ? left : right;
     }
 
    public:
+    // Returns faster even if single value exists
     Node* findLCA2(Node* root, int node1, int node2) {
-        auto lca = findLCA2Internal(root, node1, node2);
-
-        return lca && exists(root, node1) && exists(root, node2) ? lca : nullptr;
-    }
-
-    Node* findLCA2Internal(Node* root, int node1, int node2) {
         if (!root) return nullptr;
-
         if (root->val == node1 || root->val == node2) return root;
 
-        auto left = findLCA2Internal(root->left, node1, node2);
-        auto right = findLCA2Internal(root->right, node1, node2);
+        auto left = findLCA2(root->left, node1, node2);
+        auto right = findLCA2(root->right, node1, node2);
 
         return left ? left : right;
-    }
-
-    bool exists(Node* root, int val) {
-        if (!root) return false;
-
-        if (root->val == val) return true;
-
-        return exists(root->left, val) || exists(root->right, val);
     }
 };

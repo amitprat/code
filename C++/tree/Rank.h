@@ -48,19 +48,20 @@ class Bst {
 
     int rank(BstNode* cur, int elem) {
         if (cur == nullptr) return -1;
-        if (cur->val == elem) return size(cur->left);
+        if (cur->val == elem) return 1 + size(cur->left);
+
         if (elem < cur->val)
             return rank(cur->left, elem);
         else {
             int right = rank(cur->right, elem);
-            if (right == -1) return right;
+            if (right == -1) return right;  // handle missing element
             return 1 + size(cur->left) + right;
         }
     }
 
     int rank_missingelement(BstNode* cur, int elem) {
         if (cur == nullptr) return 0;
-        if (cur->val == elem) return size(cur->left);
+        if (cur->val == elem) return 1 + size(cur->left);
         if (elem < cur->val)
             return rank_missingelement(cur->left, elem);
         else

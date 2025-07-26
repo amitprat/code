@@ -1,4 +1,41 @@
+#pragma once
 #include "../header.h"
+
+/*
+-----------------------------------------------------------
+🧩 PROBLEM: Print All Paths from Source to Destination in a Directed Graph
+-----------------------------------------------------------
+
+Given a directed graph and two vertices `src` and `dst`,
+print all possible paths from `src` to `dst`.
+
+Example:
+Graph:
+    0 → 1 → 3
+    ↘︎ 2 → 0
+      ↘︎ 1
+
+Paths from 2 → 3:
+    2 → 0 → 1 → 3
+    2 → 1 → 3
+
+-----------------------------------------------------------
+🚀 APPROACHES:
+-----------------------------------------------------------
+
+1️⃣ **DFS Backtracking**
+   - Explore all possible paths recursively.
+   - Mark vertices as visited during current recursion.
+   - Backtrack to explore alternative routes.
+   - Time Complexity: O(V!); exponential in worst case.
+
+2️⃣ **BFS (Level-wise path expansion)**
+   - Store paths as queues and expand step by step.
+   - Avoid revisiting nodes already in current path.
+   - Less space-efficient, but easy to implement iteratively.
+
+-----------------------------------------------------------
+*/
 
 class AllPathsFromSourceToDestination {
     class Graph {
@@ -37,6 +74,9 @@ class AllPathsFromSourceToDestination {
     }
 
    private:
+    //-------------------------------------------------------
+    // Depth-First Search (Recursive Backtracking)
+    //-------------------------------------------------------
     void printAllPathsDFS(const Graph& g, int s, int d) {
         vector<vector<int>> paths;
         vector<bool> visited(g.V, false);
@@ -44,9 +84,15 @@ class AllPathsFromSourceToDestination {
         vector<int> path;
         dfs(g, s, d, visited, path, paths);
 
+                if (paths.empty()) {
+            cout << "No paths found.\n";
+            return;
+        }
+
         for (const auto& p : paths) {
+            cout << "[ ";
             for (int node : p) cout << node << " ";
-            cout << endl;
+            cout << "]\n";
         }
     }
 
@@ -71,6 +117,9 @@ class AllPathsFromSourceToDestination {
     }
 
    public:
+    //-------------------------------------------------------
+    // Breadth-First Search (Iterative using path queue)
+    //-------------------------------------------------------
     void printAllPathsBFS(const Graph& g, int s, int d) {
         vector<vector<int>> result;
 
@@ -90,7 +139,7 @@ class AllPathsFromSourceToDestination {
                 continue;
             }
 
-            for (const auto& v : g.adjMap[u]) {
+            for (const auto& v : g.adjMap.at(u)) {
                 if (find(path.begin(), path.end(), v) == path.end()) {
                     vector<int> new_path = path;
                     new_path.push_back(v);
@@ -99,9 +148,15 @@ class AllPathsFromSourceToDestination {
             }
         }
 
+        if (result.empty()) {
+            cout << "No paths found.\n";
+            return;
+        }
+
         for (const auto& p : result) {
+            cout << "[ ";
             for (int node : p) cout << node << " ";
-            cout << endl;
+            cout << "]\n";
         }
     }
 };

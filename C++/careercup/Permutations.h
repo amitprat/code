@@ -29,7 +29,7 @@ class Permutations {
             auto sortedres4 = res4;
             sort(sortedres4.begin(), sortedres4.end());
 
-            auto res5 = obj.getSortedPermutationsWithDuplcates(input);
+            auto res5 = obj.getSortedPermutationsWithDuplicates(input);
             // assert(areEqual<string>(res3, sortedres4));
             assert(areEqual<string>(sortedres4, res5));
             cout << "Sorted unique permutations are: " << res5 << endl;
@@ -120,7 +120,7 @@ class Permutations {
     }
 
    private:
-    vector<string> getSortedPermutationsWithDuplcates(string& str) {
+    vector<string> getSortedPermutationsWithDuplicates(string& str) {
         vector<string> output;
         getSortedPermutationsWithDuplicates(str, output);
 

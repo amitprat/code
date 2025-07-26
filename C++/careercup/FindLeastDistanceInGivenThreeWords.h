@@ -26,23 +26,27 @@ class FindLeastDistanceInGivenThreeWords {
         double current_val;
         int opt_indexes[3] = {0, 0, 0};
 
-    while (i < arr1.size() || j < arr2.size() || k < arr3.size()) {
-        current_val = calculate_distance(A[i], B[j], C[k]);
-        if (current_val < min_value) {
-            min_value = current_val;
-            opt_indexes[1] = i;
-            opt_indexes[2] = j;
-            opt_indexes[3] = k;
+        while (i < arr1.size() || j < arr2.size() || k < arr3.size()) {
+            current_val = calculate_distance(arr1[i], arr2[j], arr3[k]);
+            if (current_val < min_value) {
+                min_value = current_val;
+                opt_indexes[1] = i;
+                opt_indexes[2] = j;
+                opt_indexes[3] = k;
+            }
+
+            if (arr1[i] < arr2[j] && arr1[i] < arr3[k] && i < arr1.size())
+                i++;
+            else if (arr2[j] < arr3[k] && j < arr2.size())
+                j++;
+            else
+                k++;
         }
 
-        if (A[i] < B[j] && A[i] < C[k] && i < A.size)
-            i++;
-        else if (B[j] < C[k] && j < B.size)
-            j++;
-        else
-            k++;
+        return min_value;
     }
 
-    return min_value;
+    int calculate_distance(int d1, int d2, int d3) {
+        return max(d1, max(d2, d3)) - min(d1, min(d2, d3));
     }
 };
