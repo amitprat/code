@@ -15,7 +15,7 @@ class CountIslands {
         cout << obj.countIslandsDP(v) << endl;
     }
 
-public:
+   public:
     int countIslandsDP(vector<vector<bool>> v) {
         int count = 0;
         for (int i = 0; i < v.size(); i++) {
@@ -31,7 +31,7 @@ public:
         return count;
     }
 
-public:
+   public:
     int countIslands(vector<vector<bool>> v) {
         int count = 0;
         for (int i = 0; i < v.size(); i++) {

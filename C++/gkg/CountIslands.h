@@ -22,8 +22,7 @@ class CountIslands {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (mat[i][j] == 'X') {
-                    if ((i == 0 || mat[i - 1][j] == 'O') &&
-                        (j == 0 || mat[i][j - 1] == 'O')) {
+                    if ((i == 0 || mat[i - 1][j] == 'O') && (j == 0 || mat[i][j - 1] == 'O')) {
                         cnt++;
                     }
                 }

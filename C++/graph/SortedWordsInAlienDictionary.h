@@ -2,8 +2,30 @@
 #include "../header.h"
 using namespace std;
 
+/*
+https://neetcode.io/problems/foreign-dictionary/question?list=neetcode150
+
+There is a foreign language which uses the latin alphabet, but the order among letters is not "a", "b", "c" ... "z" as in English.
+
+You receive a list of non-empty strings words from the dictionary, where the words are sorted lexicographically based on the rules of this new language.
+
+Derive the order of letters in this language. If the order is invalid, return an empty string. If there are multiple valid order of letters, return any of them.
+
+A string a is lexicographically smaller than a string b if either of the following is true:
+
+The first letter where they differ is smaller in a than in b.
+a is a prefix of b and a.length < b.length.
+Example 1:
+
+Input: ["z","o"]
+
+Output: "zo"
+Explanation:
+From "z" and "o", we know 'z' < 'o', so return "zo".
+*/
+
 template <class T>
-class Graph {
+class Graph2 {
    private:
     using AdjList = unordered_map<T, vector<T>>;
     AdjList adjList;
@@ -69,7 +91,7 @@ class SortedWordsInAlienDictionary {
    public:
     static void test() {
         SortedWordsInAlienDictionary obj;
-        vector<string> words = {"cc", "cb", "bb", "ac"};
+        vector<string> words = {"abc", "bcd", "cde"};  //{"cc", "cb", "bb", "ac"};
         vector<char> order = obj.findOrdering(words);
         for (auto ch : order) {
             cout << ch << " ";
@@ -78,7 +100,7 @@ class SortedWordsInAlienDictionary {
     }
 
     vector<char> findOrdering(vector<string> words) {
-        Graph<char> g;
+        Graph2<char> g;
         for (int i = 0; i < words.size() - 1; i++) {
             string f = words[i];
             string s = words[i + 1];

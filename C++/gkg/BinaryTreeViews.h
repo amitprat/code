@@ -69,10 +69,9 @@ class BinaryTreeViews {
 
         vector<int> result;
         while (!q.empty()) {
-            auto sz = q.size();
-
             result.push_back(q.front()->val);
 
+            auto sz = q.size();
             while (sz--) {
                 auto front = q.front();
                 q.pop();

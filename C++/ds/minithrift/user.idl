@@ -1,0 +1,4 @@
+struct User {
+    int id;
+    string name;
+}

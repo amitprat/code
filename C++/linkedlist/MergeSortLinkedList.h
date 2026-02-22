@@ -20,9 +20,9 @@ class LinkedListMergeSort {
 
    public:
     void sort(LinkedList<int> head) {
-        auto node = head.get_head();
+        auto node = head.getHead();
         sort(node);
-        head.set_head(node);
+        head.setHead(node);
     }
 
     void sort(LinkedList<int>::Node* node) {

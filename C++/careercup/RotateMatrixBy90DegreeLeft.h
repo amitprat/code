@@ -215,4 +215,27 @@ class RotateMatrixBy90DegreeLeft {
             }
         }
     }
+
+   public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+
+        for (int i = 0; i < n / 2; i++) {          // each layer
+            for (int j = i; j < n - i - 1; j++) {  // elements in layer
+                swap4(
+                    matrix[i][j],
+                    matrix[j][n - 1 - i],
+                    matrix[n - 1 - i][n - 1 - j],
+                    matrix[n - 1 - j][i]);
+            }
+        }
+    }
+
+    void swap4(int& a, int& b, int& c, int& d) {
+        int tmp = a;
+        a = d;
+        d = c;
+        c = b;
+        b = tmp;
+    }
 };

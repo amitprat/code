@@ -22,7 +22,7 @@ class SortedRotatedArraySearchAndPivot {
         };
 
         srand(time(nullptr));
-        for (auto &test : tests) {
+        for (auto& test : tests) {
             auto pivot = obj.findPivot(test);
 
             int randIndex = rand() % (test.size() + 1);
@@ -37,7 +37,7 @@ class SortedRotatedArraySearchAndPivot {
 
    private:
     // minimum element
-    int findPivot(vector<int> &v) {
+    int findPivot(vector<int>& v) {
         if (v.empty()) return -1;
 
         int l = 0, r = v.size() - 1;
@@ -54,11 +54,11 @@ class SortedRotatedArraySearchAndPivot {
 
    private:
     // search element in array
-    int search(vector<int> &arr, int x) {
+    int search(vector<int>& arr, int x) {
         return search(arr, 0, arr.size() - 1, x);
     }
 
-    int search(vector<int> &arr, int l, int r, int x) {
+    int search(vector<int>& arr, int l, int r, int x) {
         if (l > r) return -1;
 
         int m = (l + r) / 2;
@@ -77,7 +77,7 @@ class SortedRotatedArraySearchAndPivot {
 
    private:
     // search element in array second method (using offset)
-    int searchElementInArrayUsingOffset(vector<int> &nums, int target) {
+    int searchElementInArrayUsingOffset(vector<int>& nums, int target) {
         if (nums.empty()) return -1;
 
         // find pivot
