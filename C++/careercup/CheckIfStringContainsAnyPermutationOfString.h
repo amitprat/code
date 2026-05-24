@@ -20,6 +20,7 @@ class CheckIfStringContainsAnyPermutationOfString {
             {"abcdef", ""},
             {"bababa", "aabb"},
             {"xyzdcba", "abcd"}};
+
         for (auto& input : inputs) {
             auto str = input[0];
             auto pat = input[1];

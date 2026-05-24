@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 class AllPairShortestPath {
@@ -37,7 +38,7 @@ class AllPairShortestPath {
     }
 
    private:
-    void floydWarshal(vector<vector<int>> &matrix) {
+    void floydWarshal(vector<vector<int>>& matrix) {
         int V = matrix.size();
 
         for (int k = 0; k < V; k++) {
@@ -51,14 +52,14 @@ class AllPairShortestPath {
         }
     }
 
-    void floydWarshalPath(vector<vector<int>> &matrix, int src, int dst) {
+    void floydWarshalPath(vector<vector<int>>& matrix, int src, int dst) {
         vector<vector<int>> dist(matrix.size(), vector<int>(matrix.size()));
         vector<vector<int>> path(matrix.size(), vector<int>(matrix.size()));
 
         for (int i = 0; i < matrix.size(); i++) {
             for (int j = 0; j < matrix[i].size(); j++) {
                 dist[i][j] = matrix[i][j];
-                
+
                 if (dist[i][j] == INT_MAX)
                     path[i][j] = -1;
                 else
@@ -79,7 +80,7 @@ class AllPairShortestPath {
         cout << "Shorted path between " << src << "->" << dst << " = " << shortestPath << endl;
     }
 
-    void floydWarshalPath(vector<vector<int>> &dist, vector<vector<int>> &path) {
+    void floydWarshalPath(vector<vector<int>>& dist, vector<vector<int>>& path) {
         int V = dist.size();
 
         for (int k = 0; k < V; k++) {

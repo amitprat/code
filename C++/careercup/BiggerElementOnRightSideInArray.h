@@ -5,6 +5,7 @@
 https://www.careercup.com/question?id=6497025214382080
 
 Replace element of an Array with nearest bigger number at right side of the Array in O(n)
+
 For example if the input Array is
 7, 5, 6, 3, 4, 1, 2, 9, 11
 output array should be
@@ -24,6 +25,7 @@ for( i = N-1; i>=0; i-- )
     S.push(a[i]);
 }
 */
+
 class BiggerElementOnRightSideInArray {
    public:
     static void test() {

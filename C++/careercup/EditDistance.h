@@ -12,7 +12,7 @@ class EditDistance {
     }
 
    private:
-    int getEditDistance(string &s1, string &s2) {
+    int getEditDistance(string& s1, string& s2) {
         int n = s1.length();
         int m = s2.length();
 

@@ -1,3 +1,6 @@
+#pragma once
+#include <thread>
+
 #include "../header.h"
 
 /*
@@ -59,18 +62,18 @@ class BlockingQueueTester {
         thread publisher([&]() {
             for (int i = 0; i < 100; i++) {
                 queue.push(i);
-                this_thread::sleep_for(chrono::seconds(1));
+                std::this_thread::sleep_for(chrono::seconds(1));
             }
         });
 
         cout << "Waiting for subscribers to consume" << endl;
-        this_thread::sleep_for(chrono::seconds(10));
+        std::this_thread::sleep_for(chrono::seconds(10));
 
         cout << "Subscriber started" << endl;
         thread subscriber([&]() {
             for (int i = 0; i < 100; i++) {
                 cout << queue.pop() << endl;
-                this_thread::sleep_for(chrono::seconds(1));
+                std::this_thread::sleep_for(chrono::seconds(1));
             }
         });
 

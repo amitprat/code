@@ -56,4 +56,22 @@ class ClosestValueInBST {
         else
             return right;
     }
+
+    double closestValue(ITNode* root, double target) {
+        if (!root) return 0;
+
+        double closest = root->val;
+        ITNode* node = root;
+        while (node) {
+            if (abs(node->val - target) < abs(closest - target))
+                closest = node->val;
+
+            if (target < node->val)
+                node = node->left;
+            else
+                node = node->right;
+        }
+
+        return closest;
+    }
 };

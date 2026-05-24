@@ -324,4 +324,31 @@ class WordBreak {
         result = memo[n];
         return exitst;
     }
+
+    // correct working
+   private:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+
+        vector<string> result;
+        wordBreak(s, 0, s.length(), dict, "", result);
+
+        return result;
+    }
+
+    void wordBreak(string& s, int index, int length, unordered_set<string>& dict, string part,
+                   vector<string>& result) {
+        if (index == length) {
+            part.pop_back();
+            result.push_back(part);
+            return;
+        }
+
+        for (int j = index + 1; j <= length; j++) {
+            string cur = s.substr(index, j - index);
+            if (dict.contains(cur)) {
+                wordBreak(s, j, length, dict, part + cur + " ", result);
+            }
+        }
+    }
 };

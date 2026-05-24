@@ -184,7 +184,7 @@ class BinarySearchTreeQuestions {
 
        public:
         Node* successor2(int key) {
-            return successor(root, key);
+            return successor2(root, key);
         }
 
         Node* successor2(Node* root, int key) {

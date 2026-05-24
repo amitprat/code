@@ -38,6 +38,21 @@ class CombinationOfNumbersToGivenSum {
     }
 
    private:
+    void allCombinations3(vector<int> arr, int i, int n, vector<int>& cur, vector<vector<int>>& result) {
+        if (n == 0) {
+            result.push_back(cur);
+            return;
+        }
+        if (n < 0) return;
+
+        for (int j = i; j < n; j++) {
+            cur.push_back(arr[j]);
+            allCombinations3(arr, j, n - j, cur, result);
+            cur.pop_back();
+        }
+    }
+
+   private:
     vector<vector<int>> allCombinations2(int N) {
         vector<vector<int>> result;
         allCombinations2(N, 1, {}, result);

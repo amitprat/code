@@ -1,16 +1,17 @@
+#pragma once
 #include "../header.h"
 
 class LowestCommonAncestor {
     struct Node {
         int val;
-        Node *left = nullptr;
-        Node *right = nullptr;
+        Node* left = nullptr;
+        Node* right = nullptr;
         Node(int val) : val(val) {}
     };
 
    public:
     static void test() {
-        Node *root = new Node(5);
+        Node* root = new Node(5);
         root->left = new Node(3);
         root->left->left = new Node(1);
         root->left->right = new Node(4);
@@ -20,7 +21,7 @@ class LowestCommonAncestor {
 
         LowestCommonAncestor obj;
         int val1 = 7, val2 = 20;
-        Node *result = obj.lcaInBT1Wrapper(root, val1, val2);
+        Node* result = obj.lcaInBT1Wrapper(root, val1, val2);
         cout << format("LCA of {} and {} is {}.", val1, val2, result ? result->val : -1) << endl;
 
         val1 = 1, val2 = 4;
@@ -36,7 +37,9 @@ class LowestCommonAncestor {
         cout << format("LCA of {} and {} is {}.", val1, val2, result ? result->val : -1) << endl;
     }
 
-    Node *lcaInBST(Node *root, int val1, int val2) {
+    // lowest common ancestor in binary search tree
+   public:
+    Node* lcaInBST(Node* root, int val1, int val2) {
         if (!root) return nullptr;
 
         if (val1 < root->val && val2 < root->val) {
@@ -48,7 +51,18 @@ class LowestCommonAncestor {
         }
     }
 
-    Node *lcaInBT(Node *root, int val1, int val2) {
+    Node* lowestCommonAncestorInBST(Node* root, Node* p, Node* q) {
+        if (!root || !p || !q) return nullptr;
+
+        if (min(p->val, q->val) > root->val) return lowestCommonAncestorInBST(root->right, p, q);
+        else if (max(p->val, q->val) < root->val) return lowestCommonAncestorInBST(root->left, p, q);
+        else return root;
+    }
+
+    // lowest common ancestor in binary tree
+   public:
+    // this one doesn't handle missing value properly
+    Node* lcaInBT(Node* root, int val1, int val2) {
         if (!root) return root;
 
         if (root->val == val1 || root->val == val2) return root;
@@ -61,7 +75,7 @@ class LowestCommonAncestor {
         return left ? left : right;
     }
 
-    Node *lcaInBT1Wrapper(Node *root, int val1, int val2) {
+    Node* lcaInBT1Wrapper(Node* root, int val1, int val2) {
         bool val1Found = false, val2Found = false;
 
         auto result = lcaInBT1(root, val1, val2, val1Found, val2Found);
@@ -79,7 +93,7 @@ class LowestCommonAncestor {
         return nullptr;
     }
 
-    Node *lcaInBT1(Node *root, int val1, int val2, bool &val1Found, bool &val2Found) {
+    Node* lcaInBT1(Node* root, int val1, int val2, bool& val1Found, bool& val2Found) {
         if (!root) return root;
 
         bool lval1 = false, lval2 = false;

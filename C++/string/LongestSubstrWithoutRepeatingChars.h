@@ -141,4 +141,38 @@ class LongestSubstrWithoutRepeatingChars {
 
         return longest;
     }
+
+   public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> lastPos;
+        int mxLen = 0;
+        for (int i = 0, j = 0; j < s.length(); j++) {
+            auto ch = s[j];
+            if (lastPos.contains(s[j])) {
+                i = max(i, lastPos[s[j]] + 1);
+            }
+            lastPos[ch] = j;
+
+            mxLen = max(mxLen, j - i + 1);
+        }
+        return mxLen;
+    }
+
+   public:
+    int characterReplacement(string s, int k) {
+        int mx = 0, res = 0;
+        unordered_map<char, int> freq;
+
+        for (int l = 0, r = 0; r < s.length(); r++) {
+            freq[s[r]]++;
+            mx = max(mx, freq[s[r]]);
+            while (r - l + 1 - mx > k) {
+                freq[s[l]]--;
+                l++;
+            }
+            res = max(res, r - l + 1);
+        }
+
+        return res;
+    }
 };

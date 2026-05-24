@@ -53,6 +53,31 @@ class CheckIfAllNodesAreConnected {
         return memo[s];
     }
 
+    bool allConnected2(Graph g, char s, char d) {
+        unordered_set<char> visisted;
+        unordered_map<char, bool> memo;
+
+        return allConnected2(g, s, d, visisted, memo);
+    }
+
+    bool allConnected2(Graph g, char s, char d, unordered_set<char>& visited, unordered_map<char, bool>& memo) {
+        if (s == d) return true;
+        if (memo.contains(s)) return memo[s];
+        if (visited.contains(s)) return false;
+
+        visited.insert(s);
+
+        bool conn = !g.adjList[s].empty();
+        for (auto& v : g.adjList[s]) {
+            conn &= allConnected2(g, v, d, visited, memo);
+            if (!conn) break;
+        }
+        memo[s] = conn;
+        visited.erase(s);
+
+        return memo[s];
+    }
+
    public:
     static void test() {
         Graph g;

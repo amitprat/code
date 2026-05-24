@@ -84,4 +84,29 @@ class ValidateSuduko {
 
         return true;
     }
+
+   public:
+    bool isValidSudoku4(vector<vector<char>>& board) {
+        int n = board.size();
+        vector<int> rows(n + 1, 0);
+        vector<int> cols(n + 1, 0);
+        vector<int> blocks(n + 1, 0);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == '.') continue;
+
+                auto num = board[i][j] - '0';
+                int b = (i / 3) * 3 + (j / 3);
+
+                if ((rows[i] & (1 << num)) || (cols[j] & (1 << num)) || (blocks[b] & (1 << num))) {
+                    return false;
+                }
+
+                rows[i] |= (1 << num);
+                cols[j] |= (1 << num);
+                blocks[b] |= (1 << num);
+            }
+        }
+    }
 };

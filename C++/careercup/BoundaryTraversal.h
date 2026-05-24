@@ -16,7 +16,7 @@ class BoundaryTraversal {
             4      12   10         25
                 11            21
         */
-        Node *root = new Node(20);
+        Node* root = new Node(20);
 
         root->left = new Node(8);
         root->right = new Node(22);
@@ -63,8 +63,8 @@ class BoundaryTraversal {
     }
 
    private:
-    void leftMostNodesIterative(Node *root) {
-        queue<Node *> q;
+    void leftMostNodesIterative(Node* root) {
+        queue<Node*> q;
         q.push(root);
 
         vector<int> result;
@@ -84,7 +84,7 @@ class BoundaryTraversal {
         cout << "Left View: " << result << endl;
     }
 
-    void leftMostNodesRecursive(Node *root) {
+    void leftMostNodesRecursive(Node* root) {
         int maxLevel = -1;
         vector<int> result;
         this->leftMostNodesRecursive(root, 0, maxLevel, result);
@@ -92,7 +92,7 @@ class BoundaryTraversal {
         cout << "Left View: " << result << endl;
     }
 
-    void leftMostNodesRecursive(Node *root, int level, int &maxLevel, vector<int> &result) {
+    void leftMostNodesRecursive(Node* root, int level, int& maxLevel, vector<int>& result) {
         if (!root) return;
         if (level > maxLevel) {
             result.push_back(root->val);
@@ -104,14 +104,14 @@ class BoundaryTraversal {
     }
 
    private:
-    void rightMostNodesRecursive(Node *root) {
+    void rightMostNodesRecursive(Node* root) {
         int maxLevel = -1;
         vector<int> result;
 
         this->rightMostNodesRecursive(root, 0, maxLevel, result);
         cout << "Right view: " << result << endl;
     }
-    void rightMostNodesRecursive(Node *root, int level, int &maxLevel, vector<int> &result) {
+    void rightMostNodesRecursive(Node* root, int level, int& maxLevel, vector<int>& result) {
         if (!root) return;
         if (level > maxLevel) {
             maxLevel = level;
@@ -122,8 +122,8 @@ class BoundaryTraversal {
         rightMostNodesRecursive(root->left, level + 1, maxLevel, result);
     }
 
-    void rightMostNodesIterative(Node *root) {
-        queue<Node *> q;
+    void rightMostNodesIterative(Node* root) {
+        queue<Node*> q;
         q.push(root);
 
         vector<int> result;
@@ -144,14 +144,14 @@ class BoundaryTraversal {
     }
 
    private:
-    void bottomViewRecursive(Node *root) {
+    void bottomViewRecursive(Node* root) {
         map<int, pair<int, int>> result;
         this->bottomViewRecursive(root, 0, 0, result);
 
         println("Bottom view: {0}", result);
     }
 
-    void bottomViewRecursive(Node *root, int hd, int vd, map<int, pair<int, int>> &result) {
+    void bottomViewRecursive(Node* root, int hd, int vd, map<int, pair<int, int>>& result) {
         if (!root) return;
         if (result.find(hd) == result.end() || result[hd].second < vd) {
             result[hd] = {root->val, vd};
@@ -161,8 +161,8 @@ class BoundaryTraversal {
         bottomViewRecursive(root->right, hd + 1, vd + 1, result);
     }
 
-    void bottomViewIterative(Node *root) {
-        queue<pair<Node *, int>> q;
+    void bottomViewIterative(Node* root) {
+        queue<pair<Node*, int>> q;
         q.push({root, 0});
 
         map<int, int> result;
@@ -178,23 +178,23 @@ class BoundaryTraversal {
         }
 
         cout << "Bottom view: ";
-        for (auto &e : result)
+        for (auto& e : result)
             cout << e.second << ", ";
         cout << endl;
     }
 
    private:
-    void topViewRecursive(Node *root) {
+    void topViewRecursive(Node* root) {
         map<int, pair<int, int>> result;
         this->topViewRecursive(root, 0, 0, result);
 
         cout << "Top view: ";
-        for (auto &e : result)
+        for (auto& e : result)
             cout << e.second.first << ", ";
         cout << endl;
     }
 
-    void topViewRecursive(Node *root, int hd, int vd, map<int, pair<int, int>> &result) {
+    void topViewRecursive(Node* root, int hd, int vd, map<int, pair<int, int>>& result) {
         if (!root) return;
         if (result.find(hd) == result.end() || vd < result[hd].second) {
             result[hd] = {root->val, vd};
@@ -204,8 +204,8 @@ class BoundaryTraversal {
         topViewRecursive(root->right, hd + 1, vd + 1, result);
     }
 
-    void topViewIterative(Node *root) {
-        queue<pair<Node *, int>> q;
+    void topViewIterative(Node* root) {
+        queue<pair<Node*, int>> q;
         q.push({root, 0});
         map<int, int> result;
 
@@ -222,13 +222,13 @@ class BoundaryTraversal {
         }
 
         cout << "Top view: ";
-        for (auto &e : result)
+        for (auto& e : result)
             cout << e.second << ", ";
         cout << endl;
     }
 
    private:
-    void boundaryViewRecursive(Node *root) {
+    void boundaryViewRecursive(Node* root) {
         if (!root) return;
 
         vector<int> result;
@@ -239,7 +239,7 @@ class BoundaryTraversal {
 
         map<int, pair<int, int>> bottomView;
         this->bottomViewRecursive(root, 0, 0, bottomView);
-        for (auto &e : bottomView) result.push_back(e.second.first);
+        for (auto& e : bottomView) result.push_back(e.second.first);
         result.pop_back();
 
         maxLevel = 0;
@@ -252,8 +252,8 @@ class BoundaryTraversal {
     }
 
    private:
-    void boundaryViewIterative(Node *root) {
-        queue<pair<Node *, int>> q;
+    void boundaryViewIterative(Node* root) {
+        queue<pair<Node*, int>> q;
         q.push({root, 0});
 
         map<int, int> bottomView;
@@ -266,10 +266,10 @@ class BoundaryTraversal {
                 auto cur = q.front();
                 q.pop();
 
-                if (i == 0 && !leaf(cur)) leftView.push_back(cur.first->val);
-                if (i == n - 1 && !leaf(cur)) rightView.push_back(cur.first->val);
+                if (i == 0 && !leaf(cur.first)) leftView.push_back(cur.first->val);
+                if (i == n - 1 && !leaf(cur.first)) rightView.push_back(cur.first->val);
 
-                if (leaf(cur)) bottomView[cur.second] = cur.first->val;
+                if (leaf(cur.first)) bottomView[cur.second] = cur.first->val;
 
                 if (cur.first->left) q.push({cur.first->left, cur.second - 1});
                 if (cur.first->right) q.push({cur.first->right, cur.second + 1});
@@ -280,7 +280,7 @@ class BoundaryTraversal {
         result.insert(result.end(), leftView.begin(), leftView.end());
         result.pop_back();
 
-        for (auto &e : bottomView) result.push_back(e.second);
+        for (auto& e : bottomView) result.push_back(e.second);
         result.pop_back();
 
         result.insert(result.end(), rightView.rbegin(), rightView.rend());
@@ -289,12 +289,12 @@ class BoundaryTraversal {
         cout << "Boundary View: " << result << endl;
     }
 
-    bool leaf(Node *root) {
+    bool leaf(Node* root) {
         return !root->left && !root->right;
     }
 
    private:
-    vector<int> boundaryView(Node *root) {
+    vector<int> boundaryView(Node* root) {
         vector<int> result;
         if (!root) return result;
 
@@ -307,7 +307,7 @@ class BoundaryTraversal {
         return result;
     }
 
-    void printLeftBoundary(Node *root, vector<int> &result) {
+    void printLeftBoundary(Node* root, vector<int>& result) {
         if (!root) return;
         if (!root->left && !root->right) return;
 
@@ -319,7 +319,7 @@ class BoundaryTraversal {
             printLeftBoundary(root->right, result);
     }
 
-    void printRightBoundary(Node *root, vector<int> &result) {
+    void printRightBoundary(Node* root, vector<int>& result) {
         if (!root) return;
         if (!root->left && !root->right) return;
 
@@ -331,7 +331,7 @@ class BoundaryTraversal {
         result.push_back(root->val);
     }
 
-    void printBoundary(Node *root, vector<int> &result) {
+    void printBoundary(Node* root, vector<int>& result) {
         if (!root) return;
 
         if (!root->left && !root->right) result.push_back(root->val);

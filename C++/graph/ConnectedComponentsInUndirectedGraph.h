@@ -72,4 +72,56 @@ class ConnectedComponentsInUndirectedGraph {
             }
         }
     }
+
+   public:
+    class UnionFind {
+        vector<int> parent;
+        vector<int> rank;
+
+       public:
+        UnionFind(int n) {
+            parent.reserve(n);
+            rank.reserve(n);
+
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                rank[i] = 1;
+            }
+        }
+
+        int find(int p) {
+            while (parent[p] != p) {
+                p = parent[p];
+            }
+            return p;
+        }
+
+        bool join(int p, int q) {
+            int rootP = find(p);
+            int rootQ = find(q);
+
+            if (rootP == rootQ) return false;
+
+            if (rank[rootP] < rank[rootQ]) {
+                rank[rootP] += 1;
+                parent[rootQ] = rootP;
+            } else {
+                rank[rootQ] += 1;
+                parent[rootP] = rootQ;
+            }
+
+            return true;
+        }
+    };
+
+    int countComponents(int n, vector<vector<int>>& edges) {
+        UnionFind uf(n);
+        int cnt = n;
+
+        for (auto& edge : edges) {
+            if (uf.join(edge[0], edge[1])) cnt--;
+        }
+
+        return cnt;
+    }
 };

@@ -1,14 +1,20 @@
 #pragma once
 #include "../header.h"
 
+/*
+Bellman-Ford algorithm for single-source shortest paths in a graph with negative weights.
+*/
+
 class BellmanFord {
     class Graph {
        public:
         struct Edge {
             int u, v, w;
         };
+
         int V;
         vector<Edge> edges;
+
         Graph(int v) : V(v) {}
         void add(Edge edge) { edges.push_back(edge); }
     };
@@ -62,6 +68,7 @@ class BellmanFord {
     }
 
     bool canRelax(Graph::Edge e, vector<int> dst) {
+        // if we can still relax edge then its negative weight cycle
         return dst[e.v] > dst[e.u] + e.w;
     }
 };

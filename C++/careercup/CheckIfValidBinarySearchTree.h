@@ -6,11 +6,11 @@ class CheckIfValidBinarySearchTree {
     using Node = BinaryTree<int>::Node;
 
    private:
-    bool isBinarySearchTree(Node *root) {
+    bool isBinarySearchTree(Node* root) {
         return this->isBinarySearchTree(root, INT_MIN, INT_MAX);
     }
 
-    bool isBinarySearchTree(Node *root, int mnValue, int mxValue) {
+    bool isBinarySearchTree(Node* root, int mnValue, int mxValue) {
         if (!root) return true;
         if (root->val < mnValue || root->val > mxValue) return false;
 

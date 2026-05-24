@@ -34,8 +34,7 @@ class CheckBalancedParentheses {
             } else if (isClose(ch)) {
                 auto t = st.top();
                 st.pop();
-                if (!isPair(t, ch))
-                    return false;
+                if (!isPair(t, ch)) return false;
             }
         }
 

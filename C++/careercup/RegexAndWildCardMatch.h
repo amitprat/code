@@ -78,8 +78,8 @@ class RegexAndWildCardMatch {
 
    public:
     bool isRegexMatch(string s1, string s2) {
-        char *c1 = const_cast<char *>(s1.c_str());
-        char *c2 = const_cast<char *>(s2.c_str());
+        char* c1 = const_cast<char*>(s1.c_str());
+        char* c2 = const_cast<char*>(s2.c_str());
 
         auto res1 = isRegexMatch1(c1, c2);
         auto res2 = isRegexMatch2(s1, s2);
@@ -92,8 +92,8 @@ class RegexAndWildCardMatch {
     }
 
     bool isWildMatch(string s1, string s2) {
-        char *c1 = const_cast<char *>(s1.c_str());
-        char *c2 = const_cast<char *>(s2.c_str());
+        char* c1 = const_cast<char*>(s1.c_str());
+        char* c2 = const_cast<char*>(s2.c_str());
 
         auto res1 = wildCardMatch1(c1, c2);
         auto res2 = wildCardMatch2(s1, s2);
@@ -106,7 +106,7 @@ class RegexAndWildCardMatch {
     }
 
    private:
-    bool isRegexMatch1(char *t, char *p) {
+    bool isRegexMatch1(char* t, char* p) {
         if (!*p) return (*t == '\0');
 
         if (*(p + 1) != '*') {
@@ -162,7 +162,7 @@ class RegexAndWildCardMatch {
     }
 
    private:
-    bool wildCardMatch1(char *t, char *p) {
+    bool wildCardMatch1(char* t, char* p) {
         if (!*t && !*p) return true;
         if (!*t && *p == '*' && *(p + 1) != '\0') return false;
         if (*p == *t || *p == '?') return wildCardMatch1(t + 1, p + 1);
@@ -210,5 +210,22 @@ class RegexAndWildCardMatch {
         }
 
         return table[n][m];
+    }
+
+    bool isMatchDP(const string& s, int n, const string& p, int m) {
+        vector<vector<bool>> dp(n + 1, vector<bool>(m + 1, false));
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                if (i == 0 && j == 0) dp[i][j] = true;
+                else if (j == 0) dp[i][j] = false;
+                else if (i == 0) dp[i][j] = p[j - 1] == '*' && dp[i][j - 1];
+                else if (s[i - 1] == p[j - 1] || p[j - 1] == '?') dp[i][j] = dp[i - 1][j - 1];
+                else if (p[j - 1] == '*') dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
+                else dp[i][j] = false;
+            }
+        }
+
+        return dp[n][m];
     }
 };

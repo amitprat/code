@@ -9,7 +9,7 @@ determine whether the input string can be segmented into a space-separated seque
 that respects the usage counts.
 
 Example:
-  input = "abcababab"
+  input = "abcaababb"
   dictionary = {"abc":3, "ab":2, "abca":1}
   Output: true
 --------------------------------------------------

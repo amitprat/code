@@ -22,7 +22,7 @@ class CheckifValidBinaryTree {
         return true;
     }
 
-    void dfs(Graph g, int u, vector<bool> &visited) {
+    void dfs(Graph g, int u, vector<bool>& visited) {
         visited[u] = true;
 
         for (auto v : g.adjVertices(u)) {
@@ -37,7 +37,7 @@ class CheckifValidBinaryTree {
         return hasAtMost2Children(g, 0, -1, visited);
     }
 
-    bool hasAtMost2Children(Graph g, int src, int parent, unordered_set<int> &visited) {
+    bool hasAtMost2Children(Graph g, int src, int parent, unordered_set<int>& visited) {
         if (visited.find(src) != visited.end()) return true;
 
         visited.insert(src);
@@ -46,7 +46,7 @@ class CheckifValidBinaryTree {
         if (children.size() > 3) return false;
         if (children.size() > 2 && (children.find(parent) == children.end())) return false;
 
-        for (auto &e : children) {
+        for (auto& e : children) {
             if (!hasAtMost2Children(g, e, src, visited)) return false;
         }
 
@@ -66,7 +66,7 @@ class CheckifValidBinaryTree {
         return false;
     }
 
-    bool hasCycle(Graph g, int u, int p, vector<bool> &visited) {
+    bool hasCycle(Graph g, int u, int p, vector<bool>& visited) {
         visited[u] = true;
 
         for (auto v : g.adjVertices(u)) {

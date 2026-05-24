@@ -16,7 +16,7 @@ class FindNumberOfIslands {
     }
 
    private:
-    int countIslands(vector<vector<int>> &matrix) {
+    int countIslands(vector<vector<int>>& matrix) {
         int n = matrix.size();
         vector<vector<bool>> visited(n, vector<bool>(n, false));
 
@@ -33,7 +33,7 @@ class FindNumberOfIslands {
         return islands;
     }
 
-    void dfs(vector<vector<int>> &matrix, int r, int c, vector<vector<bool>> &visited) {
+    void dfs(vector<vector<int>>& matrix, int r, int c, vector<vector<bool>>& visited) {
         visited[r][c] = true;
 
         for (int i = -1; i <= 1; i++) {
@@ -49,7 +49,7 @@ class FindNumberOfIslands {
         }
     }
 
-    bool safe(vector<vector<int>> &matrix, int r, int c, vector<vector<bool>> &visited) {
+    bool safe(vector<vector<int>>& matrix, int r, int c, vector<vector<bool>>& visited) {
         if (r < 0 || c < 0) return false;
         if (r >= matrix.size() || c >= matrix.size()) return false;
         if (visited[r][c]) return false;

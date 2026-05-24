@@ -238,4 +238,41 @@ class RotateMatrixBy90DegreeLeft {
         c = b;
         b = tmp;
     }
+
+   private:
+    // better solution is to reverse and transpose for right rotate
+    // transpose and reverse for left rotate
+
+    // reverse is row-wise reverse vertically.
+    // transpose is swap of (i, j) with (j, i)
+
+    void rightRotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        if (n == 0) return;
+
+        // reverse
+        std::reverse(matrix.begin(), matrix.end());
+
+        // transpose
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+    }
+
+    void leftRotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        if (n == 0) return;
+
+        // transpose
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+
+        // reverse
+        std::reverse(matrix.begin(), matrix.end());
+    }
 };

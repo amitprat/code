@@ -23,14 +23,15 @@ class AToF {
         size_t exp = str.find("E");
         if (exp == string::npos) exp = str.find("e");
 
-        string first = str.substr(0, exp);
-        double result = convertToFloat(first);
+        double result = 0;
+        string firstStr = str.substr(0, exp);
+        double first = convertToFloat(firstStr);
 
         if (exp != string::npos) {
-            string second = str.substr(exp + 1);
-            double part = convertToFloat(second);
+            string secondStr = str.substr(exp + 1);
+            double second = convertToFloat(secondStr);
 
-            result *= pow(10, part);
+            result = first * pow(10, second);
         }
 
         return result;
@@ -44,19 +45,23 @@ class AToF {
         double result1 = 0, result2 = 0;
         int decDiv = 10;
         bool isNeg = false;
+
         for (auto ch : str) {
             if (ch == '+' || ch == '-') {
                 if (signSeen) throw runtime_error("Invalid double string");
+
                 signSeen = true;
                 isNeg = ch == '-';
             } else if (ch == '.') {
                 if (decSeen) throw runtime_error("Invalid double string");
+
                 decSeen = true;
             } else if (ch >= '0' && ch <= '9') {
                 double num = ch - '0';
-                if (!decSeen)
+
+                if (!decSeen) {
                     result1 = result1 * 10 + num;
-                else {
+                } else {
                     result2 = result2 + num / decDiv;
                     decDiv *= 10;
                 }

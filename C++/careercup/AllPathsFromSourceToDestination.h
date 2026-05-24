@@ -84,7 +84,7 @@ class AllPathsFromSourceToDestination {
         vector<int> path;
         dfs(g, s, d, visited, path, paths);
 
-                if (paths.empty()) {
+        if (paths.empty()) {
             cout << "No paths found.\n";
             return;
         }
@@ -97,8 +97,7 @@ class AllPathsFromSourceToDestination {
     }
 
    public:
-    void dfs(const Graph& g, int s, int d, vector<bool>& visited,
-             vector<int>& path, vector<vector<int>>& paths) {
+    void dfs(const Graph& g, int s, int d, vector<bool>& visited, vector<int>& path, vector<vector<int>>& paths) {
         visited[s] = true;
         path.push_back(s);
 

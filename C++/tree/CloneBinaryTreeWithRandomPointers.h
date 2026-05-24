@@ -35,4 +35,30 @@ class CloneBinaryTreeWithRandomPointers {
         copyRandomPointers(orig->left, map);
         copyRandomPointers(orig->right, map);
     }
+
+   private:
+    Node* copyRandomList(Node* head) {
+        unordered_map<Node*, Node*> oldToNewNodeMap;
+
+        Node* newHead = new Node(-1);
+        Node* org = head;
+        Node* cur = newHead;
+        while (org) {
+            cur->next = new Node(org->val);
+            oldToNewNodeMap[org] = cur->next;
+
+            cur = cur->next;
+            org = org->next;
+        }
+
+        cur = newHead->next;
+        org = head;
+        while (cur) {
+            cur->random = oldToNewNodeMap[org->random];
+            cur = cur->next;
+            org = org->next;
+        }
+
+        return newHead->next;
+    }
 };

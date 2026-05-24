@@ -133,23 +133,23 @@ class MaxProfitByStockSelling {
    private:
     int maxProfitBySellingStocksKTimes(vector<int>& prices, int k) {
         int n = prices.size();
-        vector<vector<int>> profit(k + 1, vector<int>(n + 1));
+        vector<vector<int>> profit(k + 1, vector<int>(n));
 
         for (int i = 0; i <= k; i++) {
-            for (int j = 0; j <= n; j++) {
+            for (int j = 0; j < n; j++) {
                 if (i == 0 || j == 0)
                     profit[i][j] = 0;
                 else {
                     int maxSoFar = INT_MIN;
-                    for (int m = 0; m < j; m++) {
-                        maxSoFar = max(maxSoFar, profit[i - 1][m] + prices[j] - prices[m]);
+                    for (int k = 0; k < j; k++) {
+                        maxSoFar = max(maxSoFar, profit[i - 1][k] + prices[j] - prices[k]);
                     }
                     profit[i][j] = max(profit[i][j - 1], maxSoFar);
                 }
             }
         }
 
-        return profit[k][n];
+        return profit[k][n - 1];
     }
 
    private:

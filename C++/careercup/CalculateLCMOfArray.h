@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -48,7 +49,7 @@ class CalculateLCMOfArray {
         return a * b / GCD(a, b);
     }
 
-    int LCM2(int *a, int i, int n) {
+    int LCM2(int* a, int i, int n) {
         if (i == n) {
             return 1;
         }

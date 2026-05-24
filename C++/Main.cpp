@@ -1,7 +1,7 @@
-#include "careercup/MedianOfStream.h"
+#include "careercup/IslandAndTreasure.h"
 
 int main() {
-    MedianOfStream::test();
+    IslandAndTreasure::test();
 
     return 0;
 }

@@ -174,4 +174,30 @@ class MinimumWindowSubstring {
 
         return minWin.second == INT_MAX ? "" : s.substr(minWin.first, minWin.second);
     }
+
+   public:
+    string minWindow(string_view str, string_view pat) {
+        if (str.empty() || pat.empty() || str.size() < pat.size()) return {};
+
+        array<int, 256> freq{};
+        for (unsigned char c : pat) freq[c]++;
+
+        int required = static_cast<int>(pat.size());
+        int matched = 0;
+        size_t minStart = 0, minLen = string_view::npos;
+
+        for (size_t s = 0, e = 0; e < str.size(); ++e) {
+            if (freq[static_cast<unsigned char>(str[e])]-- > 0) ++matched;
+
+            while (matched == required) {
+                if (auto len = e - s + 1; len < minLen || minLen == string_view::npos) {
+                    minLen = len;
+                    minStart = s;
+                }
+                if (++freq[static_cast<unsigned char>(str[s++])] > 0) --matched;
+            }
+        }
+
+        return minLen == string_view::npos ? "" : string(str.substr(minStart, minLen));
+    }
 };

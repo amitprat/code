@@ -1,3 +1,6 @@
+#pragma once
+#include "../header.h"
+
 // Problem: Word Distance
 // -------------------------------------
 // Given a sentence and two words, find the minimum number of words between the two words in the sentence.
@@ -6,13 +9,10 @@
 // -------------------------------------
 // Example:
 // Input: "the quick the brown quick brown the frog", w1 = "quick", w2 = "frog"
-// Output: 1
-
-#pragma once
-#include "../header.h"
+// Output: 2
 
 class WordDistance {
-public:
+   public:
     static void test() {
         WordDistance obj;
 
@@ -124,14 +124,14 @@ public:
         return (minDist == numeric_limits<int>::max()) ? -1 : minDist;
     }
 
-private:
+   private:
     /**
      * Utility function to split a string by a single character delimiter.
      */
     vector<string> split(const string& s, char delim) {
         vector<string> result;
-        size_t start = 0;
-        size_t end = 0;
+
+        size_t start = 0, end = 0;
         while ((end = s.find(delim, start)) != string::npos) {
             if (end > start) {
                 result.emplace_back(s.substr(start, end - start));
@@ -141,6 +141,7 @@ private:
         if (start < s.length()) {
             result.emplace_back(s.substr(start));
         }
+
         return result;
     }
 };

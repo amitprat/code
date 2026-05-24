@@ -188,4 +188,62 @@ class SudokuSolver {
 
         return false;
     }
+
+   public:
+    void solveSudoku(vector<vector<char>>& board) {
+        bitset<10> rows[9], cols[9], blocks[9];  // for keeping track of used numbers in rows, columns and 3x3 blocks
+        vector<pair<int, int>> emptySlots;       // to store the positions of empty cells
+
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board[i].size(); j++) {
+                if (board[i][j] == '.') emptySlots.push_back({i, j});  // if empty, add to emptySlots
+                else {
+                    // if not empty, mark the number as used in corresponding row, column and block
+                    rows[i].set(board[i][j] - '0');
+                    cols[j].set(board[i][j] - '0');
+                    blocks[(i / 3) * 3 + (j / 3)].set(board[i][j] - '0');
+                }
+            }
+        }
+
+        bool result = solveSudoku(board, emptySlots, rows, cols, blocks);
+        if (!result) cout << "Couldn't solve it" << endl;
+    }
+
+    bool solveSudoku(vector<vector<char>>& board, vector<pair<int, int>>& emptySlots,
+                     bitset<10> (&rows)[9], bitset<10> (&cols)[9], bitset<10> (&blocks)[9]) {
+        // if there are no more empty slots, we have successfully solved the sudoku
+        if (emptySlots.empty()) return true;
+
+        // get the next empty slot to fill
+        auto slot = emptySlots.back();
+        emptySlots.pop_back();
+
+        for (int num = 1; num <= 9; num++) {
+            // check if it's safe to place the number in the current slot (i.e., it doesn't violate sudoku rules)
+            if (!rows[slot.first].test(num) &&
+                !cols[slot.second].test(num) &&
+                !blocks[(slot.first / 3) * 3 + (slot.second / 3)].test(num)) {
+                // if it's safe, place the number and mark it as used in the corresponding row, column and block
+                board[slot.first][slot.second] = num + '0';
+                rows[slot.first].set(num);
+                cols[slot.second].set(num);
+                blocks[(slot.first / 3) * 3 + (slot.second / 3)].set(num);
+
+                // recursively try to solve the rest of the sudoku with the current number placed
+                if (solveSudoku(board, emptySlots, rows, cols, blocks)) return true;
+
+                // if placing the number doesn't lead to a solution, backtrack: unmark the number and reset the slot
+                board[slot.first][slot.second] = '.';
+                rows[slot.first].reset(num);
+                cols[slot.second].reset(num);
+                blocks[(slot.first / 3) * 3 + (slot.second / 3)].reset(num);
+            }
+        }
+
+        // if no number from 1 to 9 can be placed in the current slot, backtrack by adding the slot back to emptySlots and return false
+        emptySlots.push_back(slot);
+
+        return false;
+    }
 };

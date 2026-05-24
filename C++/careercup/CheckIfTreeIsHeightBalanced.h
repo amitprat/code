@@ -5,26 +5,28 @@ class CheckIfTreeIsHeightBalanced {
     using Node = BinaryTree<int>::Node;
 
    public:
-    bool isHeightBalanced(Node *root) {
+    bool isHeightBalanced(Node* root) {
         int mxHeight = 0;
         return this->isHeightBalanced(root, mxHeight);
     }
 
-    bool isHeightBalanced(Node *root, int &mxHeight) {
-        if (!root) return true;
+    bool isHeightBalanced(Node* root, int& height) {
+        if (!root) {
+            height = 0;
+            return true;
+        }
 
         int lh = 0, rh = 0;
-        bool ls = isHeightBalanced(root->left, lh);
-        bool rs = isHeightBalanced(root->right, rh);
+        bool lb = isHeightBalanced(root->left, lh);
+        bool rb = isHeightBalanced(root->right, rh);
 
-        int diff = abs(lh - rh);
-        if (ls && rs && diff <= 1) return true;
+        height = max(lh, rh) + 1;
 
-        return false;
+        return lb && rb && abs(lh - rh) <= 1;
     }
 
    public:
-    bool isHeightBalancedBruteForce(Node *root) {
+    bool isHeightBalancedBruteForce(Node* root) {
         if (!root) return true;
 
         int lh = this->height(root->left);
@@ -37,7 +39,7 @@ class CheckIfTreeIsHeightBalanced {
         return false;
     }
 
-    int height(Node *root) {
+    int height(Node* root) {
         if (!root) return 0;
 
         return 1 + max(height(root->left), height(root->right));

@@ -1,9 +1,10 @@
+#pragma once
 #include "../header.h"
 
 class CheckIfListIsPalindromic {
     struct Node {
         int val;
-        Node *next = nullptr;
+        Node* next = nullptr;
         Node(int val) : val(val) {}
     };
 
@@ -11,7 +12,7 @@ class CheckIfListIsPalindromic {
     static void test() {
         CheckIfListIsPalindromic obj;
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
 
             cout << "List: " << root << endl;
 
@@ -26,7 +27,7 @@ class CheckIfListIsPalindromic {
         }
 
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
             root->next = new Node(2);
 
             cout << "List: " << root << endl;
@@ -42,7 +43,7 @@ class CheckIfListIsPalindromic {
         }
 
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
             root->next = new Node(1);
 
             cout << "List: " << root << endl;
@@ -58,7 +59,7 @@ class CheckIfListIsPalindromic {
         }
 
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
             root->next = new Node(2);
             root->next->next = new Node(1);
 
@@ -75,7 +76,7 @@ class CheckIfListIsPalindromic {
         }
 
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
             root->next = new Node(2);
             root->next->next = new Node(2);
             root->next->next->next = new Node(1);
@@ -93,7 +94,7 @@ class CheckIfListIsPalindromic {
         }
 
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
             root->next = new Node(2);
             root->next->next = new Node(3);
             root->next->next->next = new Node(1);
@@ -111,7 +112,7 @@ class CheckIfListIsPalindromic {
         }
 
         {
-            Node *root = new Node(1);
+            Node* root = new Node(1);
             root->next = new Node(2);
             root->next->next = new Node(3);
             root->next->next->next = new Node(2);
@@ -131,15 +132,15 @@ class CheckIfListIsPalindromic {
     }
 
    private:
-    bool IsPalindromicUsingListReverse(Node *root) {
-        Node *rev = reverseList(root);
+    bool IsPalindromicUsingListReverse(Node* root) {
+        Node* rev = reverseList(root);
         return IsSame(root, rev);
     }
 
-    Node *reverseList(Node *root) {
-        Node *newRoot = new Node(root->val);
+    Node* reverseList(Node* root) {
+        Node* newRoot = new Node(root->val);
         while (root->next) {
-            Node *newRootNext = newRoot;
+            Node* newRootNext = newRoot;
             newRoot = new Node(root->next->val);
             newRoot->next = newRootNext;
             root = root->next;
@@ -148,7 +149,7 @@ class CheckIfListIsPalindromic {
         return newRoot;
     }
 
-    bool IsSame(Node *root1, Node *root2) {
+    bool IsSame(Node* root1, Node* root2) {
         while (root1 && root2) {
             if (root1->val != root2->val)
                 return false;
@@ -159,9 +160,9 @@ class CheckIfListIsPalindromic {
         return (!root1 && !root2);
     }
 
-    bool IsPalindromicUsingStack(Node *root) {
-        stack<Node *> st;
-        Node *cur = root;
+    bool IsPalindromicUsingStack(Node* root) {
+        stack<Node*> st;
+        Node* cur = root;
         while (cur) {
             st.push(cur);
             cur = cur->next;
@@ -170,27 +171,25 @@ class CheckIfListIsPalindromic {
         while (root) {
             auto cur = st.top();
             st.pop();
-            if (cur->val != root->val)
-                return false;
+            if (cur->val != root->val) return false;
             root = root->next;
         }
 
         return true;
     }
 
-    bool IsPalindromicUsingRecursion(Node *&root1, Node *root2) {
+    bool IsPalindromicUsingRecursion(Node*& root1, Node* root2) {
         if (!root2) return true;
 
         bool res = IsPalindromicUsingRecursion(root1, root2->next);
-        if (!res || root1->val != root2->val)
-            return false;
+        if (!res || root1->val != root2->val) return false;
 
         root1 = root1->next;
 
         return true;
     }
 
-    friend std::ostream &operator<<(std::ostream &out, Node *root) {
+    friend std::ostream& operator<<(std::ostream& out, Node* root) {
         while (root) {
             out << root->val << " ";
             root = root->next;

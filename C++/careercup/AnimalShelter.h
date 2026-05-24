@@ -1,5 +1,4 @@
-#include <compare>
-
+#pragma once
 #include "../header.h"
 
 class AnimalShelter {

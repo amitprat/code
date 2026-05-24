@@ -1,3 +1,4 @@
+#pragma once
 #include "../header.h"
 
 /*
@@ -41,7 +42,7 @@ class CheckBiPartitite {
         vector<int> colors(g.V, -1);
         vector<bool> visited(g.V, false);
 
-        for (auto &u : g.vertices) {
+        for (auto& u : g.vertices) {
             if (!visited[u]) {
                 bool result = this->dfs(g, u, visited, colors, 0);
                 if (!result) return false;
@@ -51,13 +52,13 @@ class CheckBiPartitite {
         return true;
     }
 
-    bool dfs(Graph g, int u, vector<bool> &visited, vector<int> &colors, int curColor) {
+    bool dfs(Graph g, int u, vector<bool>& visited, vector<int>& colors, int curColor) {
         visited[u] = true;
         colors[u] = curColor;
 
-        for (auto &v : g.adjMap[u]) {
+        for (auto& v : g.adjMap[u]) {
             if (!visited[v]) {
-                if (!dfs(g, v, visited, colors, !curColor)) return false;
+                if (!dfs(g, v, visited, colors, 1 - curColor)) return false;
             } else if (colors[v] == colors[u]) {
                 return false;
             }
